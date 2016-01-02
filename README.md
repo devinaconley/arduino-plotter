@@ -1,5 +1,6 @@
 # arduinoPlotter
 an Arduino library for easy plotting using Processing via serial communication
+
 by: Devin Conley
 
 Types of plots available:
