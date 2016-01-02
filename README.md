@@ -2,7 +2,7 @@ arduinoPlotter
 ===============
 an Arduino library for easy plotting using Processing via serial communication
 
-by: Devin Conley
+_by: Devin Conley_
 
 Types of plots available:
 ------------------------
