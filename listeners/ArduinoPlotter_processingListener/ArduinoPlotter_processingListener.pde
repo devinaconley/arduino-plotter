@@ -1,9 +1,10 @@
 import processing.serial.*;
 Serial port;
 
-
 //CONSTANTS
 final int[] COLORS = {#00FF00,#FF0000,#0000FF}; //int color codes
+final char OUTER_KEY = '#';
+final String INNER_KEY = "@";
 
 // Setup and config Globals
 int h;
@@ -20,7 +21,7 @@ int[][] pos_graphs; // stored as {x, width, y, height}
 String[] titles;
 String[] labels;
 boolean[] xvy;
-int[] min_var_index_graphs;
+int[] first_index_graphs;
 int[] sz_graphs;
 
 // Data handling Globals
@@ -61,7 +62,7 @@ void plot_time(int graph_index) {
   rect(pos_graphs[g][0],pos_graphs[g][1],sub_width,sub_height);
   
   int textPos = pos_graphs[g][1] + 30;
-  int k = min_var_index_graphs[g];
+  int k = first_index_graphs[g];
   for (int i = 0; i < sz_graphs[g]; i++) {
       fill(COLORS[i]);
       text(labels[k + i],pos_graphs[g][0] + 10,textPos);
@@ -79,7 +80,7 @@ void plot_time(int graph_index) {
 void serialEvent(Serial ser) {
   // Listen for serial data until #, the end of transmission key
   try {
-    String temp = ser.readStringUntil('#');
+    String temp = ser.readStringUntil(OUTER_KEY);
     String[] array_main = temp.split("\n");
     
     // ********************************************************* //
@@ -88,10 +89,13 @@ void serialEvent(Serial ser) {
     
     // If config code has changed, need to go through setup again
     if (!config_code.equals(array_main[0])) {
-      configured = false;
-      String[] array_sub = array_main[0].split("@");
-      // Get number of graphs and determine orientation of each 
+      String[] array_sub = array_main[0].split(INNER_KEY);
+      // Check for size of full transmission against expected to flag bad transmission
       num_graphs = Integer.parseInt(array_sub[0]);
+      if (array_main.length != num_graphs+2) {
+	throw new Exception();
+      }
+      // Determine orientation of each graph      
       int num_high = 1;
       int num_wide = 1;
       // Increase num subsections in each direction until all graphs can fit
@@ -103,7 +107,7 @@ void serialEvent(Serial ser) {
 	  num_wide++;
 	}	
       }
-
+      
       // Set bounding box for each subsection
       pos_graphs = new int[num_graphs][2];
       int k = 0; // k tracks overall graph index
@@ -125,7 +129,7 @@ void serialEvent(Serial ser) {
       titles = new String[num_graphs];
       xvy = new boolean[num_graphs];
       sz_graphs = new int[num_graphs];
-      min_var_index_graphs = new int[num_graphs];
+      first_index_graphs = new int[num_graphs];
       data = new double[sub_width][total_vars];
       pos_x = new int[sub_width];
       val_avg = new double[total_vars];
@@ -135,12 +139,12 @@ void serialEvent(Serial ser) {
       // Iterate through the individual graph data blocks to get graph specific info
       k = 0; // k tracks overall variable index
       for (int i = 0; i < num_graphs; i++) {
-	array_sub = array_main[i+1].split("@");
+	array_sub = array_main[i+1].split(INNER_KEY);
 	titles[i] = array_sub[0];
 	xvy[i] = Boolean.parseBoolean(array_sub[1]);
 	num2avg[i] = round(Integer.parseInt(array_sub[2]) / sub_width);
 	sz_graphs[i] = Integer.parseInt(array_sub[3]);
-	min_var_index_graphs[i] = k;
+	first_index_graphs[i] = k;
 	int p = 4; // first label of this graph falls at index 4
 	for (int j = 0; j < sz_graphs[i]; j++) {
 	  labels[k] = array_sub[p];
@@ -155,44 +159,44 @@ void serialEvent(Serial ser) {
     } else {
       // Matching a code means we have configured correctly
       configured = true;
-     }
-
-    // *********************************************************** //
-    // ************ NORMAL PLOTTING FUNCTIONALITY **************** //
-    // *********************************************************** //
     
-    for (int i = 0; i < num_graphs; i++) {
-      String[] array_sub = array_main[i+1].split("@");
       
-      if (xvy[i]) {
-	// Plot x vs y graph
-	
-      } else {
-	// TIME GRAPH HANDLER
-	int p = 5; // first index of double in split array
-	// j is only a counter for var in graph context
-	for (int j = min_var_index_graphs[i]; j < min_var_index_graphs[i] + sz_graphs[i]; j++) { 
-	  // Update rolling average for all values associated with that graph
-	  val_avg[j] = (weight_avg[i]*val_avg[j] + Double.parseDouble(array_sub[p])) 
-	    / (weight_avg[i] + 1);
-	  p += 2; // value will appear every 2 positions
-	}
-	weight_avg[i]++;
-	
-	// If enough values have been averaged for this graph, set vals appropriately
-	if (weight_avg[i] >= num2avg[i]) {
-	  for (int j = min_var_index_graphs[i]; j < min_var_index_graphs[i]+sz_graphs[i]; j++) {
-	    data[pos_x[i]][j] = val_avg[j];
-	  }
-	  pos_x[i]++; // advance position of next placed value
-	  if (pos_x[i] >= sub_width) {
-	    pos_x[i] = 0;
-	  }
-	  weight_avg[i] = 0;
-	}
-      }
-    }
+      // *********************************************************** //
+      // ************ NORMAL PLOTTING FUNCTIONALITY **************** //
+      // *********************************************************** //
     
+      for (int i = 0; i < num_graphs; i++) {
+	String[] array_sub = array_main[i+1].split(INNER_KEY);
+      
+	if (xvy[i]) {
+	  // Plot x vs y graph
+	
+	} else {
+	  // TIME GRAPH HANDLER
+	  int p = 5; // first index of double in split array
+	  // j is only a counter for var in graph context
+	  for (int j = first_index_graphs[i]; j < first_index_graphs[i] + sz_graphs[i]; j++) { 
+	    // Update rolling average for all values associated with that graph
+	    val_avg[j] = (weight_avg[i]*val_avg[j] + Double.parseDouble(array_sub[p])) 
+	      / (weight_avg[i] + 1);
+	    p += 2; // value will appear every 2 positions
+	  }
+	  weight_avg[i]++;
+	
+	  // If enough values have been averaged for this graph, set vals appropriately
+	  if (weight_avg[i] >= num2avg[i]) {
+	    for (int j = first_index_graphs[i]; j < first_index_graphs[i]+sz_graphs[i]; j++) {
+	      data[pos_x[i]][j] = val_avg[j];
+	    }
+	    pos_x[i]++; // advance position of next placed value
+	    if (pos_x[i] >= sub_width) {
+	      pos_x[i] = 0;
+	    }
+	    weight_avg[i] = 0;
+	  }
+	}
+      }      
+    }
   }
   catch (Exception e) {
     println("exception....");

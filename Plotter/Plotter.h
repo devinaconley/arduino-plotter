@@ -38,6 +38,8 @@ class Plotter {
   unsigned long last_updated;
   GraphNode* head;
   
+  static const char OUTER_KEY = '#';
+  static const char INNER_KEY = '@';
 };
 
 #endif

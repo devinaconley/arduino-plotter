@@ -1,4 +1,4 @@
-arduinoPlotter
+ArduinoPlotter
 ===============
 an Arduino library for easy plotting using Processing via serial communication
 

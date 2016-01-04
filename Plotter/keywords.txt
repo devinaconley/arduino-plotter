@@ -1,0 +1,4 @@
+Plotter	KEYWORD1
+addTimeGraph	KEYWORD2
+addXYGraph	KEYWORD2
+plot		KEYWORD2

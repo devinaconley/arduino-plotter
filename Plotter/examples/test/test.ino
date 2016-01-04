@@ -28,6 +28,7 @@ void loop() {
     test.addTimeGraph("Anothah one", "x", &x, "y", &y, "z", &z);
     anotherOne = false;
   }
+  Serial.print("hello");
   x = 10*sin(2.0*PI*(millis()/1000.0));
   y = 10*cos(2.0*PI*(millis()/1000.0));
   z = 5*sin(2.0*PI*(millis()/1000.0));

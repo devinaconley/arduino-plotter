@@ -59,6 +59,7 @@ void Plotter::init() {
 
 void Plotter::plot() {
   // Print configuration code
+  Serial.print(OUTER_KEY);
   Serial.print(num_graphs); Serial.print('@'); Serial.print(total_size); Serial.print('@'); 
   Serial.print(last_updated); Serial.print('@'); Serial.println();
   GraphNode* temp = head;
@@ -66,7 +67,7 @@ void Plotter::plot() {
     temp->plot();
     temp = temp->next;
   }
-  Serial.print('#');
+  Serial.print(OUTER_KEY);
 }
 
 // Functions for helper class
