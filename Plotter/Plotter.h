@@ -61,6 +61,7 @@ class Plotter {
   int max_points_displayed;
   unsigned long last_updated;
   GraphNode* head;
+  GraphNode* tail;
   
 };
 

@@ -22,7 +22,7 @@ void setup() {
 void loop() {
 
   if (millis() > 10100 && anotherOne) {
-    test.addTimeGraph("Anothah one", 3000, "x", &x, "y", &y, "z", &z);
+    test.addTimeGraph("Anothah one", 2000, "x", &x, "y", &y);
     anotherOne = false;
   }
 

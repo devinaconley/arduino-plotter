@@ -5,7 +5,7 @@ Serial port;
 final int[] COLORS = {#00FF00,#FF0000,#0000FF}; //int color codes
 final char OUTER_KEY = '#';
 final String INNER_KEY = "@";
-final double Y_SCALE_COVERAGE = 0.75;
+final double AXIS_COVERAGE = 0.75;
 
 // Setup and config Globals
 int h;
@@ -24,9 +24,10 @@ float[][] pos_graphs; // stored as {x, y}
 String[] titles;
 boolean[] xvy;
 int[] first_index_graphs;
-int[] sz_graphs;
+int[] sz_graphs; // num of values tracked in each graph
 int[] num_points;
 double[][] extremes_graphs; // {min_x, max_x, min_y, max_y}
+int[][] extremes_graphs_counter; // tracker for values since last set
 int[] pos_x;
 
 // Variable-specific Globals
@@ -41,7 +42,7 @@ void setup() {
   String portID = Serial.list()[0];
   port = new Serial(this, portID, 115200);  
   port.bufferUntil('#');
-  frameRate(20);
+  frameRate(100);
   textSize(16);
   background(75);
 }
@@ -67,16 +68,10 @@ void plot_xy(int graph_index) {
   int k = first_index_graphs[g];   
 
   // Calculations for offset and scaling of graph
-  double x_scale = sub_width / (extremes_graphs[g][1] - extremes_graphs[g][0]);
-  double x_offset = x_scale*extremes_graphs[g][0];
-  double y_scale = Y_SCALE_COVERAGE*sub_height / (extremes_graphs[g][3] - extremes_graphs[g][2]);
-  double y_offset = y_scale*extremes_graphs[g][3] + 0.5*(1.0 - Y_SCALE_COVERAGE)*sub_height;
-  
-  // Reset the extremes to the first value in data and get min and max again
-  extremes_graphs[g][0] = data[0][k][1];
-  extremes_graphs[g][1] = data[0][k][1];
-  extremes_graphs[g][2] = data[0][k+1][1];
-  extremes_graphs[g][3] = data[0][k+1][1];
+  double x_scale = AXIS_COVERAGE * sub_width / (extremes_graphs[g][1] - extremes_graphs[g][0]);
+  double x_offset = x_scale*extremes_graphs[g][0] - 0.5*(1.0 - AXIS_COVERAGE)*sub_width;
+  double y_scale = AXIS_COVERAGE * sub_height / (extremes_graphs[g][3] - extremes_graphs[g][2]);
+  double y_offset = y_scale*extremes_graphs[g][3] + 0.5*(1.0 - AXIS_COVERAGE)*sub_height;
 
   // Drawing setup
   fill(115);
@@ -88,17 +83,6 @@ void plot_xy(int graph_index) {
   for (int j = 0; j < num_points[g]; j++) {
     point( (float)(pos_graphs[g][0] + (data[j][k][1]*x_scale - x_offset)),
 	   (float)(pos_graphs[g][1] + y_offset - data[j][k+1][1]*y_scale) );
-    // Check for min or max
-    if (data[j][k][1] < extremes_graphs[g][0]) {
-      extremes_graphs[g][0] = data[j][k][1];
-    } else if (data[j][k][1] > extremes_graphs[g][1]) {
-      extremes_graphs[g][1] = data[j][k][1];
-    }
-    if (data[j][k+1][1] < extremes_graphs[g][2]) {
-      extremes_graphs[g][2] = data[j][k+1][1];
-    } else if (data[j][k+1][1] > extremes_graphs[g][3]) {
-      extremes_graphs[g][3] = data[j][k+1][1];
-    }	
   }
 
 }
@@ -110,12 +94,8 @@ void plot_time(int graph_index) {
   // Calculations for offset and scaling of graph
   double x_scale = sub_width / (extremes_graphs[g][1] - extremes_graphs[g][0]);
   double x_offset = x_scale*extremes_graphs[g][0];
-  double y_scale = Y_SCALE_COVERAGE*sub_height / (extremes_graphs[g][3] - extremes_graphs[g][2]);
-  double y_offset = y_scale*extremes_graphs[g][3] + 0.5*(1.0 - Y_SCALE_COVERAGE)*sub_height;
-
-  // Reset the y-extremes to the first value in data and get min and max again
-  extremes_graphs[g][2] = data[0][k][1];
-  extremes_graphs[g][3] = data[0][k][1];
+  double y_scale = AXIS_COVERAGE*sub_height / (extremes_graphs[g][3] - extremes_graphs[g][2]);
+  double y_offset = y_scale*extremes_graphs[g][3] + 0.5*(1.0 - AXIS_COVERAGE)*sub_height;
   
   // Drawing setup
   fill(115);
@@ -132,12 +112,6 @@ void plot_time(int graph_index) {
       for (int j = 0; j < num_points[g]; j++) {
 	point( (float)(pos_graphs[g][0] + (data[j][k+i][0]*x_scale - x_offset)),
 	       (float)(pos_graphs[g][1] + y_offset - data[j][k+i][1]*y_scale) );
-	// Check for min or max
-	if (data[j][k+i][1] < extremes_graphs[g][2]) {
-	  extremes_graphs[g][2] = data[j][k+i][1];
-	} else if (data[j][k+i][1] > extremes_graphs[g][3]) {
-	  extremes_graphs[g][3] = data[j][k+i][1];
-	}
 	
       }
       
@@ -198,6 +172,7 @@ void serialEvent(Serial ser) {
       xvy = new boolean[num_graphs];
       sz_graphs = new int[num_graphs];
       extremes_graphs = new double[num_graphs][4];
+      extremes_graphs_counter = new int[num_graphs][4];
       first_index_graphs = new int[num_graphs];
       data = new double[max_points][total_vars][2];
       
@@ -245,9 +220,50 @@ void serialEvent(Serial ser) {
 	  // j is only a counter for var in graph context
 	  for (int j = first_index_graphs[i]; j < first_index_graphs[i] + sz_graphs[i]; j++) { 
 	    data[pos_x[i]][j][1] = Double.parseDouble(array_sub[p]);
+	    
+	    // Check for new extremes ("p-5, "p-4" is just to get index at x:0,1 then y:2,3)
+	    if (data[pos_x[i]][j][1] < extremes_graphs[i][p-5]) {
+	      extremes_graphs[i][p-5] = data[pos_x[i]][j][1];
+	      extremes_graphs_counter[i][p-5] = 0;
+	    } else if (data[pos_x[i]][j][1] > extremes_graphs[i][p-4]) {
+	      extremes_graphs[i][p-4] = data[pos_x[i]][j][1];
+	      extremes_graphs_counter[i][p-4] = 0;
+	    }
+	    
 	    p += 2;	    
 	  }
-
+	  
+	  // Check for extremes going out of scope, to need a full new max/min calc
+	  boolean[] needs_calc = {false, false, false, false};
+	  for (int j = 0; j < 4; j++) {
+	    if (extremes_graphs_counter[i][j] > num_points[i]) {
+	      needs_calc[j] = true;
+	    } else {
+	      extremes_graphs_counter[i][j]++;
+	    }
+	  }
+	  if (needs_calc[0] || needs_calc[1] || needs_calc[2] || needs_calc[3]) {
+	    int j = first_index_graphs[i];
+	    for (int k = 0; k < num_points[i]; k++) {
+	      // x-direction
+	      if (needs_calc[0] && data[k][j][1] < extremes_graphs[i][0]) {
+		extremes_graphs[i][0] = data[k][j][1];
+		extremes_graphs_counter[i][0] = 0;
+	      } else if (needs_calc[1] && data[k][j][1] > extremes_graphs[i][1]) {
+		extremes_graphs[i][1] = data[k][j][1];
+		extremes_graphs_counter[i][1] = 0;
+	      }
+	      // y-direction
+	      if (needs_calc[2] && data[k][j+1][1] < extremes_graphs[i][2]) {
+		extremes_graphs[i][2] = data[k][j+1][1];
+		extremes_graphs_counter[i][2] = 0;
+	      } else if (needs_calc[3] && data[k][j+1][1] > extremes_graphs[i][3]) {
+		extremes_graphs[i][3] = data[k][j+1][1];
+		extremes_graphs_counter[i][3] = 0;
+	      }	      
+	    } 
+	  }
+  	  
 	  // Advance pos_x and rollback pos_x if exceeds max points for specific graph
 	  pos_x[i]++;
 	  if (pos_x[i] >= num_points[i]) {
@@ -256,14 +272,49 @@ void serialEvent(Serial ser) {
 	  
 	} else {
 	  // TIME GRAPH HANDLER
-	  int p = 5; // first index of double in split array
 	  
-	  // j is only a counter for var in graph context
+	  int p = 5; // first index of double in split array	  
 	  for (int j = first_index_graphs[i]; j < first_index_graphs[i] + sz_graphs[i]; j++) { 
 	    data[pos_x[i]][j][0] = temp_time;
 	    data[pos_x[i]][j][1] = Double.parseDouble(array_sub[p]);
 	    p += 2;
+
+	    // Check for new extremes
+	    if (data[pos_x[i]][j][1] <= extremes_graphs[i][2]) {
+	      extremes_graphs[i][2] = data[pos_x[i]][j][1];
+	      extremes_graphs_counter[i][2] = 0;
+	    } else if (data[pos_x[i]][j][1] >= extremes_graphs[i][3]) {
+	      extremes_graphs[i][3] = data[pos_x[i]][j][1];
+
+	      extremes_graphs_counter[i][3] = 0;
+	    }
+	    
 	  }
+
+	  // Check for extremes going out of scope, to need a full new max/min calc
+	  boolean[] needs_calc = {false, false, false, false};
+	  for (int j = 2; j < 4; j++) {
+	    if (extremes_graphs_counter[i][j] > num_points[i]) {
+	      needs_calc[j] = true;
+	    } else {
+	      extremes_graphs_counter[i][j]++;
+	    }
+	  }
+	  if (needs_calc[2] || needs_calc[3]) {
+	    print("lets avoid being in this block");
+	    for (int j = first_index_graphs[i]; j < first_index_graphs[i] + sz_graphs[i]; j++) { 
+	      for (int k = 0; k < num_points[i]; k++) {
+		if (needs_calc[2] && data[k][j][1] < extremes_graphs[i][2]) {
+		  extremes_graphs[i][2] = data[k][j][1];
+		  extremes_graphs_counter[i][2] = 0;
+		} else if (needs_calc[3] && data[k][j][1] > extremes_graphs[i][3]) {
+		  extremes_graphs[i][3] = data[k][j][1];
+		  extremes_graphs_counter[i][3] = 0;
+		}
+	      }
+	    } 
+	  }
+	  
 	  // Max timestamp of graph will be now
 	  extremes_graphs[i][1] = temp_time;
 	  
@@ -279,7 +330,7 @@ void serialEvent(Serial ser) {
 	  } else { 
 	    // But if hasn't fully filled array, need to estimate
 	    extremes_graphs[i][0] = temp_time - 
-	      ((temp_time - last_config) / pos_x[i])*num_points[i];
+	      ((temp_time - data[0][first_index_graphs[i]][0]) / pos_x[i])*num_points[i];
 	  }
 	  	  
 	}
