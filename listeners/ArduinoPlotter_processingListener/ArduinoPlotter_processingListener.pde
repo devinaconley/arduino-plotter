@@ -5,7 +5,14 @@ Serial port;
 final int[] COLORS = {#00FF00,#FF0000,#0000FF}; //int color codes
 final char OUTER_KEY = '#';
 final String INNER_KEY = "@";
-final double AXIS_COVERAGE = 0.75;
+final float AXIS_COVERAGE = 0.75;
+final int LABEL_SZ = 16; // text sizes
+final int TITLE_SZ = 20;
+final int NUM_SZ = 12; 
+final int BG_COL = 75;
+final int PLOT_COL = 115;
+final int TICK_LEN = 6;
+final int NUM_TICKS = 4;
 
 // Setup and config Globals
 int h;
@@ -36,21 +43,21 @@ String[] labels;
 
 
 void setup() {
+  fullScreen();
   h = displayHeight;
   w = displayWidth;
-  fullScreen();
   String portID = Serial.list()[0];
   port = new Serial(this, portID, 115200);  
   port.bufferUntil('#');
   frameRate(100);
   textSize(16);
-  background(75);
+  background(BG_COL);
 }
 
 void draw() {
   //PLOT ALL
   if (configured) {
-    background(75);
+    background(BG_COL);
     for (int i = 0; i < num_graphs; i++) {
       if (xvy[i]) {
 	plot_xy(i);
@@ -74,10 +81,28 @@ void plot_xy(int graph_index) {
   double y_offset = y_scale*extremes_graphs[g][3] + 0.5*(1.0 - AXIS_COVERAGE)*sub_height;
 
   // Drawing setup
-  fill(115);
+  fill(PLOT_COL);
   stroke(255);
   rect(pos_graphs[g][0],pos_graphs[g][1],sub_width,sub_height);
   
+  // Label graph
+  stroke(255);
+  fill(255);
+  textSize(NUM_SZ);
+  float temp_x = pos_graphs[g][0] - TICK_LEN/2;
+  float tick_offset = 0.5*(1.0 - AXIS_COVERAGE)*sub_height; 
+  float val = (float)extremes_graphs[g][3];
+  float val_interval = (float)(extremes_graphs[g][3] - extremes_graphs[g][2]) / (NUM_TICKS - 1);
+  for (float temp_y = pos_graphs[g][1] + tick_offset;
+       temp_y <= pos_graphs[g][1] + sub_height - tick_offset; 
+       temp_y += AXIS_COVERAGE * sub_height / (NUM_TICKS - 1)) {
+    line(temp_x, temp_y, temp_x + TICK_LEN, temp_y);
+    text(Float.toString(val), temp_x + TICK_LEN + 1, temp_y + NUM_SZ/2 );
+    val -= val_interval;
+  }
+  // float temp_y = pos_graphs[g][1] + sub_height + TICK_LEN/2;
+
+  //line(temp_x, temp_x + TICK_LEN, pos_graphs[g][1] + y_offset, pos_graphs[g][1] + y_offset
   // ** add support for multiple paths in x-y here **
   stroke(COLORS[0]);
   for (int j = 0; j < num_points[g]; j++) {
@@ -157,12 +182,14 @@ void serialEvent(Serial ser) {
       for (int i = 0; i < num_high; i++) {
 	for (int j = 0; j < num_wide; j++) {
 	  if (k < num_graphs) {
-	    pos_graphs[k][0] = j*sub_width;
+	    pos_graphs[k][0] = j*sub_width + LABEL_SZ;
 	    pos_graphs[k][1] = i*sub_height;
 	  }
 	  k++;
 	}
       }
+      sub_width -= LABEL_SZ;
+      sub_height -= LABEL_SZ;
 
       // Reset data storage arrays
       total_vars = Integer.parseInt(array_sub[1]);
