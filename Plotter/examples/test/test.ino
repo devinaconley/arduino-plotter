@@ -14,14 +14,15 @@ void setup() {
   Serial.begin(9600);
   test = Plotter();
 
-  test.addXYGraph("X-Y graph", 3000, "x", &x, "y", &y);
+  test.addXYGraph("X-Z graph", 3000, "x", &x, "z", &z);
+  test.addTimeGraph("Third plot", 1000, "label for the x variable", &x, "label for the y var", &y, "label for zeta", &z);
   x = 10;
   test.plot();
 }
 
 void loop() {
 
-  if (millis() > 10100 && anotherOne) {
+  if (millis() > 3000 && anotherOne) {
     test.addTimeGraph("Anothah one", 2000, "x", &x, "y", &y);
     anotherOne = false;
   }

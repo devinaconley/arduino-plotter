@@ -20,4 +20,4 @@ Processing listener options:
 -----------------------------
 * Stand-alone Windows application
 * Stand-alone Linux application
-* Source Processing script (arduinoPlotter_processingListener.pde)
+* Source Processing script (ArduinoPlotter_processingListener.pde)

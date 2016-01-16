@@ -9,7 +9,8 @@ final float AXIS_COVERAGE = 0.75;
 final int LABEL_SZ = 16; // text sizes
 final int TITLE_SZ = 20;
 final int NUM_SZ = 12; 
-final int BG_COL = 75;
+final int MARGIN_SZ = 20; // between plots
+final int BG_COL = 75; // 
 final int PLOT_COL = 115;
 final int TICK_LEN = 6;
 final int NUM_TICKS = 4;
@@ -80,29 +81,18 @@ void plot_xy(int graph_index) {
   double y_scale = AXIS_COVERAGE * sub_height / (extremes_graphs[g][3] - extremes_graphs[g][2]);
   double y_offset = y_scale*extremes_graphs[g][3] + 0.5*(1.0 - AXIS_COVERAGE)*sub_height;
 
-  // Drawing setup
+  // Plot Background
   fill(PLOT_COL);
   stroke(255);
   rect(pos_graphs[g][0],pos_graphs[g][1],sub_width,sub_height);
-  
-  // Label graph
-  stroke(255);
+  // Title
+  textSize(TITLE_SZ);
   fill(255);
-  textSize(NUM_SZ);
-  float temp_x = pos_graphs[g][0] - TICK_LEN/2;
-  float tick_offset = 0.5*(1.0 - AXIS_COVERAGE)*sub_height; 
-  float val = (float)extremes_graphs[g][3];
-  float val_interval = (float)(extremes_graphs[g][3] - extremes_graphs[g][2]) / (NUM_TICKS - 1);
-  for (float temp_y = pos_graphs[g][1] + tick_offset;
-       temp_y <= pos_graphs[g][1] + sub_height - tick_offset; 
-       temp_y += AXIS_COVERAGE * sub_height / (NUM_TICKS - 1)) {
-    line(temp_x, temp_y, temp_x + TICK_LEN, temp_y);
-    text(Float.toString(val), temp_x + TICK_LEN + 1, temp_y + NUM_SZ/2 );
-    val -= val_interval;
-  }
-  // float temp_y = pos_graphs[g][1] + sub_height + TICK_LEN/2;
+  textAlign(CENTER, TOP);
+  text(titles[g], pos_graphs[g][0] + sub_width/2, pos_graphs[g][1] + TITLE_SZ);
+  
+  drawTicks(g);
 
-  //line(temp_x, temp_x + TICK_LEN, pos_graphs[g][1] + y_offset, pos_graphs[g][1] + y_offset
   // ** add support for multiple paths in x-y here **
   stroke(COLORS[0]);
   for (int j = 0; j < num_points[g]; j++) {
@@ -122,16 +112,25 @@ void plot_time(int graph_index) {
   double y_scale = AXIS_COVERAGE*sub_height / (extremes_graphs[g][3] - extremes_graphs[g][2]);
   double y_offset = y_scale*extremes_graphs[g][3] + 0.5*(1.0 - AXIS_COVERAGE)*sub_height;
   
-  // Drawing setup
-  fill(115);
+  // Plot Background
+  fill(PLOT_COL);
   stroke(255);
   rect(pos_graphs[g][0],pos_graphs[g][1],sub_width,sub_height);
-  float textPos = pos_graphs[g][1] + 30;
+  // Title
+  textSize(TITLE_SZ);
+  fill(255);
+  textAlign(CENTER, TOP);
+  text(titles[g], pos_graphs[g][0] + sub_width/2, pos_graphs[g][1] + TITLE_SZ);
+  
+  // Plot legend
+  float textPos = pos_graphs[g][1] + LABEL_SZ;
+  textAlign(RIGHT, TOP);
+  textSize(LABEL_SZ);
   // Plot each line
   for (int i = 0; i < sz_graphs[g]; i++) {
       fill(COLORS[i]);
-      text(labels[k + i],pos_graphs[g][0] + 10,textPos);
-      textPos += 20;
+      text(labels[k + i],pos_graphs[g][0] + sub_width - 10,textPos);
+      textPos += (LABEL_SZ + 3);
       stroke(COLORS[i]);
       
       for (int j = 0; j < num_points[g]; j++) {
@@ -140,7 +139,46 @@ void plot_time(int graph_index) {
 	
       }
       
-    }
+  }
+  drawTicks(g); // draw ticks over any data (only an issue with time plot)
+}
+
+void drawTicks(int g) {
+  // Label graph with numbered tick marks
+  stroke(255);
+  fill(255);
+  textSize(NUM_SZ);
+  textAlign(LEFT, CENTER);
+  // Draw ticks along y-axis
+  float temp_x = pos_graphs[g][0] - TICK_LEN/2;
+  float tick_offset = 0.5*(1.0 - AXIS_COVERAGE)*sub_height; 
+  float val = (float)extremes_graphs[g][3];
+  float val_interval = (float)(extremes_graphs[g][3] - extremes_graphs[g][2]) / (NUM_TICKS - 1);
+  for (float temp_y = pos_graphs[g][1] + tick_offset;
+       temp_y <= pos_graphs[g][1] + sub_height - tick_offset; 
+       temp_y += AXIS_COVERAGE * sub_height / (NUM_TICKS - 1)) {
+    line(temp_x, temp_y, temp_x + TICK_LEN, temp_y);
+    text(Float.toString(val), temp_x + TICK_LEN + 5, temp_y);
+    val -= val_interval;
+  }
+  // Draw along x-axis
+  float temp_y = pos_graphs[g][1] + sub_height - TICK_LEN/2;
+  tick_offset = 0.5*(1.0 - AXIS_COVERAGE)*sub_width;
+  val = (float)extremes_graphs[g][0];
+  val_interval = (float)(extremes_graphs[g][1] - extremes_graphs[g][0]) / (NUM_TICKS - 1);  
+  if (xvy[g]) {
+    val *= AXIS_COVERAGE;
+    val_interval *= AXIS_COVERAGE;
+  }
+  textAlign(CENTER, BOTTOM);
+  for (temp_x = pos_graphs[g][0] + tick_offset;
+       temp_x <= pos_graphs[g][0] + sub_width - tick_offset; 
+       temp_x += AXIS_COVERAGE * sub_width / (NUM_TICKS - 1)) {
+    line(temp_x, temp_y, temp_x, temp_y + TICK_LEN);
+    text(Float.toString(val), temp_x, temp_y - 5);
+    val += val_interval;
+  }
+
 }
 
 void serialEvent(Serial ser) {
@@ -182,16 +220,16 @@ void serialEvent(Serial ser) {
       for (int i = 0; i < num_high; i++) {
 	for (int j = 0; j < num_wide; j++) {
 	  if (k < num_graphs) {
-	    pos_graphs[k][0] = j*sub_width + LABEL_SZ;
-	    pos_graphs[k][1] = i*sub_height;
+	    pos_graphs[k][0] = j*sub_width + MARGIN_SZ/2;
+	    pos_graphs[k][1] = i*sub_height + MARGIN_SZ/2;
 	  }
 	  k++;
 	}
       }
-      sub_width -= LABEL_SZ;
-      sub_height -= LABEL_SZ;
+      sub_width -= MARGIN_SZ;
+      sub_height -= MARGIN_SZ;
 
-      // Reset data storage arrays
+      // Pull more values and reset datastore arrays as appropriate
       total_vars = Integer.parseInt(array_sub[1]);
       max_points = Integer.parseInt(array_sub[2]);
       labels = new String[total_vars];
