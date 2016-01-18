@@ -1,3 +1,26 @@
+/*
+  ///////////////////////////////////////////////////////////////////////////////////////////
+  Plotter is an Arduino library that allows easy multi-variable and multi-graph plotting. The
+  library supports plots against time as well as 2-variable "X vs Y" graphing. 
+  -------------------------------------------------------------------------------------------
+  The library transfers information via the serial port to a listener program written with the
+  software provided by Processing. No modification is needed to this program; graph placement,
+  axis-scaling, etc. are handled automatically. 
+  Multiple options for this listener are available including stand-alone applications as well 
+  as the source Processing script.
+
+  The library, these listeners, a quick-start guide, and usage examples are available at:
+  
+  https://github.com/devinconley/ArduinoPlotter
+
+  -------------------------------------------------------------------------------------------
+  Plotter
+  v1.0.0
+  https://github.com/devinconley/ArduinoPlotter
+  by Devin Conley
+  ///////////////////////////////////////////////////////////////////////////////////////////
+ */
+
 #include "Plotter.h"
 
 Plotter::Plotter() {
@@ -21,74 +44,60 @@ Plotter::~Plotter() {
   delete temp;
 }
 
-
 void Plotter::addTimeGraph(String title, int points_displayed, String labelA, double* refA) {
   String labels[] = {labelA};
   double* refs[] = {refA};
-  GraphNode* temp = new GraphNode(title, labels, refs, 1, false, points_displayed);
-  if (head) {
-    tail->next = temp;
-    tail = temp;
-  } else {
-    head = temp;
-    tail = temp;
-  }
-
-  total_size++;
-  num_graphs++;
-  if (points_displayed > max_points_displayed) {
-    max_points_displayed = points_displayed;
-  }
-  last_updated = millis();
+  addGraphHelper(title, labels, refs, 1, false, points_displayed);
 }
 
 void Plotter::addTimeGraph(String title, int points_displayed, String labelA, double* refA, 
 			   String labelB, double* refB) {
   String labels[] = {labelA, labelB};
   double* refs[] = {refA, refB};
-  GraphNode* temp = new GraphNode(title, labels, refs, 2, false, points_displayed);
-  if (head) {
-    tail->next = temp;
-    tail = temp;
-  } else {
-    head = temp;
-    tail = temp;
-  }
-
-  total_size+=2;
-  num_graphs++;
-  if (points_displayed > max_points_displayed) {
-    max_points_displayed = points_displayed;
-  }
-  last_updated = millis();
+  addGraphHelper(title, labels, refs, 2, false, points_displayed);
 }
 
 void Plotter::addTimeGraph(String title, int points_displayed, String labelA, double* refA, 
 			   String labelB, double* refB, String labelC, double* refC) {
   String labels[] = {labelA, labelB, labelC};
   double* refs[] = {refA, refB, refC};
-  GraphNode* temp = new GraphNode(title, labels, refs, 3, false, points_displayed);
-  if (head) {
-    tail->next = temp;
-    tail = temp;
-  } else {
-    head = temp;
-    tail = temp;
-  }
-
-  total_size+=3;
-  num_graphs++;
-  if (points_displayed > max_points_displayed) {
-    max_points_displayed = points_displayed;
-  }
-  last_updated = millis();
+  addGraphHelper(title, labels, refs, 2, false, points_displayed);
 }
 
+void Plotter::addTimeGraph(String title, int points_displayed, String labelA, double* refA, 
+			   String labelB, double* refB, String labelC, double* refC,
+			   String labelD, double* refD) {
+  String labels[] = {labelA, labelB, labelC, labelD};
+  double* refs[] = {refA, refB, refC, refD};
+  addGraphHelper(title, labels, refs, 4, false, points_displayed);
+}
 
-void Plotter::addXYGraph(String title, int points_displayed, String labelX, double* refX, String labelY, double* refY) {
+void Plotter::addTimeGraph(String title, int points_displayed, String labelA, double* refA, 
+			   String labelB, double* refB, String labelC, double* refC,
+			   String labelD, double* refD, String labelE, double* refE) {
+  String labels[] = {labelA, labelB, labelC, labelD, labelE};
+  double* refs[] = {refA, refB, refC, refD, refE};
+  addGraphHelper(title, labels, refs, 5, false, points_displayed);
+}
+
+void Plotter::addTimeGraph(String title, int points_displayed, String labelA, double* refA, 
+			   String labelB, double* refB, String labelC, double* refC,
+			   String labelD, double* refD, String labelE, double* refE,
+			   String labelF, double* refF) {
+  String labels[] = {labelA, labelB, labelC, labelD, labelE, labelF};
+  double* refs[] = {refA, refB, refC, refD, refE, refF};
+  addGraphHelper(title, labels, refs, 6, false, points_displayed);
+}
+  
+void Plotter::addXYGraph(String title, int points_displayed, String labelX, double* refX, 
+			 String labelY, double* refY) {
   String labels[] = {labelX, labelY};
   double* refs[] = {refX, refY};
-  GraphNode* temp = new GraphNode(title, labels, refs, 2, true, points_displayed);
+  addGraphHelper(title, labels, refs, 2, true, points_displayed);
+}
+
+void Plotter::addGraphHelper(String title, String labels[], double* refs[], int sz, bool xvy, int points_displayed) { 
+  GraphNode* temp = new GraphNode(title, labels, refs, sz, xvy, points_displayed);
   if (head) {
     tail->next = temp;
     tail = temp;
@@ -96,14 +105,15 @@ void Plotter::addXYGraph(String title, int points_displayed, String labelX, doub
     head = temp;
     tail = temp;
   }
-
-  total_size+=2;
+  
+  total_size += sz;
   num_graphs++;
   if (points_displayed > max_points_displayed) {
     max_points_displayed = points_displayed;
   }
   last_updated = millis();
 }
+
 
 void Plotter::plot() {
   // Print configuration code

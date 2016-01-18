@@ -1,8 +1,32 @@
+/*
+  ///////////////////////////////////////////////////////////////////////////////////////////
+  ArduinoPlotter_processingListener is the source processing script that corresponds to the 
+  Plotter library for Arduino. The library supports plots against time as well as 2-variable 
+  "X vs Y" graphing. 
+  -------------------------------------------------------------------------------------------
+  The library transfers information via the serial port to a listener program written with the
+  software provided by Processing. No modification is needed to this program; graph placement,
+  axis-scaling, etc. are handled automatically. 
+  Multiple options for this listener are available including stand-alone applications as well 
+  as the source Processing script.
+
+  The library, these listeners, a quick-start guide, and usage examples are available at:
+  
+  https://github.com/devinconley/ArduinoPlotter
+
+  -------------------------------------------------------------------------------------------
+  ArduinoPlotter_processingListener
+  v1.0.0
+  https://github.com/devinconley/ArduinoPlotter
+  by Devin Conley
+  ///////////////////////////////////////////////////////////////////////////////////////////
+ */
+
 import processing.serial.*;
 Serial port;
 
 //CONSTANTS
-final int[] COLORS = {#00FF00,#FF0000,#0000FF}; //int color codes
+final int[] COLORS = {#00FF00,#FF0000,#0000FF, #FEFF00, #FF9900, #FF00FF}; //int color codes
 final char OUTER_KEY = '#';
 final String INNER_KEY = "@";
 final float AXIS_COVERAGE = 0.75;
@@ -13,7 +37,7 @@ final int MARGIN_SZ = 20; // between plots
 final int BG_COL = 75; // 
 final int PLOT_COL = 115;
 final int TICK_LEN = 6;
-final int NUM_TICKS = 4;
+final int NUM_TICKS = 5;
 
 // Setup and config Globals
 int h;
@@ -66,8 +90,6 @@ void draw() {
 	plot_time(i);
       }
     }
-  } else {
-    
   }
 }
 
@@ -90,7 +112,12 @@ void plot_xy(int graph_index) {
   fill(255);
   textAlign(CENTER, TOP);
   text(titles[g], pos_graphs[g][0] + sub_width/2, pos_graphs[g][1] + TITLE_SZ);
-  
+  // X and Y labels
+  textSize(LABEL_SZ);
+  textAlign(LEFT, TOP);
+  text(labels[k+1], pos_graphs[g][0] + 10, pos_graphs[g][1] + 10);
+  textAlign(RIGHT, BOTTOM);
+  text(labels[k], pos_graphs[g][0] + sub_width - 10, pos_graphs[g][1] + sub_height - 3*NUM_SZ);
   drawTicks(g);
 
   // ** add support for multiple paths in x-y here **
@@ -366,7 +393,6 @@ void serialEvent(Serial ser) {
 	    }
 	  }
 	  if (needs_calc[2] || needs_calc[3]) {
-	    print("lets avoid being in this block");
 	    for (int j = first_index_graphs[i]; j < first_index_graphs[i] + sz_graphs[i]; j++) { 
 	      for (int k = 0; k < num_points[i]; k++) {
 		if (needs_calc[2] && data[k][j][1] < extremes_graphs[i][2]) {
