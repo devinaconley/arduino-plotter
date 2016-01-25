@@ -1,5 +1,5 @@
 /*
-  ///////////////////////////////////////////////////////////////////////////////////////////
+  ===========================================================================================
   Plotter is an Arduino library that allows easy multi-variable and multi-graph plotting. The
   library supports plots against time as well as 2-variable "X vs Y" graphing. 
   -------------------------------------------------------------------------------------------
@@ -18,8 +18,8 @@
   v1.0.0
   https://github.com/devinconley/ArduinoPlotter
   by Devin Conley
-  ///////////////////////////////////////////////////////////////////////////////////////////
- */
+  ===========================================================================================
+*/
 
 #ifndef PLOTTER_H
 #define PLOTTER_H
@@ -69,6 +69,16 @@ class Plotter {
   void plot();
   
   
+  /*
+    Remove Graph
+
+    Args:
+    - index: position of graph to remove (ie. passing 0 would remove the first graph added)
+    Returns:
+    - true, if successful
+   */
+  bool remove(int index);
+  
   // Add a 2-variable graph vs. time
   void addTimeGraph(String title, int points_displayed, String labelA, double* refA, 
 		    String labelB, double* refB);
@@ -90,7 +100,7 @@ class Plotter {
 		    String labelD, double* refD, String labelE, double* refE,
 		    String labelF, double* refF);
   
-  
+  // Destructor for Plotter class
   ~Plotter();
   
  private:
@@ -98,12 +108,12 @@ class Plotter {
   class GraphNode {
   public:
     GraphNode* next;
+    int size;
     GraphNode(String title, String* labels, double** refs, int size, bool xvy, 
 	      int points_displayed);
     void plot();
   private:
     bool xvy;
-    int size;
     int points_displayed;
     String title;
     String* labels;

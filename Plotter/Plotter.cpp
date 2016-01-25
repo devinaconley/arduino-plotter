@@ -1,5 +1,5 @@
 /*
-  ///////////////////////////////////////////////////////////////////////////////////////////
+  ===========================================================================================
   Plotter is an Arduino library that allows easy multi-variable and multi-graph plotting. The
   library supports plots against time as well as 2-variable "X vs Y" graphing. 
   -------------------------------------------------------------------------------------------
@@ -18,7 +18,7 @@
   v1.0.0
   https://github.com/devinconley/ArduinoPlotter
   by Devin Conley
-  ///////////////////////////////////////////////////////////////////////////////////////////
+  ===========================================================================================
  */
 
 #include "Plotter.h"
@@ -61,7 +61,7 @@ void Plotter::addTimeGraph(String title, int points_displayed, String labelA, do
 			   String labelB, double* refB, String labelC, double* refC) {
   String labels[] = {labelA, labelB, labelC};
   double* refs[] = {refA, refB, refC};
-  addGraphHelper(title, labels, refs, 2, false, points_displayed);
+  addGraphHelper(title, labels, refs, 3, false, points_displayed);
 }
 
 void Plotter::addTimeGraph(String title, int points_displayed, String labelA, double* refA, 
@@ -114,14 +114,35 @@ void Plotter::addGraphHelper(String title, String labels[], double* refs[], int 
   last_updated = millis();
 }
 
+bool Plotter::remove(int index) {
+  if (num_graphs == 0 || index < 0 || num_graphs <= index) {
+    return false;
+  } else {
+    GraphNode* temp = head;
+    if (index == 0) {
+      head = head->next;
+      delete temp;
+    } else {
+      GraphNode* last = temp;
+      for (int i = 0; i < index; i++) {
+	last = temp;
+	temp = temp->next;
+      }
+      last->next = temp->next;
+      num_graphs--;
+      total_size -= temp->size;
+      delete temp;
+    }
+    last_updated = millis();
+    return true;
+  }
+}
 
 void Plotter::plot() {
-  // Print configuration code
   String code = OUTER_KEY;
   code += (num_graphs + INNER_KEY + total_size + INNER_KEY
 	   + max_points_displayed + INNER_KEY + last_updated + INNER_KEY);
   Serial.print(code);
-  // Print each graph code
   GraphNode* temp = head;
   while (temp != NULL) {
     Serial.println();
@@ -131,7 +152,7 @@ void Plotter::plot() {
   Serial.println(OUTER_KEY);
 }
 
-// Functions for helper class
+
 Plotter::GraphNode::GraphNode(String title, String* _labels, double** _refs, int size, bool xvy, 
 			      int points_displayed) : title(title), size(size), xvy(xvy), 
 						      points_displayed(points_displayed) {
@@ -145,12 +166,12 @@ Plotter::GraphNode::GraphNode(String title, String* _labels, double** _refs, int
 }
 
 void Plotter::GraphNode::plot() {
-  Serial.print(title); Serial.print('@');
-  Serial.print(xvy); Serial.print('@');
-  Serial.print(points_displayed); Serial.print('@');
-  Serial.print(size); Serial.print('@');
+  Serial.print(title); Serial.print(INNER_KEY);
+  Serial.print(xvy); Serial.print(INNER_KEY);
+  Serial.print(points_displayed); Serial.print(INNER_KEY);
+  Serial.print(size); Serial.print(INNER_KEY);
   for (int i = 0; i < size; i++) {
-    Serial.print(labels[i]); Serial.print('@');
-    Serial.print(*refs[i]); Serial.print('@');
+    Serial.print(labels[i]); Serial.print(INNER_KEY);
+    Serial.print(*refs[i]); Serial.print(INNER_KEY);
   }
 }

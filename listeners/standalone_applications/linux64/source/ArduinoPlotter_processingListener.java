@@ -1,3 +1,21 @@
+import processing.core.*; 
+import processing.data.*; 
+import processing.event.*; 
+import processing.opengl.*; 
+
+import processing.serial.*; 
+
+import java.util.HashMap; 
+import java.util.ArrayList; 
+import java.io.File; 
+import java.io.BufferedReader; 
+import java.io.PrintWriter; 
+import java.io.InputStream; 
+import java.io.OutputStream; 
+import java.io.IOException; 
+
+public class ArduinoPlotter_processingListener extends PApplet {
+
 /*
   ===========================================================================================
   ArduinoPlotter_processingListener is the source processing script that corresponds to the 
@@ -22,14 +40,14 @@
   ===========================================================================================
  */
 
-import processing.serial.*;
+
 Serial port;
 
 //CONSTANTS
-final int[] COLORS = {#00FF00,#FF0000,#0000FF, #FEFF00, #FF9900, #FF00FF}; //int color codes
+final int[] COLORS = {0xff00FF00,0xffFF0000,0xff0000FF, 0xffFEFF00, 0xffFF9900, 0xffFF00FF}; //int color codes
 final char OUTER_KEY = '#';
 final String INNER_KEY = "@";
-final float AXIS_COVERAGE = 0.75;
+final float AXIS_COVERAGE = 0.75f;
 final int LABEL_SZ = 14; // text sizes
 final int TITLE_SZ = 16;
 final int NUM_SZ = 10; 
@@ -67,8 +85,8 @@ double[][][] data;
 String[] labels;
 
 
-void setup() {
-  size(800, 800);
+public void setup() {
+  
   surface.setResizable(true);
   h = height;
   w = width;
@@ -80,7 +98,7 @@ void setup() {
   background(BG_COL);
 }
 
-void draw() {
+public void draw() {
   //PLOT ALL
   try {
     if (configured) {
@@ -101,15 +119,15 @@ void draw() {
   } catch (Exception e) {}
 }
 
-void plot_xy(int graph_index) {
+public void plot_xy(int graph_index) {
   int g = graph_index;
   int k = first_index_graphs[g];   
 
   // Calculations for offset and scaling of graph
   double x_scale = AXIS_COVERAGE * sub_width / (extremes_graphs[g][1] - extremes_graphs[g][0]);
-  double x_offset = x_scale*extremes_graphs[g][0] - 0.5*(1.0 - AXIS_COVERAGE)*sub_width;
+  double x_offset = x_scale*extremes_graphs[g][0] - 0.5f*(1.0f - AXIS_COVERAGE)*sub_width;
   double y_scale = AXIS_COVERAGE * sub_height / (extremes_graphs[g][3] - extremes_graphs[g][2]);
-  double y_offset = y_scale*extremes_graphs[g][3] + 0.5*(1.0 - AXIS_COVERAGE)*sub_height;
+  double y_offset = y_scale*extremes_graphs[g][3] + 0.5f*(1.0f - AXIS_COVERAGE)*sub_height;
 
   // Plot Background
   fill(PLOT_COL);
@@ -137,7 +155,7 @@ void plot_xy(int graph_index) {
 
 }
 
-void plot_time(int graph_index) {
+public void plot_time(int graph_index) {
   int g = graph_index;
   int k = first_index_graphs[g];   
 
@@ -145,7 +163,7 @@ void plot_time(int graph_index) {
   double x_scale = sub_width / (extremes_graphs[g][1] - extremes_graphs[g][0]);
   double x_offset = x_scale*extremes_graphs[g][0];
   double y_scale = AXIS_COVERAGE*sub_height / (extremes_graphs[g][3] - extremes_graphs[g][2]);
-  double y_offset = y_scale*extremes_graphs[g][3] + 0.5*(1.0 - AXIS_COVERAGE)*sub_height;
+  double y_offset = y_scale*extremes_graphs[g][3] + 0.5f*(1.0f - AXIS_COVERAGE)*sub_height;
   
   // Plot Background
   fill(PLOT_COL);
@@ -182,7 +200,7 @@ void plot_time(int graph_index) {
   drawTicks(g); // draw ticks over any data (only an issue with time plot)
 }
 
-void drawTicks(int g) {
+public void drawTicks(int g) {
   // Label graph with numbered tick marks
   stroke(255);
   fill(255);
@@ -190,7 +208,7 @@ void drawTicks(int g) {
   textAlign(LEFT, CENTER);
   // Draw ticks along y-axis
   float temp_x = pos_graphs[g][0] - TICK_LEN/2;
-  float tick_offset = 0.5*(1.0 - AXIS_COVERAGE)*sub_height; 
+  float tick_offset = 0.5f*(1.0f - AXIS_COVERAGE)*sub_height; 
   float val = (float)extremes_graphs[g][3];
   float val_interval = (float)(extremes_graphs[g][3] - extremes_graphs[g][2]) / (NUM_TICKS - 1);
   for (float temp_y = pos_graphs[g][1] + tick_offset;
@@ -202,7 +220,7 @@ void drawTicks(int g) {
   }
   // Draw along x-axis
   float temp_y = pos_graphs[g][1] + sub_height - TICK_LEN/2;
-  tick_offset = 0.5*(1.0 - AXIS_COVERAGE)*sub_width;
+  tick_offset = 0.5f*(1.0f - AXIS_COVERAGE)*sub_width;
   val = (float)extremes_graphs[g][0];
   val_interval = (float)(extremes_graphs[g][1] - extremes_graphs[g][0]) / (NUM_TICKS - 1);  
   if (xvy[g]) {
@@ -219,7 +237,7 @@ void drawTicks(int g) {
   }
 }
 
-void serialEvent(Serial ser) {
+public void serialEvent(Serial ser) {
   // Listen for serial data until #, the end of transmission key
   try {
     String temp = ser.readStringUntil(OUTER_KEY);
@@ -420,7 +438,7 @@ void serialEvent(Serial ser) {
 }
 
 // Helper method to calculate bounds of graphs
-void setupGraphPosition() {
+public void setupGraphPosition() {
   // Determine orientation of each graph      
   int num_high = 1;
   int num_wide = 1;
@@ -455,4 +473,14 @@ void setupGraphPosition() {
   sub_width -= MARGIN_SZ;
   sub_height -= MARGIN_SZ;
 
+}
+  public void settings() {  size(800, 800); }
+  static public void main(String[] passedArgs) {
+    String[] appletArgs = new String[] { "ArduinoPlotter_processingListener" };
+    if (passedArgs != null) {
+      PApplet.main(concat(appletArgs, passedArgs));
+    } else {
+      PApplet.main(appletArgs);
+    }
+  }
 }
