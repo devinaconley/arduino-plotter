@@ -28,18 +28,18 @@ Quickstart:
 #### Install Plotter library 
 Search for "Plotter" in the Arduino Library Manager 
 
-_or_
+     ___or___
 
-Install directly with the [.zip file of Plotter](https://github.com/devinconley/ArduinoPlotter-for-Library-Manager/archive/master.zip)
+Install directly with the [ZIP file of Plotter](https://github.com/devinconley/ArduinoPlotter-for-Library-Manager/archive/master.zip)
 
 #### Setup Listener
 Download one of the following stand-alone listener options. Keep the folder intact so the application can access the lib and source folders. These stand-alone applications are dependent on your system having the Java Runtime Engine (JRE) installed.
-- [Windows 32](https://www.dropbox.com/s/wl6cxbceeqj1lxz/ArduinoPlotter_listener_windows32.zip?dl=1)
-- [Windows 64](https://www.dropbox.com/s/i7edmomwpqiqa5e/ArduinoPlotter_listener_windows64.zip?dl=1)
-- [Linux 32](https://www.dropbox.com/s/s0csn6xfuchfalf/ArduinoPlotter_listener_linux32.zip?dl=1)
-- [Linux 64](https://www.dropbox.com/s/ia7w80irwfojxp1/ArduinoPlotter_listener_linux64.zip?dl=1)
+* [Windows 32-bit](https://www.dropbox.com/s/88wa2nkfzh5j3uz/ArduinoPlotter_listener_windows32.zip?dl=1)
+* [Windows 64-bit](https://www.dropbox.com/s/ahy2ppul6v4lybi/ArduinoPlotter_listener_windows64.zip?dl=1)
+* [Linux 32-bit](https://www.dropbox.com/s/ilt9n3hkiw74vrf/ArduinoPlotter_listener_linux32.zip?dl=1)
+* [Linux 64-bit](https://www.dropbox.com/s/6irh0fn4c97aqz0/ArduinoPlotter_listener_linux64.zip?dl=1)
 
-_or_
+     ___or___
 
 Download the source script from this repository (ArduinoPlotter_processingListener.pde) and run that with the Processing IDE.
 
@@ -80,6 +80,6 @@ void loop() {
 ```
 
 #### Using the Listener
-Once the Arduino is running, launch the listener application for your system.
+Once the Arduino is running, start the listener application that you chose above.
 
 __That's it!__
