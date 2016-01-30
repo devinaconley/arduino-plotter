@@ -6,40 +6,40 @@ _by: Devin Conley_
 
 Types of plots available:
 ------------------------
-* Multivariable plots against time
-* 2-variable "x" vs "y" plots
+- Multivariable plots against time
+- 2-variable "x" vs "y" plots
 
 Features:
 ----------
-* Display multiple graphs within single window 
-* Simply pass a reference to your variables when the graph is added, no need to update the values manually
-* Choose desired number of data points to be shown along time scale for each graph
-* Auto-scaling to fit all data on graph
+- Display multiple graphs within single window 
+- Simply pass a reference to your variables when the graph is added, no need to update the values manually
+- Choose desired number of data points to be shown along time scale for each graph
+- Auto-scaling to fit all data on graph
 
 Processing listener options:
 -----------------------------
-* Stand-alone Windows application (32-bit, 64-bit)
-* Stand-alone Linux application (32-bit, 64-bit)
-* Source Processing script (ArduinoPlotter_processingListener.pde)
+- Stand-alone Windows application (32-bit, 64-bit)
+- Stand-alone Linux application (32-bit, 64-bit)
+- Source Processing script (ArduinoPlotter_processingListener.pde)
 
 Quickstart:
 ------------
 
 #### Install Plotter library 
-Search for "Plotter" in the Arduino Library Manager 
+Search for "Plotter" in the Arduino Library Manager.
 
-     ___or___
+___or___
 
-Install directly with the [ZIP file of Plotter](https://github.com/devinconley/ArduinoPlotter-for-Library-Manager/archive/master.zip)
+Install directly with the [ZIP file of Plotter](https://github.com/devinconley/ArduinoPlotter-for-Library-Manager/archive/master.zip)/
 
 #### Setup Listener
 Download one of the following stand-alone listener options. Keep the folder intact so the application can access the lib and source folders. These stand-alone applications are dependent on your system having the Java Runtime Engine (JRE) installed.
-* [Windows 32-bit](https://www.dropbox.com/s/88wa2nkfzh5j3uz/ArduinoPlotter_listener_windows32.zip?dl=1)
-* [Windows 64-bit](https://www.dropbox.com/s/ahy2ppul6v4lybi/ArduinoPlotter_listener_windows64.zip?dl=1)
-* [Linux 32-bit](https://www.dropbox.com/s/ilt9n3hkiw74vrf/ArduinoPlotter_listener_linux32.zip?dl=1)
-* [Linux 64-bit](https://www.dropbox.com/s/6irh0fn4c97aqz0/ArduinoPlotter_listener_linux64.zip?dl=1)
+- [Windows 32-bit](https://www.dropbox.com/s/88wa2nkfzh5j3uz/ArduinoPlotter_listener_windows32.zip?dl=1)
+- [Windows 64-bit](https://www.dropbox.com/s/ahy2ppul6v4lybi/ArduinoPlotter_listener_windows64.zip?dl=1)
+- [Linux 32-bit](https://www.dropbox.com/s/ilt9n3hkiw74vrf/ArduinoPlotter_listener_linux32.zip?dl=1)
+- [Linux 64-bit](https://www.dropbox.com/s/6irh0fn4c97aqz0/ArduinoPlotter_listener_linux64.zip?dl=1)
 
-     ___or___
+___or___
 
 Download the source script from this repository (ArduinoPlotter_processingListener.pde) and run that with the Processing IDE.
 
