@@ -19,7 +19,7 @@ Features:
 Processing listener options:
 -----------------------------
 * Stand-alone Windows application (32-bit, 64-bit)
-* Stand-alone Linux application (32-bit, 64-bit, armv6hf)
+* Stand-alone Linux application (32-bit, 64-bit)
 * Source Processing script (ArduinoPlotter_processingListener.pde)
 
 Quickstart:
@@ -27,12 +27,20 @@ Quickstart:
 
 #### Install Plotter library 
 Search for "Plotter" in the Arduino Library Manager 
+
 _or_
-Install directly with the .zip file.
+
+Install directly with the [.zip file of Plotter](https://github.com/devinconley/ArduinoPlotter-for-Library-Manager/archive/master.zip)
 
 #### Setup Listener
-Download this repository in order to use one of the stand-alone listener options. Keep the folder intact so the application can access the lib and source folders. These stand-alone applications are dependent on your system having the Java Runtime Engine (JRE) installed.
+Download one of the following stand-alone listener options. Keep the folder intact so the application can access the lib and source folders. These stand-alone applications are dependent on your system having the Java Runtime Engine (JRE) installed.
+- [Windows 32](https://www.dropbox.com/s/wl6cxbceeqj1lxz/ArduinoPlotter_listener_windows32.zip?dl=1)
+- [Windows 64](https://www.dropbox.com/s/i7edmomwpqiqa5e/ArduinoPlotter_listener_windows64.zip?dl=1)
+- [Linux 32](https://www.dropbox.com/s/s0csn6xfuchfalf/ArduinoPlotter_listener_linux32.zip?dl=1)
+- [Linux 64](https://www.dropbox.com/s/ia7w80irwfojxp1/ArduinoPlotter_listener_linux64.zip?dl=1)
+
 _or_
+
 Download the source script from this repository (ArduinoPlotter_processingListener.pde) and run that with the Processing IDE.
 
 #### Usage in Arduino code
