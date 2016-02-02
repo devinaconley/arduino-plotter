@@ -38,6 +38,7 @@ final int BG_COL = 75; //
 final int PLOT_COL = 115;
 final int TICK_LEN = 6;
 final int NUM_TICKS = 5;
+final float PT_SZ = 1.5;
 
 // Setup and config Globals
 int h;
@@ -78,6 +79,7 @@ void setup() {
   frameRate(100);
   textSize(16);
   background(BG_COL);
+  strokeWeight(PT_SZ);
 }
 
 void draw() {
@@ -191,28 +193,34 @@ void drawTicks(int g) {
   // Draw ticks along y-axis
   float temp_x = pos_graphs[g][0] - TICK_LEN/2;
   float tick_offset = 0.5*(1.0 - AXIS_COVERAGE)*sub_height; 
+  float tick_interval = AXIS_COVERAGE * sub_height / (NUM_TICKS - 1);
   float val = (float)extremes_graphs[g][3];
   float val_interval = (float)(extremes_graphs[g][3] - extremes_graphs[g][2]) / (NUM_TICKS - 1);
   for (float temp_y = pos_graphs[g][1] + tick_offset;
-       temp_y <= pos_graphs[g][1] + sub_height - tick_offset; 
-       temp_y += AXIS_COVERAGE * sub_height / (NUM_TICKS - 1)) {
+       temp_y <= pos_graphs[g][1] + sub_height - tick_offset; temp_y += tick_interval) {
     line(temp_x, temp_y, temp_x + TICK_LEN, temp_y);
     text(Float.toString(val), temp_x + TICK_LEN + 5, temp_y);
     val -= val_interval;
   }
-  // Draw along x-axis
+  // Draw along x-axis (will be diff for each type of graph)
   float temp_y = pos_graphs[g][1] + sub_height - TICK_LEN/2;
-  tick_offset = 0.5*(1.0 - AXIS_COVERAGE)*sub_width;
-  val = (float)extremes_graphs[g][0];
-  val_interval = (float)(extremes_graphs[g][1] - extremes_graphs[g][0]) / (NUM_TICKS - 1);  
+  // if XvY graph, evenly spaced ticks within coverage
   if (xvy[g]) {
-    val *= AXIS_COVERAGE;
-    val_interval *= AXIS_COVERAGE;
+    val = (float)extremes_graphs[g][0];
+    val_interval = (float)(extremes_graphs[g][1] - extremes_graphs[g][0]) / (NUM_TICKS - 1);  
+    tick_offset = 0.5*(1.0 - AXIS_COVERAGE)*sub_width;
+    tick_interval = AXIS_COVERAGE * sub_width / (NUM_TICKS - 1);
+  // if a time graph, evenly spaced ticks across all
+  } else {
+    val_interval = (float)(extremes_graphs[g][1] - extremes_graphs[g][0]) / (NUM_TICKS + 1);
+    val = (float)extremes_graphs[g][0] + val_interval;
+    tick_offset = sub_width / (NUM_TICKS + 1);
+    tick_interval = tick_offset;
   }
   textAlign(CENTER, BOTTOM);
   for (temp_x = pos_graphs[g][0] + tick_offset;
        temp_x <= pos_graphs[g][0] + sub_width - tick_offset; 
-       temp_x += AXIS_COVERAGE * sub_width / (NUM_TICKS - 1)) {
+       temp_x += tick_interval) {
     line(temp_x, temp_y, temp_x, temp_y + TICK_LEN);
     text(Float.toString(val), temp_x, temp_y - 5);
     val += val_interval;
