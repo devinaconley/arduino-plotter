@@ -79,4 +79,4 @@ Once the Arduino is running, start the listener application that you setup above
 
 The application will auto-configure itself and your data should be plotted appropriately.
 
-![Quick Start Results Image](https://www.dropbox.com/s/jcosj7sa5uissgh/quickstart_plotted.png?raw=1)
+![Quick Start Results Image](https://www.dropbox.com/s/41w9g2htkeil6dj/quickstart_plotted.png?raw=1)
