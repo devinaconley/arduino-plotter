@@ -1,6 +1,6 @@
 ArduinoPlotter
 ===============
-An Arduino library for easy plotting on host computer via serial communication
+An Arduino library for easy graphing on host computer via serial communication
 
 _by: Devin Conley_
 
@@ -51,14 +51,14 @@ double y;
 Plotter p;
 ```
 
-Create the Plotter object and add graphs as desired. When adding graphs, the first argument is a String with the title of the graph and the second argument is an int with the number of points displayed at any given time. These two arguments are followed by atleast one String and double reference. Include more arguments (in pairs of a String and double reference) to plot multiple variables on a single time graph. If adding an XYGraph, exactly two of these pairs are required. 
+Create the Plotter object and add graphs as desired. When adding graphs, the first argument is a String with the title of the graph and the second argument is an int with the number of points displayed at any given time. These two arguments are followed by atleast one String and double pair. Include more arguments (in pairs of a String and double) to plot multiple variables on a single time graph. If adding an XYGraph, exactly two of these pairs are required. 
 ```arduino
 void setup() {
   p = Plotter();
   
-  p.addTimeGraph("Some title of single variable graph", 500, "label for x", &x);
-  p.addTimeGraph("Some title of two-variable graph", 500, "label for x", &x, "label for y", &y);
-  p.addXYGraph("Title of x versus y graph", 500, "x axis", &x, "y axis", &y);
+  p.addTimeGraph("Some title of single variable graph", 500, "label for x", x);
+  p.addTimeGraph("Some title of two-variable graph", 500, "label for x", x, "label for y", y);
+  p.addXYGraph("Title of x versus y graph", 500, "x axis", x, "y axis", y);
 }
 ```
 
@@ -79,4 +79,4 @@ Once the Arduino is running, start the listener application that you setup above
 
 The application will auto-configure itself and your data should be plotted appropriately.
 
-__That's it!__
+![Quick Start Results Image](https://www.dropbox.com/s/jcosj7sa5uissgh/quickstart_plotted.png?raw=1)

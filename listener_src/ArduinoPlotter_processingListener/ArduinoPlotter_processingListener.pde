@@ -16,7 +16,7 @@
 
   -------------------------------------------------------------------------------------------
   ArduinoPlotter_processingListener
-  v1.0.0
+  v1.1.0
   https://github.com/devinconley/ArduinoPlotter
   by Devin Conley
   ===========================================================================================
@@ -246,7 +246,7 @@ void serialEvent(Serial ser) {
 	throw new Exception();
       }
       configured = false;
-      print("no match");
+      //print("New config");
       
       setupGraphPosition();
       
@@ -271,7 +271,6 @@ void serialEvent(Serial ser) {
 	array_sub = array_main[i+1].split(INNER_KEY);
 	titles[i] = array_sub[0];
 	xvy[i] = Integer.parseInt(array_sub[1]) == 1;
-	println(xvy[i]);
 	num_points[i] = Integer.parseInt(array_sub[2]);
 	sz_graphs[i] = Integer.parseInt(array_sub[3]);
 	first_index_graphs[i] = k;
@@ -284,7 +283,7 @@ void serialEvent(Serial ser) {
       }
       // Set new config code
       config_code = array_main[0];
-      println(config_code);
+      //println(config_code);
       last_config = millis();
     } else {
       // Matching a code means we have configured correctly

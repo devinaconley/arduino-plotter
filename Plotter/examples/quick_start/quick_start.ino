@@ -11,34 +11,22 @@
 
 #include "Plotter.h"
 
-// Plotted variables must be declared as globals 
-double v;
-double w;
 double x;
 double y;
-double z;
 
-// Also declare plotter as global
 Plotter p;
 
 void setup() {
-  // Plotter constructor
   p = Plotter();
-  
-  // Add 5 variable time graph
-  p.addTimeGraph("5 variable time graph", 1000, "v label", v, "w label", w, "x label", x, "y label", y, "z label", z);
 
+  p.addTimeGraph("Some title of single variable graph", 500, "label for x", x);
+  p.addTimeGraph("Some title of two-variable graph", 500, "label for x", x, "label for y", y);
+  p.addXYGraph("Title of x versus y graph", 500, "x axis", x, "y axis", y);
 }
 
 void loop() {
-
-  // Update variables with arbitrary sine/cosine data
-  v = 3*cos(2.0*PI*(millis()/2500.0));
-  w = 4.0;
   x = 10*sin(2.0*PI*(millis()/5000.0));
-  y = 7*cos(2.0*PI*(millis()/5000.0));
-  z = 5*sin(2.0*PI*(millis()/5000.0));
+  y = 10*cos(2.0*PI*(millis()/5000.0));
 
-  // Plot
-  p.plot();
+  p.plot(); // usually called within loop()
 }

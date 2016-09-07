@@ -7,7 +7,7 @@
   https://github.com/devinconley/ArduinoPlotter
   by Devin Conley
   ===========================================================================================
-*/
+  */
 
 #include "Plotter.h"
 

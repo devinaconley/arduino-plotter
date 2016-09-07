@@ -3,11 +3,11 @@
   Example to demonstrate effect of "Points Displayed" in Time Graph and in XY Graph
   -------------------------------------------------------------------------------------------
   Plotter
-  v1.0.0
+  v1.1.0
   https://github.com/devinconley/ArduinoPlotter
   by Devin Conley
   ===========================================================================================
-  */
+*/
 
 #include "Plotter.h"
 
@@ -23,12 +23,12 @@ void setup() {
   p = Plotter();
   
   // Add X-Y graphs 
-  p.addXYGraph("X-Y graph w/ 500 points", 500, "x axis", &x, "y axis", &y);
-  p.addXYGraph("X-Y graph w/ 200 points", 200, "x axis", &x, "y axis", &y);
+  p.addXYGraph("X-Y graph w/ 500 points", 500, "x axis", x, "y axis", y);
+  p.addXYGraph("X-Y graph w/ 200 points", 200, "x axis", x, "y axis", y);
 
   // Add time graphs. Notice the effect of points displayed on the time scale
-  p.addTimeGraph("Time graph w/ 500 points", 500, "x label", &x);
-  p.addTimeGraph("Time graph w/ 200 points", 200, "x label", &x);
+  p.addTimeGraph("Time graph w/ 500 points", 500, "x label", x);
+  p.addTimeGraph("Time graph w/ 200 points", 200, "x label", x);
 
 }
 

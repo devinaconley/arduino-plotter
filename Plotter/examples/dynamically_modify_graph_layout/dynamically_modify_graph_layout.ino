@@ -3,11 +3,11 @@
   Example to demonstrate dynamic addition and removal of graphs
   -------------------------------------------------------------------------------------------
   Plotter
-  v1.0.0
+  v1.1.0
   https://github.com/devinconley/ArduinoPlotter
   by Devin Conley
   ===========================================================================================
-  */
+*/
 
 #include "Plotter.h"
 
@@ -29,20 +29,20 @@ void setup() {
   p = Plotter();
   
   // Add a graph during setup
-  p.addTimeGraph("x and y against time", 1000, "x label", &x, "y label", &y);
+  p.addTimeGraph("x and y against time", 1000, "x label", x, "y label", y);
 }
 
 void loop() {
 
   // After 3 seconds add a 1-variable graph
   if (millis() > 3000 && add_first) {
-    p.addTimeGraph("First dynamic addition", 1000, "z label", &z);
+    p.addTimeGraph("First dynamic addition", 1000, "z label", z);
     add_first = false;
   }
 
   // After 5 seconds, add a 3-variable graph
   if (millis() > 5000 && add_second) {
-    p.addTimeGraph("Second dynamic addition", 1000, "x label", &x, "y label", &y, "z label", &z);
+    p.addTimeGraph("Second dynamic addition", 1000, "x label", x, "y label", y, "z label", z);
     add_second = false;
   }
 

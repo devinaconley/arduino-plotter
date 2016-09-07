@@ -15,7 +15,7 @@
 
   -------------------------------------------------------------------------------------------
   Plotter
-  v1.0.0
+  v1.1.0
   https://github.com/devinconley/ArduinoPlotter
   by Devin Conley
   ===========================================================================================
@@ -44,55 +44,55 @@ Plotter::~Plotter() {
   delete temp;
 }
 
-void Plotter::addTimeGraph(String title, int points_displayed, String labelA, double* refA) {
+void Plotter::addTimeGraph(String title, int points_displayed, String labelA, double & refA) {
   String labels[] = {labelA};
-  double* refs[] = {refA};
+  double* refs[] = {&refA};
   addGraphHelper(title, labels, refs, 1, false, points_displayed);
 }
 
-void Plotter::addTimeGraph(String title, int points_displayed, String labelA, double* refA, 
-			   String labelB, double* refB) {
+void Plotter::addTimeGraph(String title, int points_displayed, String labelA, double & refA, 
+			   String labelB, double & refB) {
   String labels[] = {labelA, labelB};
-  double* refs[] = {refA, refB};
+  double* refs[] = {&refA, &refB};
   addGraphHelper(title, labels, refs, 2, false, points_displayed);
 }
 
-void Plotter::addTimeGraph(String title, int points_displayed, String labelA, double* refA, 
-			   String labelB, double* refB, String labelC, double* refC) {
+void Plotter::addTimeGraph(String title, int points_displayed, String labelA, double & refA, 
+			   String labelB, double & refB, String labelC, double & refC) {
   String labels[] = {labelA, labelB, labelC};
-  double* refs[] = {refA, refB, refC};
+  double* refs[] = {&refA, &refB, &refC};
   addGraphHelper(title, labels, refs, 3, false, points_displayed);
 }
 
-void Plotter::addTimeGraph(String title, int points_displayed, String labelA, double* refA, 
-			   String labelB, double* refB, String labelC, double* refC,
-			   String labelD, double* refD) {
+void Plotter::addTimeGraph(String title, int points_displayed, String labelA, double & refA, 
+			   String labelB, double & refB, String labelC, double & refC,
+			   String labelD, double & refD) {
   String labels[] = {labelA, labelB, labelC, labelD};
-  double* refs[] = {refA, refB, refC, refD};
+  double* refs[] = {&refA, &refB, &refC, &refD};
   addGraphHelper(title, labels, refs, 4, false, points_displayed);
 }
 
-void Plotter::addTimeGraph(String title, int points_displayed, String labelA, double* refA, 
-			   String labelB, double* refB, String labelC, double* refC,
-			   String labelD, double* refD, String labelE, double* refE) {
+void Plotter::addTimeGraph(String title, int points_displayed, String labelA, double & refA, 
+			   String labelB, double & refB, String labelC, double & refC,
+			   String labelD, double & refD, String labelE, double & refE) {
   String labels[] = {labelA, labelB, labelC, labelD, labelE};
-  double* refs[] = {refA, refB, refC, refD, refE};
+  double* refs[] = {&refA, &refB, &refC, &refD, &refE};
   addGraphHelper(title, labels, refs, 5, false, points_displayed);
 }
 
-void Plotter::addTimeGraph(String title, int points_displayed, String labelA, double* refA, 
-			   String labelB, double* refB, String labelC, double* refC,
-			   String labelD, double* refD, String labelE, double* refE,
-			   String labelF, double* refF) {
+void Plotter::addTimeGraph(String title, int points_displayed, String labelA, double & refA, 
+			   String labelB, double & refB, String labelC, double & refC,
+			   String labelD, double & refD, String labelE, double & refE,
+			   String labelF, double & refF) {
   String labels[] = {labelA, labelB, labelC, labelD, labelE, labelF};
-  double* refs[] = {refA, refB, refC, refD, refE, refF};
+  double* refs[] = {&refA, &refB, &refC, &refD, &refE, &refF};
   addGraphHelper(title, labels, refs, 6, false, points_displayed);
 }
   
-void Plotter::addXYGraph(String title, int points_displayed, String labelX, double* refX, 
-			 String labelY, double* refY) {
+void Plotter::addXYGraph(String title, int points_displayed, String labelX, double & refX, 
+			 String labelY, double & refY) {
   String labels[] = {labelX, labelY};
-  double* refs[] = {refX, refY};
+  double* refs[] = {&refX, &refY};
   addGraphHelper(title, labels, refs, 2, true, points_displayed);
 }
 
@@ -172,6 +172,6 @@ void Plotter::GraphNode::plot() {
   Serial.print(size); Serial.print(INNER_KEY);
   for (int i = 0; i < size; i++) {
     Serial.print(labels[i]); Serial.print(INNER_KEY);
-    Serial.print(*refs[i]); Serial.print(INNER_KEY);
+    Serial.print(*(refs[i])); Serial.print(INNER_KEY);
   }
 }

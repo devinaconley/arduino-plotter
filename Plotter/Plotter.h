@@ -15,7 +15,7 @@
 
   -------------------------------------------------------------------------------------------
   Plotter
-  v1.0.0
+  v1.1.0
   https://github.com/devinconley/ArduinoPlotter
   by Devin Conley
   ===========================================================================================
@@ -38,11 +38,11 @@ class Plotter {
      - title: String with title of graph
      - points_displayed: number of points to be shown at a given time. Used to control time-scaling
      - labelA: String with label of the plotted variable
-     - refA: reference to global double variable that will be updated throughout program (ie. &global_double)
+     - refA: reference to global double variable that will be updated throughout program
      
      Similar methods for multi-variable graphing vs. time are declared below and follow the same format
    */
-  void addTimeGraph(String title, int points_displayed, String labelA, double* refA);
+  void addTimeGraph(String title, int points_displayed, String labelA, double & refA);
 
   /*
     Add an X vs. Y graph 
@@ -51,12 +51,12 @@ class Plotter {
     - title: String with title of graph
     - points_displayed: number of points to be shown at a given time. Determines duration of data persistance
     - labelX: String with label of variable to be plotted along X-axis
-    - refX: reference to global double X-variable that will be updated throughout program (ie. &global_double)
+    - refX: reference to global double X-variable that will be updated throughout program
     - labelY: String with label of variable to be plotted along Y-axis
-    - refY: reference to global double Y-variable that will be updated throughout program (ie. &global_double)    
+    - refY: reference to global double Y-variable that will be updated throughout program
   */
   void addXYGraph(String title, int points_displayed,
-		  String labelX, double* refX, String labelY, double* refY);
+		  String labelX, double & refX, String labelY, double & refY);
   
   /* 
      Plot data
@@ -79,26 +79,27 @@ class Plotter {
    */
   bool remove(int index);
   
+
   // Add a 2-variable graph vs. time
-  void addTimeGraph(String title, int points_displayed, String labelA, double* refA, 
-		    String labelB, double* refB);
+  void addTimeGraph(String title, int points_displayed, String labelA, double & refA, 
+		    String labelB, double & refB);
   // Add a 3-variable graph vs. time
-  void addTimeGraph(String title, int points_displayed, String labelA, double* refA, 
-		    String labelB, double* refB, String labelC, double* refC);
+  void addTimeGraph(String title, int points_displayed, String labelA, double & refA, 
+		    String labelB, double & refB, String labelC, double & refC);
   
   // Add a 4-variable graph vs. time
-  void addTimeGraph(String title, int points_displayed, String labelA, double* refA, 
-		    String labelB, double* refB, String labelC, double* refC,
-		    String labelD, double* refD);
+  void addTimeGraph(String title, int points_displayed, String labelA, double & refA, 
+		    String labelB, double & refB, String labelC, double & refC,
+		    String labelD, double & refD);
   // Add a 5-variable graph vs. time
-  void addTimeGraph(String title, int points_displayed, String labelA, double* refA, 
-		    String labelB, double* refB, String labelC, double* refC,
-		    String labelD, double* refD, String labelE, double* refE);
+  void addTimeGraph(String title, int points_displayed, String labelA, double & refA, 
+		    String labelB, double & refB, String labelC, double & refC,
+		    String labelD, double & refD, String labelE, double & refE);
   // Add a 6-variable graph vs. time
-  void addTimeGraph(String title, int points_displayed, String labelA, double* refA, 
-		    String labelB, double* refB, String labelC, double* refC,
-		    String labelD, double* refD, String labelE, double* refE,
-		    String labelF, double* refF);
+  void addTimeGraph(String title, int points_displayed, String labelA, double & refA, 
+		    String labelB, double & refB, String labelC, double & refC,
+		    String labelD, double & refD, String labelE, double & refE,
+		    String labelF, double & refF);
   
   // Destructor for Plotter class
   ~Plotter();
@@ -119,7 +120,7 @@ class Plotter {
     String* labels;
     double** refs;
   };
-
+ private:
   // Private members
   int num_graphs;
   int total_size;
