@@ -42,8 +42,15 @@ class Plotter {
      
      Similar methods for multi-variable graphing vs. time are declared below and follow the same format
    */
-  void addTimeGraph(String title, int points_displayed, String labelA, double & refA);
+  template <typename T>
+      void addTimeGraph(String title, int points_displayed, String labelA, T & refA)
+  {
+      VarWrapper * temp = new VarWrapper[1];
+      temp[0] = VarWrapper( labelA, static_cast<void *>( &refA ), &dereference<T> );
+      addGraphHelper( title, temp, 1, false, points_displayed );
+  }
 
+  
   /*
     Add an X vs. Y graph 
     
@@ -79,7 +86,7 @@ class Plotter {
    */
   bool remove(int index);
   
-
+/*
   // Add a 2-variable graph vs. time
   void addTimeGraph(String title, int points_displayed, String labelA, double & refA, 
 		    String labelB, double & refB);
@@ -100,36 +107,79 @@ class Plotter {
 		    String labelB, double & refB, String labelC, double & refC,
 		    String labelD, double & refD, String labelE, double & refE,
 		    String labelF, double & refF);
-  
-  // Destructor for Plotter class
+*/
+		    
+// Destructor for Plotter class
   ~Plotter();
   
- private:
-  // Internal helper class
-  class GraphNode {
+ public:
+
+  // Nested VariableWrapper class
+  class VarWrapper
+  {
   public:
-    GraphNode* next;
+      VarWrapper() : ref( NULL ), deref( NULL ) {}
+      VarWrapper( String label, void * ref, double ( * deref )( void * ) ) :
+          label( label ), ref( ref ), deref( deref )
+      {}
+
+      String GetLabel()
+      {
+	  return label;
+      }
+      
+      double GetValue()
+      {
+	  return deref( ref );
+      }
+
+  private:
+      // Data
+      double ( * deref )( void * );
+      void * ref;
+      String label;
+      
+  }; // --VarWrapper
+
+public:
+  // Nested Graph node class
+  class Graph
+  {
+  public:
+    Graph * next;
     int size;
-    GraphNode(String title, String* labels, double** refs, int size, bool xvy, 
+    Graph(String title, VarWrapper * wrappers, int size, bool xvy, 
 	      int points_displayed);
     void plot();
+    
   private:
     bool xvy;
     int points_displayed;
     String title;
-    String* labels;
-    double** refs;
-  };
+    VarWrapper * wrappers;
+    
+  }; // --Graph
+  
  private:
-  // Private members
+  // Helpers
+  void addGraphHelper(String title, VarWrapper * wrappers, int sz, bool xvy, int points_displayed);
+  
+  template <typename T>
+  static double dereference( void * ref )
+  {
+      return (double) (* static_cast<T *>( ref ) );
+  }
+  
+  
+  // Data
   int num_graphs;
   int total_size;
   int max_points_displayed;
   unsigned long last_updated;
-  GraphNode* head;
-  GraphNode* tail;
-  void addGraphHelper(String title, String labels[], double* refs[], int sz, bool xvy, int points_displayed);
-};
+  Graph * head;
+  Graph * tail;
+  
+}; // --Plotter
 
 static const String OUTER_KEY = "#";
 static const String INNER_KEY = "@";
