@@ -8,8 +8,9 @@ Features:
 ----------
 - Multi-variable plots against time
 - 2-variable "x" vs "y" plots
-- Display multiple graphs within single window 
-- Simply pass a reference to your variables when the graph is added, no need to update each value directly
+- Display multiple graphs within single window
+- Support for any data type that can be cast to a double
+- Simply pass a reference to your variables when the graph is added, no need to update each value explicitly
 - Control number of data points displayed on each graph
 - Auto-scaling to fit all data on graph
 - Stand-alone listener application, written with Processing, is provided
@@ -43,30 +44,26 @@ Include library
 #include "Plotter.h"
 ```
 
-Declare global variables. Any variable that you want plotted needs to be a double with global scope. You will also likely want the Plotter object to be accessible globally.
+Declare global variables. Any variable that you want plotted should have global scope. You will also likely want the Plotter object to be accessible globally.
 ```arduino
 double x;
-double y;
 
 Plotter p;
 ```
 
-Create the Plotter object and add graphs as desired. When adding graphs, the first argument is a String with the title of the graph and the second argument is an int with the number of points displayed at any given time. These two arguments are followed by atleast one String and double pair. Include more arguments (in pairs of a String and double) to plot multiple variables on a single time graph. If adding an XYGraph, exactly two of these pairs are required. 
+Create the Plotter object and add graphs as desired. When adding graphs, the first argument is a String with the title of the graph and the second argument is an int with the number of points displayed at any given time. These two arguments are followed by a String and your corresponding variable.
 ```arduino
 void setup() {
   p = Plotter();
   
-  p.addTimeGraph("Some title of single variable graph", 500, "label for x", x);
-  p.addTimeGraph("Some title of two-variable graph", 500, "label for x", x, "label for y", y);
-  p.addXYGraph("Title of x versus y graph", 500, "x axis", x, "y axis", y);
+  p.AddTimeGraph( "Some title of a graph", 500, "label for x", x );
 }
 ```
 
-Update variables as desired and call plot when you want all values to be plotted on their respective graphs. This example simply assigns arbitrary sine and cosine data.
+Update variables as you normally would and call plot whenever you are ready. This example simply assigns arbitrary sine data.
 ```arduino
 void loop() {
   x = 10*sin(2.0*PI*(millis()/5000.0));
-  y = 10*cos(2.0*PI*(millis()/5000.0));
 
   p.plot(); // usually called within loop()
 }
@@ -77,6 +74,6 @@ Once the Arduino is running, start the listener application that you setup above
 
 ![Start Listener Image](https://www.dropbox.com/s/9kyzory64369mjh/start_listener.png?raw=1)
 
-The application will auto-configure itself and your data should be plotted appropriately.
+The application will configure itself and your data should be plotted appropriately.
 
-![Quick Start Results Image](https://www.dropbox.com/s/41w9g2htkeil6dj/quickstart_plotted.png?raw=1)
+![Quick Start Results Image](https://www.dropbox.com/s/jcj7wilsu8fbzia/quickstart.png?raw=1)

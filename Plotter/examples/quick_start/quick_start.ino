@@ -15,14 +15,15 @@ double x;
 
 Plotter p;
 
-void setup() {
-  p = Plotter();
+void setup()
+{
+    p = Plotter();
 
-  p.addTimeGraph( "Some title of a graph", 500, "label for x", x );
+    p.AddTimeGraph( "Some title of a graph", 500, "label for x", x );
 }
 
 void loop() {
-  x = 10*sin( 2.0*PI*( millis() / 5000.0 ) );
+    x = 10*sin( 2.0*PI*( millis() / 5000.0 ) );
 
-  p.plot(); // usually called within loop()
+    p.Plot(); // usually called within loop()
 }

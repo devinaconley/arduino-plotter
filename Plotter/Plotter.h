@@ -26,7 +26,8 @@
 
 #include "Arduino.h"
 
-class Plotter {
+class Plotter
+{
 public:
     // The constructor for Plotter requires no arguments
     Plotter();
@@ -36,19 +37,19 @@ public:
      
        Args:
        - title: String with title of graph
-       - points_displayed: number of points to be shown at a given time. Used to control time-scaling
+       - pointsDisplayed: number of points to be shown at a given time. Used to control time-scaling
        - labelA: String with label of the plotted variable
        - refA: reference to global variable that will be updated throughout program
      
        Similar methods for multi-variable graphing vs. time are declared below and follow the same format
     */
     template <typename A>
-    void addTimeGraph( String title, int points_displayed,
+    void AddTimeGraph( String title, int pointsDisplayed,
 		       String labelA, A & refA )
     {
-	VarWrapper * wrappers = new VarWrapper[1];
-	wrappers[0] = VarWrapper( labelA, static_cast<void *>( &refA ), &dereference<A> );
-	addGraphHelper( title, wrappers, 1, false, points_displayed );
+	VariableWrapper * wrappers = new VariableWrapper[1];
+	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &dereference<A> );
+	AddGraphHelper( title, wrappers, 1, false, pointsDisplayed );
     }
   
     /*
@@ -56,20 +57,20 @@ public:
     
       Args:
       - title: String with title of graph
-      - points_displayed: number of points to be shown at a given time. Determines duration of data persistance
+      - pointsDisplayed: number of points to be shown at a given time. Determines duration of data persistance
       - labelX: String with label of variable to be plotted along X-axis
       - refX: reference to global X-variable that will be updated throughout program
       - labelY: String with label of variable to be plotted along Y-axis
       - refY: reference to global Y-variable that will be updated throughout program
     */
     template <typename X, typename Y>
-    void addXYGraph( String title, int points_displayed,
+    void AddXYGraph( String title, int pointsDisplayed,
 		     String labelX, X & refX, String labelY, Y & refY )
     {
-	VarWrapper * wrappers = new VarWrapper[2];
-	wrappers[0] = VarWrapper( labelX, static_cast<void *>( &refX ), &dereference<X> );
-	wrappers[1] = VarWrapper( labelY, static_cast<void *>( &refY ), &dereference<Y> );
-	addGraphHelper( title, wrappers, 2, true, points_displayed );
+	VariableWrapper * wrappers = new VariableWrapper[2];
+	wrappers[0] = VariableWrapper( labelX, static_cast<void *>( &refX ), &dereference<X> );
+	wrappers[1] = VariableWrapper( labelY, static_cast<void *>( &refY ), &dereference<Y> );
+	AddGraphHelper( title, wrappers, 2, true, pointsDisplayed );
     }
   
     /* 
@@ -80,8 +81,7 @@ public:
 
        It is recommended to call plot() at the end of your loop function. 
     */
-    void plot();
-  
+    void Plot();
   
     /*
       Remove Graph
@@ -95,70 +95,70 @@ public:
   
     // Add a 2-variable graph vs. time
     template <typename A, typename B>
-    void addTimeGraph( String title, int points_displayed,
+    void AddTimeGraph( String title, int pointsDisplayed,
 		       String labelA, A & refA, String labelB, B & refB )
     {
-	VarWrapper * wrappers = new VarWrapper[2];
-	wrappers[0] = VarWrapper( labelA, static_cast<void *>( &refA ), &dereference<A> );
-	wrappers[1] = VarWrapper( labelB, static_cast<void *>( &refB ), &dereference<B> );
-	addGraphHelper( title, wrappers, 2, false, points_displayed );
+	VariableWrapper * wrappers = new VariableWrapper[2];
+	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &dereference<A> );
+	wrappers[1] = VariableWrapper( labelB, static_cast<void *>( &refB ), &dereference<B> );
+	AddGraphHelper( title, wrappers, 2, false, pointsDisplayed );
     }
 
     // Add a 3-variable graph vs. time
     template <typename A, typename B, typename C>
-    void addTimeGraph( String title, int points_displayed,
+    void AddTimeGraph( String title, int pointsDisplayed,
 		       String labelA, A & refA, String labelB, B & refB, String labelC, C & refC )
     {
-	VarWrapper * wrappers = new VarWrapper[3];
-	wrappers[0] = VarWrapper( labelA, static_cast<void *>( &refA ), &dereference<A> );
-	wrappers[1] = VarWrapper( labelB, static_cast<void *>( &refB ), &dereference<B> );
-	wrappers[2] = VarWrapper( labelC, static_cast<void *>( &refC ), &dereference<C> );
-	addGraphHelper( title, wrappers, 3, false, points_displayed );
+	VariableWrapper * wrappers = new VariableWrapper[3];
+	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &dereference<A> );
+	wrappers[1] = VariableWrapper( labelB, static_cast<void *>( &refB ), &dereference<B> );
+	wrappers[2] = VariableWrapper( labelC, static_cast<void *>( &refC ), &dereference<C> );
+	AddGraphHelper( title, wrappers, 3, false, pointsDisplayed );
     }
   
     // Add a 4-variable graph vs. time
     template <typename A, typename B, typename C, typename D>
-    void addTimeGraph( String title, int points_displayed,
+    void AddTimeGraph( String title, int pointsDisplayed,
 		       String labelA, A & refA, String labelB, B & refB, String labelC, C & refC,
 		       String labelD, D & refD )
     {
-	VarWrapper * wrappers = new VarWrapper[4];
-	wrappers[0] = VarWrapper( labelA, static_cast<void *>( &refA ), &dereference<A> );
-	wrappers[1] = VarWrapper( labelB, static_cast<void *>( &refB ), &dereference<B> );
-	wrappers[2] = VarWrapper( labelC, static_cast<void *>( &refC ), &dereference<C> );
-	wrappers[3] = VarWrapper( labelD, static_cast<void *>( &refD ), &dereference<D> );
-	addGraphHelper( title, wrappers, 4, false, points_displayed );
+	VariableWrapper * wrappers = new VariableWrapper[4];
+	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &dereference<A> );
+	wrappers[1] = VariableWrapper( labelB, static_cast<void *>( &refB ), &dereference<B> );
+	wrappers[2] = VariableWrapper( labelC, static_cast<void *>( &refC ), &dereference<C> );
+	wrappers[3] = VariableWrapper( labelD, static_cast<void *>( &refD ), &dereference<D> );
+	AddGraphHelper( title, wrappers, 4, false, pointsDisplayed );
     }
 
     // Add a 5-variable graph vs. time
     template <typename A, typename B, typename C, typename D, typename E>
-    void addTimeGraph( String title, int points_displayed,
+    void AddTimeGraph( String title, int pointsDisplayed,
 		       String labelA, A & refA, String labelB, B & refB, String labelC, C & refC,
 		       String labelD, D & refD, String labelE, E & refE )
     {
-	VarWrapper * wrappers = new VarWrapper[5];
-	wrappers[0] = VarWrapper( labelA, static_cast<void *>( &refA ), &dereference<A> );
-	wrappers[1] = VarWrapper( labelB, static_cast<void *>( &refB ), &dereference<B> );
-	wrappers[2] = VarWrapper( labelC, static_cast<void *>( &refC ), &dereference<C> );
-	wrappers[3] = VarWrapper( labelD, static_cast<void *>( &refD ), &dereference<D> );
-	wrappers[4] = VarWrapper( labelE, static_cast<void *>( &refE ), &dereference<E> );
-	addGraphHelper( title, wrappers, 5, false, points_displayed );
+	VariableWrapper * wrappers = new VariableWrapper[5];
+	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &dereference<A> );
+	wrappers[1] = VariableWrapper( labelB, static_cast<void *>( &refB ), &dereference<B> );
+	wrappers[2] = VariableWrapper( labelC, static_cast<void *>( &refC ), &dereference<C> );
+	wrappers[3] = VariableWrapper( labelD, static_cast<void *>( &refD ), &dereference<D> );
+	wrappers[4] = VariableWrapper( labelE, static_cast<void *>( &refE ), &dereference<E> );
+	AddGraphHelper( title, wrappers, 5, false, pointsDisplayed );
     }
 
     // Add a 6-variable graph vs. time
     template <typename A, typename B, typename C, typename D, typename E, typename F>    
-    void addTimeGraph( String title, int points_displayed,
+    void AddTimeGraph( String title, int pointsDisplayed,
 		       String labelA, A & refA, String labelB, B & refB, String labelC, C & refC,
 		       String labelD, D & refD, String labelE, E & refE, String labelF, F & refF )
     {
-	VarWrapper * wrappers = new VarWrapper[6];
-	wrappers[0] = VarWrapper( labelA, static_cast<void *>( &refA ), &dereference<A> );
-	wrappers[1] = VarWrapper( labelB, static_cast<void *>( &refB ), &dereference<B> );
-	wrappers[2] = VarWrapper( labelC, static_cast<void *>( &refC ), &dereference<C> );
-	wrappers[3] = VarWrapper( labelD, static_cast<void *>( &refD ), &dereference<D> );
-	wrappers[4] = VarWrapper( labelE, static_cast<void *>( &refE ), &dereference<E> );
-	wrappers[5] = VarWrapper( labelF, static_cast<void *>( &refF ), &dereference<F> );
-	addGraphHelper( title, wrappers, 6, false, points_displayed );
+	VariableWrapper * wrappers = new VariableWrapper[6];
+	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &dereference<A> );
+	wrappers[1] = VariableWrapper( labelB, static_cast<void *>( &refB ), &dereference<B> );
+	wrappers[2] = VariableWrapper( labelC, static_cast<void *>( &refC ), &dereference<C> );
+	wrappers[3] = VariableWrapper( labelD, static_cast<void *>( &refD ), &dereference<D> );
+	wrappers[4] = VariableWrapper( labelE, static_cast<void *>( &refE ), &dereference<E> );
+	wrappers[5] = VariableWrapper( labelF, static_cast<void *>( &refF ), &dereference<F> );
+	AddGraphHelper( title, wrappers, 6, false, pointsDisplayed );
     }
 		    
     // Destructor for Plotter class
@@ -167,11 +167,11 @@ public:
 public:
 
     // Nested VariableWrapper class
-    class VarWrapper
+    class VariableWrapper
     {
     public:
-        VarWrapper();
-        VarWrapper( String label, void * ref, double ( * deref )( void * ) );
+        VariableWrapper();
+        VariableWrapper( String label, void * ref, double ( * deref )( void * ) );
 	
 	String GetLabel();
 	double GetValue();
@@ -182,16 +182,16 @@ public:
 	void * ref;
 	double ( * deref )( void * );
 	
-    }; //-- VarWrapper
+    }; //-- VariableWrapper
     
 public:
     // Nested Graph node class
     class Graph
     {
     public:
-	Graph(String title, VarWrapper * wrappers, int size, bool xvy, int points_displayed);
+	Graph(String title, VariableWrapper * wrappers, int size, bool xvy, int pointsDisplayed);
 	~Graph();
-	void plot();
+	void Plot();
 	
 	// Data
 	Graph * next;
@@ -199,35 +199,36 @@ public:
 	
     private:
 	bool xvy;
-	int points_displayed;
+	int pointsDisplayed;
 	String title;
-	VarWrapper * wrappers;
+	VariableWrapper * wrappers;
     
     }; //-- Graph
     
 private:
     // Helpers
-    void addGraphHelper(String title, VarWrapper * wrappers, int sz, bool xvy, int points_displayed);
+    void AddGraphHelper(String title, VariableWrapper * wrappers, int sz, bool xvy, int pointsDisplayed);
     
     template <typename T>
     static double dereference( void * ref )
     {
-	return (double) (* static_cast<T *>( ref ) );
+	return static_cast<double>( (* static_cast<T *>( ref ) ) );
     }
   
   
     // Data
-    int num_graphs;
-    int total_size;
-    int max_points_displayed;
-    unsigned long last_updated;
+    int numGraphs;
+    int totalSize;
+    int maxPointsDisplayed;
+    unsigned long lastUpdated;
     Graph * head;
     Graph * tail;
   
 }; //-- Plotter
 
+
+// Constants
 static const String OUTER_KEY = "#";
 static const String INNER_KEY = "@";
-
 
 #endif

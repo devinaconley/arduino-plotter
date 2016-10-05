@@ -1,6 +1,6 @@
 /*
   ===========================================================================================
-  Example to demonstrate multi-variable plotting against time
+  Example to demonstrate effect of plotting different variable types
   -------------------------------------------------------------------------------------------
   Plotter
   v2.0.0
@@ -12,11 +12,10 @@
 #include "Plotter.h"
 
 // Plotted variables must be declared as globals 
-double v;
-double w;
-double x;
-double y;
-double z;
+float f;
+float f2;
+int i;
+char ch;
 
 // Also declare plotter as global
 Plotter p;
@@ -26,19 +25,20 @@ void setup()
     // Plotter constructor
     p = Plotter();
   
-    // Add 5 variable time graph
-    p.AddTimeGraph( "5 variable time graph", 1000, "v label", v, "w label", w, "x label", x,
-		    "y label", y, "z label", z );
+    // Add time graphs.
+    p.AddTimeGraph( "float vs int", 500, "float", f, "int", i );
+    p.AddTimeGraph( "float vs char", 500, "float", f2, "unsigned char", ch );
+
 }
 
 void loop()
 {
-    // Update variables with arbitrary sine/cosine data
-    v = 3*cos( 2.0*PI*( millis()/2500.0 ) );
-    w = 4.0;
-    x = 10*sin( 2.0*PI*( millis() / 5000.0 ) );
-    y = 7*cos( 2.0*PI*( millis() / 5000.0 ) );
-    z = 5*sin( 2.0*PI*( millis() / 5000.0 ) );
+    // Update different variable types with arbitrary sine/cosine data
+    unsigned long time = millis();
+    f = 5*sin( 2.0*PI*( time / 5000.0 ) );
+    i = 5*sin( 2.0*PI*( time / 5000.0 ) );
+    f2 = 300*sin( 2.0*PI*( time / 5000.0 ) );
+    ch = 300*sin( 2.0*PI*( time / 5000.0 ) );
 
     // Plot
     p.Plot();

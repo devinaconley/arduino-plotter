@@ -25,32 +25,34 @@
 
 // Plotter
 
-Plotter::Plotter() {
+Plotter::Plotter()
+{
   Serial.begin(115200);
   head = NULL;
   tail = NULL;
-  total_size = 0;
-  num_graphs = 0;
-  max_points_displayed = 0;
-  last_updated = millis();
+  totalSize = 0;
+  numGraphs = 0;
+  maxPointsDisplayed = 0;
+  lastUpdated = millis();
 }
 
 Plotter::~Plotter()
 { 
     Graph * temp = head;
-    Graph * temp_next;
-    while (temp->next)
+    Graph * tempNext;
+    while ( temp->next )
     {
-	temp_next = temp->next;
+	tempNext = temp->next;
 	delete temp;
-	temp = temp_next;
+	temp = tempNext;
     }
     delete temp;
 }
 
-void Plotter::addGraphHelper(String title, VarWrapper * wrappers, int sz, bool xvy, int points_displayed) { 
-    Graph * temp = new Graph( title, wrappers, sz, xvy, points_displayed );
-    if (head)
+void Plotter::AddGraphHelper( String title, VariableWrapper * wrappers, int sz, bool xvy, int pointsDisplayed )
+{ 
+    Graph * temp = new Graph( title, wrappers, sz, xvy, pointsDisplayed );
+    if ( head )
     {
 	tail->next = temp;
 	tail = temp;
@@ -61,25 +63,26 @@ void Plotter::addGraphHelper(String title, VarWrapper * wrappers, int sz, bool x
 	tail = temp;
     }
   
-    total_size += sz;
-    num_graphs++;
-    if (points_displayed > max_points_displayed)
+    totalSize += sz;
+    numGraphs++;
+    if ( pointsDisplayed > maxPointsDisplayed )
     {
-	max_points_displayed = points_displayed;
+	maxPointsDisplayed = pointsDisplayed;
     }
   
-    last_updated = millis();
+    lastUpdated = millis();
 }
 
-bool Plotter::remove(int index) {
-    if (num_graphs == 0 || index < 0 || num_graphs <= index)
+bool Plotter::remove(int index)
+{
+    if ( numGraphs == 0 || index < 0 || numGraphs <= index )
     {
 	return false;
     }
     else
     {
 	Graph * temp = head;
-	if (index == 0)
+	if ( index == 0 )
 	{
 	    head = head->next;
 	    delete temp;
@@ -87,44 +90,45 @@ bool Plotter::remove(int index) {
 	else
 	{
 	    Graph * last = temp;
-	    for (int i = 0; i < index; i++)
+	    for ( int i = 0; i < index; i++ )
 	    {
 		last = temp;
 		temp = temp->next;
 	    }
 	    last->next = temp->next;
-	    num_graphs--;
-	    total_size -= temp->size;
+	    numGraphs--;
+	    totalSize -= temp->size;
 	    delete temp;
 	}
-	last_updated = millis();
+	lastUpdated = millis();
 	return true;
     }
 }
 
-void Plotter::plot() {
+void Plotter::Plot()
+{
     String code = OUTER_KEY;
-    code += (num_graphs + INNER_KEY + total_size + INNER_KEY
-	     + max_points_displayed + INNER_KEY + last_updated + INNER_KEY);
-    Serial.print(code);
+    code += ( numGraphs + INNER_KEY + totalSize + INNER_KEY
+	     + maxPointsDisplayed + INNER_KEY + lastUpdated + INNER_KEY );
+    Serial.print( code );
     Graph * temp = head;
-    while (temp != NULL)
+    while ( temp != NULL )
     {
 	Serial.println();
-	temp->plot();
+	temp->Plot();
 	temp = temp->next;
     }
-    Serial.println(OUTER_KEY);
+    Serial.println( OUTER_KEY );
 }
 
 // Graph
 
-Plotter::Graph::Graph(String title, VarWrapper * wrappers, int size, bool xvy, int points_displayed) :
+Plotter::Graph::Graph( String title, VariableWrapper * wrappers, int size, bool xvy, int pointsDisplayed ) :
     title( title ),
     wrappers( wrappers ),
     size( size ),
     xvy( xvy ),
-    points_displayed( points_displayed ),
+    pointsDisplayed( pointsDisplayed ),
     next( NULL )
 {}
 
@@ -133,37 +137,38 @@ Plotter::Graph::~Graph()
     delete[] wrappers;
 }
 
-void Plotter::Graph::plot() {
-    Serial.print(title); Serial.print(INNER_KEY);
-    Serial.print(xvy); Serial.print(INNER_KEY);
-    Serial.print(points_displayed); Serial.print(INNER_KEY);
-    Serial.print(size); Serial.print(INNER_KEY);
+void Plotter::Graph::Plot()
+{
+    Serial.print( title ); Serial.print( INNER_KEY );
+    Serial.print( xvy ); Serial.print( INNER_KEY );
+    Serial.print( pointsDisplayed ); Serial.print( INNER_KEY );
+    Serial.print( size ); Serial.print( INNER_KEY );
     for (int i = 0; i < size; i++)
     {
-	Serial.print( wrappers[i].GetLabel() ); Serial.print(INNER_KEY);
-	Serial.print( wrappers[i].GetValue() ); Serial.print(INNER_KEY);
+	Serial.print( wrappers[i].GetLabel() ); Serial.print( INNER_KEY );
+	Serial.print( wrappers[i].GetValue() ); Serial.print( INNER_KEY );
     }
 }
 
 // VariableWrapper
 
-Plotter::VarWrapper::VarWrapper() :
+Plotter::VariableWrapper::VariableWrapper() :
     ref( NULL ),
     deref( NULL )
 {}
 
-Plotter::VarWrapper::VarWrapper( String label, void * ref, double ( * deref )( void * ) ) :
+Plotter::VariableWrapper::VariableWrapper( String label, void * ref, double ( * deref )( void * ) ) :
     label( label ),
     ref ( ref ),
     deref ( deref )
 {}
 
-String Plotter::VarWrapper::GetLabel()
+String Plotter::VariableWrapper::GetLabel()
 {
     return label;
 }
 
-double Plotter::VarWrapper::GetValue()
+double Plotter::VariableWrapper::GetValue()
 {
     return deref( ref );
 }
