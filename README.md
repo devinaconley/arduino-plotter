@@ -90,3 +90,35 @@ Documentation:
 - pointsDisplayed: number of points to be shown at a given time. Used to control time-scaling
 - label1: String with label of the plotted variable
 - variable1: global variable that will be updated throughout program
+
+#### void AddTimeGraph( String title, int pointsDisplayed, String label1, Variable1Type variable1, String label2, Variable2Type variable2, ... )
+
+*Add a multi-variable graph vs. time*
+- title: String with title of graph
+- pointsDisplayed: number of points to be shown at a given time. Used to control time-scaling
+- label1: String with label of the plotted variable
+- variable1: global variable that will be updated throughout program
+- label2: String with label of the plotted variable
+- variable2: global variable that will be updated throughout program
+- ...
+
+#### void AddXYGraph( String title, int pointsDisplayed, String labelX, VariableTypeX variableX, String labelY, VariableTypeY variableY )
+
+*Add an X vs Y graph*
+- title: String with title of graph
+- pointsDisplayed: number of points to be shown at a given time. Used to control time-scaling
+- labelX: String with label of variable to be plotted along X-axis
+- variableX: global X-variable that will be updated throughout program
+- labelY: String with label of variable to be plotted along Y-axis
+- variableY: global Y-variable that will be updated throughout program
+
+### void Plot()
+
+*Send most recent values for all plotted variables to the listener application*
+
+### bool Remove( int index )
+
+*Removes the graph at the specified position with zero-indexing. (ie passing 0 would remove the first graph added)
+- index: position of graph to remove
+Returns:
+- bool: true if successful
