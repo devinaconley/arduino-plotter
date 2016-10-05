@@ -11,17 +11,19 @@
 
   The library, these listeners, a quick-start guide, and usage examples are available at:
   
-  https://github.com/devinconley/ArduinoPlotter
+  https://github.com/devinconley/Arduino-Plotter
 
   -------------------------------------------------------------------------------------------
   Plotter
-  v1.1.0
-  https://github.com/devinconley/ArduinoPlotter
+  v2.0.0
+  https://github.com/devinconley/Arduino-Plotter
   by Devin Conley
   ===========================================================================================
  */
 
 #include "Plotter.h"
+
+// Plotter
 
 Plotter::Plotter() {
   Serial.begin(115200);
@@ -33,145 +35,135 @@ Plotter::Plotter() {
   last_updated = millis();
 }
 
-Plotter::~Plotter() { 
-  GraphNode* temp = head;
-  GraphNode* temp_next;
-  while (temp->next) {
-    temp_next = temp->next;
+Plotter::~Plotter()
+{ 
+    Graph * temp = head;
+    Graph * temp_next;
+    while (temp->next)
+    {
+	temp_next = temp->next;
+	delete temp;
+	temp = temp_next;
+    }
     delete temp;
-    temp = temp_next;
-  }
-  delete temp;
 }
 
-void Plotter::addTimeGraph(String title, int points_displayed, String labelA, double & refA) {
-  String labels[] = {labelA};
-  double* refs[] = {&refA};
-  addGraphHelper(title, labels, refs, 1, false, points_displayed);
-}
-
-void Plotter::addTimeGraph(String title, int points_displayed, String labelA, double & refA, 
-			   String labelB, double & refB) {
-  String labels[] = {labelA, labelB};
-  double* refs[] = {&refA, &refB};
-  addGraphHelper(title, labels, refs, 2, false, points_displayed);
-}
-
-void Plotter::addTimeGraph(String title, int points_displayed, String labelA, double & refA, 
-			   String labelB, double & refB, String labelC, double & refC) {
-  String labels[] = {labelA, labelB, labelC};
-  double* refs[] = {&refA, &refB, &refC};
-  addGraphHelper(title, labels, refs, 3, false, points_displayed);
-}
-
-void Plotter::addTimeGraph(String title, int points_displayed, String labelA, double & refA, 
-			   String labelB, double & refB, String labelC, double & refC,
-			   String labelD, double & refD) {
-  String labels[] = {labelA, labelB, labelC, labelD};
-  double* refs[] = {&refA, &refB, &refC, &refD};
-  addGraphHelper(title, labels, refs, 4, false, points_displayed);
-}
-
-void Plotter::addTimeGraph(String title, int points_displayed, String labelA, double & refA, 
-			   String labelB, double & refB, String labelC, double & refC,
-			   String labelD, double & refD, String labelE, double & refE) {
-  String labels[] = {labelA, labelB, labelC, labelD, labelE};
-  double* refs[] = {&refA, &refB, &refC, &refD, &refE};
-  addGraphHelper(title, labels, refs, 5, false, points_displayed);
-}
-
-void Plotter::addTimeGraph(String title, int points_displayed, String labelA, double & refA, 
-			   String labelB, double & refB, String labelC, double & refC,
-			   String labelD, double & refD, String labelE, double & refE,
-			   String labelF, double & refF) {
-  String labels[] = {labelA, labelB, labelC, labelD, labelE, labelF};
-  double* refs[] = {&refA, &refB, &refC, &refD, &refE, &refF};
-  addGraphHelper(title, labels, refs, 6, false, points_displayed);
-}
+void Plotter::addGraphHelper(String title, VarWrapper * wrappers, int sz, bool xvy, int points_displayed) { 
+    Graph * temp = new Graph( title, wrappers, sz, xvy, points_displayed );
+    if (head)
+    {
+	tail->next = temp;
+	tail = temp;
+    }
+    else
+    {
+	head = temp;
+	tail = temp;
+    }
   
-void Plotter::addXYGraph(String title, int points_displayed, String labelX, double & refX, 
-			 String labelY, double & refY) {
-  String labels[] = {labelX, labelY};
-  double* refs[] = {&refX, &refY};
-  addGraphHelper(title, labels, refs, 2, true, points_displayed);
-}
-
-void Plotter::addGraphHelper(String title, String labels[], double* refs[], int sz, bool xvy, int points_displayed) { 
-  GraphNode* temp = new GraphNode(title, labels, refs, sz, xvy, points_displayed);
-  if (head) {
-    tail->next = temp;
-    tail = temp;
-  } else {
-    head = temp;
-    tail = temp;
-  }
+    total_size += sz;
+    num_graphs++;
+    if (points_displayed > max_points_displayed)
+    {
+	max_points_displayed = points_displayed;
+    }
   
-  total_size += sz;
-  num_graphs++;
-  if (points_displayed > max_points_displayed) {
-    max_points_displayed = points_displayed;
-  }
-  last_updated = millis();
+    last_updated = millis();
 }
 
 bool Plotter::remove(int index) {
-  if (num_graphs == 0 || index < 0 || num_graphs <= index) {
-    return false;
-  } else {
-    GraphNode* temp = head;
-    if (index == 0) {
-      head = head->next;
-      delete temp;
-    } else {
-      GraphNode* last = temp;
-      for (int i = 0; i < index; i++) {
-	last = temp;
-	temp = temp->next;
-      }
-      last->next = temp->next;
-      num_graphs--;
-      total_size -= temp->size;
-      delete temp;
+    if (num_graphs == 0 || index < 0 || num_graphs <= index)
+    {
+	return false;
     }
-    last_updated = millis();
-    return true;
-  }
+    else
+    {
+	Graph * temp = head;
+	if (index == 0)
+	{
+	    head = head->next;
+	    delete temp;
+	}
+	else
+	{
+	    Graph * last = temp;
+	    for (int i = 0; i < index; i++)
+	    {
+		last = temp;
+		temp = temp->next;
+	    }
+	    last->next = temp->next;
+	    num_graphs--;
+	    total_size -= temp->size;
+	    delete temp;
+	}
+	last_updated = millis();
+	return true;
+    }
 }
 
 void Plotter::plot() {
-  String code = OUTER_KEY;
-  code += (num_graphs + INNER_KEY + total_size + INNER_KEY
-	   + max_points_displayed + INNER_KEY + last_updated + INNER_KEY);
-  Serial.print(code);
-  GraphNode* temp = head;
-  while (temp != NULL) {
-    Serial.println();
-    temp->plot();
-    temp = temp->next;
-  }
-  Serial.println(OUTER_KEY);
+    String code = OUTER_KEY;
+    code += (num_graphs + INNER_KEY + total_size + INNER_KEY
+	     + max_points_displayed + INNER_KEY + last_updated + INNER_KEY);
+    Serial.print(code);
+    Graph * temp = head;
+    while (temp != NULL)
+    {
+	Serial.println();
+	temp->plot();
+	temp = temp->next;
+    }
+    Serial.println(OUTER_KEY);
 }
 
+// Graph
 
-Plotter::GraphNode::GraphNode(String title, String* _labels, double** _refs, int size, bool xvy, 
-			      int points_displayed) : title(title), size(size), xvy(xvy), 
-						      points_displayed(points_displayed) {
-  next = NULL;
-  labels = new String[size];
-  refs = new double*[size];
-  for (int i = 0; i < size; i++) {
-    labels[i] = _labels[i];
-    refs[i] = _refs[i];
-  }
+Plotter::Graph::Graph(String title, VarWrapper * wrappers, int size, bool xvy, int points_displayed) :
+    title( title ),
+    wrappers( wrappers ),
+    size( size ),
+    xvy( xvy ),
+    points_displayed( points_displayed ),
+    next( NULL )
+{}
+
+Plotter::Graph::~Graph()
+{
+    delete[] wrappers;
 }
 
-void Plotter::GraphNode::plot() {
-  Serial.print(title); Serial.print(INNER_KEY);
-  Serial.print(xvy); Serial.print(INNER_KEY);
-  Serial.print(points_displayed); Serial.print(INNER_KEY);
-  Serial.print(size); Serial.print(INNER_KEY);
-  for (int i = 0; i < size; i++) {
-    Serial.print(labels[i]); Serial.print(INNER_KEY);
-    Serial.print(*(refs[i])); Serial.print(INNER_KEY);
-  }
+void Plotter::Graph::plot() {
+    Serial.print(title); Serial.print(INNER_KEY);
+    Serial.print(xvy); Serial.print(INNER_KEY);
+    Serial.print(points_displayed); Serial.print(INNER_KEY);
+    Serial.print(size); Serial.print(INNER_KEY);
+    for (int i = 0; i < size; i++)
+    {
+	Serial.print( wrappers[i].GetLabel() ); Serial.print(INNER_KEY);
+	Serial.print( wrappers[i].GetValue() ); Serial.print(INNER_KEY);
+    }
+}
+
+// VariableWrapper
+
+Plotter::VarWrapper::VarWrapper() :
+    ref( NULL ),
+    deref( NULL )
+{}
+
+Plotter::VarWrapper::VarWrapper( String label, void * ref, double ( * deref )( void * ) ) :
+    label( label ),
+    ref ( ref ),
+    deref ( deref )
+{}
+
+String Plotter::VarWrapper::GetLabel()
+{
+    return label;
+}
+
+double Plotter::VarWrapper::GetValue()
+{
+    return deref( ref );
 }

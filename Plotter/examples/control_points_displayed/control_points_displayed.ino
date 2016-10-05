@@ -3,8 +3,8 @@
   Example to demonstrate effect of "Points Displayed" in Time Graph and in XY Graph
   -------------------------------------------------------------------------------------------
   Plotter
-  v1.1.0
-  https://github.com/devinconley/ArduinoPlotter
+  v2.0.0
+  https://github.com/devinconley/Arduino-Plotter
   by Devin Conley
   ===========================================================================================
 */
