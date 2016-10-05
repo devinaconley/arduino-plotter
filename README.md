@@ -53,7 +53,8 @@ Plotter p;
 
 Create the Plotter object and add graphs as desired. When adding graphs, the first argument is a String with the title of the graph and the second argument is an int with the number of points displayed at any given time. These two arguments are followed by a String and your corresponding variable.
 ```arduino
-void setup() {
+void setup()
+{
   p = Plotter();
   
   p.AddTimeGraph( "Some title of a graph", 500, "label for x", x );
@@ -62,10 +63,11 @@ void setup() {
 
 Update variables as you normally would and call plot whenever you are ready. This example simply assigns arbitrary sine data.
 ```arduino
-void loop() {
-  x = 10*sin(2.0*PI*(millis()/5000.0));
+void loop()
+{
+  x = 10*sin( 2.0*PI*( millis() / 5000.0 ) );
 
-  p.plot(); // usually called within loop()
+  p.Plot(); // usually called within loop()
 }
 ```
 
@@ -77,3 +79,14 @@ Once the Arduino is running, start the listener application that you setup above
 The application will configure itself and your data should be plotted appropriately.
 
 ![Quick Start Results Image](https://www.dropbox.com/s/jcj7wilsu8fbzia/quickstart.png?raw=1)
+
+Documentation:
+------------
+
+#### void AddTimeGraph( String title, int pointsDisplayed, String label1, Variable1Type variable1 )
+
+*Add a 1-variable graph vs. time*
+- title: String with title of graph
+- pointsDisplayed: number of points to be shown at a given time. Used to control time-scaling
+- label1: String with label of the plotted variable
+- variable1: global variable that will be updated throughout program
