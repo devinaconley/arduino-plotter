@@ -12,12 +12,12 @@
 
   The library, these listeners, a quick-start guide, and usage examples are available at:
   
-  https://github.com/devinconley/ArduinoPlotter
+  https://github.com/devinconley/Arduino-Plotter
 
   -------------------------------------------------------------------------------------------
   ArduinoPlotter_processingListener
-  v1.1.0
-  https://github.com/devinconley/ArduinoPlotter
+  v2.0.0
+  https://github.com/devinconley/Arduino-Plotter
   by Devin Conley
   ===========================================================================================
  */

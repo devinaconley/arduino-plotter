@@ -1,5 +1,5 @@
 Plotter	KEYWORD1
-addTimeGraph	KEYWORD2
-addXYGraph	KEYWORD2
-plot		KEYWORD2
-remove		KEYWORD2
+AddTimeGraph	KEYWORD2
+AddXYGraph	KEYWORD2
+Plot		KEYWORD2
+Remove		KEYWORD2

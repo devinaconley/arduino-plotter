@@ -157,7 +157,7 @@ public:
 	wrappers[2] = VarWrapper( labelC, static_cast<void *>( &refC ), &dereference<C> );
 	wrappers[3] = VarWrapper( labelD, static_cast<void *>( &refD ), &dereference<D> );
 	wrappers[4] = VarWrapper( labelE, static_cast<void *>( &refE ), &dereference<E> );
-	wrappers[4] = VarWrapper( labelF, static_cast<void *>( &refF ), &dereference<F> );
+	wrappers[5] = VarWrapper( labelF, static_cast<void *>( &refF ), &dereference<F> );
 	addGraphHelper( title, wrappers, 6, false, points_displayed );
     }
 		    
@@ -172,7 +172,7 @@ public:
     public:
         VarWrapper();
         VarWrapper( String label, void * ref, double ( * deref )( void * ) );
-
+	
 	String GetLabel();
 	double GetValue();
 
@@ -181,9 +181,9 @@ public:
 	String label;
 	void * ref;
 	double ( * deref )( void * );
-      
+	
     }; //-- VarWrapper
-
+    
 public:
     // Nested Graph node class
     class Graph
@@ -192,11 +192,11 @@ public:
 	Graph(String title, VarWrapper * wrappers, int size, bool xvy, int points_displayed);
 	~Graph();
 	void plot();
-      
+	
 	// Data
 	Graph * next;
 	int size;
-
+	
     private:
 	bool xvy;
 	int points_displayed;
@@ -204,11 +204,11 @@ public:
 	VarWrapper * wrappers;
     
     }; //-- Graph
-  
+    
 private:
     // Helpers
     void addGraphHelper(String title, VarWrapper * wrappers, int sz, bool xvy, int points_displayed);
-  
+    
     template <typename T>
     static double dereference( void * ref )
     {
