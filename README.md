@@ -121,7 +121,7 @@ Documentation:
 
 #### bool Remove( int index )
 
-*Removes the graph at the specified position with zero-indexing. (ie passing 0 would remove the first graph added)
+*Removes the graph at the specified position with zero-indexing. (ie passing 0 would remove the first graph added)*
 ##### Arguments
 - index: position of graph to remove
 
