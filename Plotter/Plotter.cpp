@@ -11,17 +11,19 @@
 
   The library, these listeners, a quick-start guide, and usage examples are available at:
   
-  https://github.com/devinconley/ArduinoPlotter
+  https://github.com/devinconley/Arduino-Plotter
 
   -------------------------------------------------------------------------------------------
   Plotter
-  v1.1.0
-  https://github.com/devinconley/ArduinoPlotter
+  v2.0.0
+  https://github.com/devinconley/Arduino-Plotter
   by Devin Conley
   ===========================================================================================
  */
 
 #include "Plotter.h"
+
+// Plotter
 
 Plotter::Plotter() {
   Serial.begin(115200);
@@ -45,61 +47,6 @@ Plotter::~Plotter()
     }
     delete temp;
 }
-
-/*
-void Plotter::addTimeGraph(String title, int points_displayed, String labelA, double & refA) {
-  String labels[] = {labelA};
-  double* refs[] = {&refA};
-  addGraphHelper(title, labels, refs, 1, false, points_displayed);
-}
-*/
-/*
-void Plotter::addTimeGraph(String title, int points_displayed, String labelA, double & refA, 
-			   String labelB, double & refB) {
-  String labels[] = {labelA, labelB};
-  double* refs[] = {&refA, &refB};
-  addGraphHelper(title, labels, refs, 2, false, points_displayed);
-}
-
-void Plotter::addTimeGraph(String title, int points_displayed, String labelA, double & refA, 
-			   String labelB, double & refB, String labelC, double & refC) {
-  String labels[] = {labelA, labelB, labelC};
-  double* refs[] = {&refA, &refB, &refC};
-  addGraphHelper(title, labels, refs, 3, false, points_displayed);
-}
-
-void Plotter::addTimeGraph(String title, int points_displayed, String labelA, double & refA, 
-			   String labelB, double & refB, String labelC, double & refC,
-			   String labelD, double & refD) {
-  String labels[] = {labelA, labelB, labelC, labelD};
-  double* refs[] = {&refA, &refB, &refC, &refD};
-  addGraphHelper(title, labels, refs, 4, false, points_displayed);
-}
-
-void Plotter::addTimeGraph(String title, int points_displayed, String labelA, double & refA, 
-			   String labelB, double & refB, String labelC, double & refC,
-			   String labelD, double & refD, String labelE, double & refE) {
-  String labels[] = {labelA, labelB, labelC, labelD, labelE};
-  double* refs[] = {&refA, &refB, &refC, &refD, &refE};
-  addGraphHelper(title, labels, refs, 5, false, points_displayed);
-}
-
-void Plotter::addTimeGraph(String title, int points_displayed, String labelA, double & refA, 
-			   String labelB, double & refB, String labelC, double & refC,
-			   String labelD, double & refD, String labelE, double & refE,
-			   String labelF, double & refF) {
-  String labels[] = {labelA, labelB, labelC, labelD, labelE, labelF};
-  double* refs[] = {&refA, &refB, &refC, &refD, &refE, &refF};
-  addGraphHelper(title, labels, refs, 6, false, points_displayed);
-}
-  
-void Plotter::addXYGraph(String title, int points_displayed, String labelX, double & refX, 
-			 String labelY, double & refY) {
-  String labels[] = {labelX, labelY};
-  double* refs[] = {&refX, &refY};
-  addGraphHelper(title, labels, refs, 2, true, points_displayed);
-}
-*/
 
 void Plotter::addGraphHelper(String title, VarWrapper * wrappers, int sz, bool xvy, int points_displayed) { 
     Graph * temp = new Graph( title, wrappers, sz, xvy, points_displayed );
@@ -170,22 +117,53 @@ void Plotter::plot() {
     Serial.println(OUTER_KEY);
 }
 
+// Graph
 
-Plotter::Graph::Graph(String title, VarWrapper * _wrappers, int size, bool xvy, int points_displayed) :
-    title(title), size(size), xvy(xvy), points_displayed(points_displayed)
+Plotter::Graph::Graph(String title, VarWrapper * wrappers, int size, bool xvy, int points_displayed) :
+    title( title ),
+    wrappers( wrappers ),
+    size( size ),
+    xvy( xvy ),
+    points_displayed( points_displayed ),
+    next( NULL )
+{}
+
+Plotter::Graph::~Graph()
 {
-    next = NULL;
-    wrappers = _wrappers;
+    delete[] wrappers;
 }
 
 void Plotter::Graph::plot() {
-  Serial.print(title); Serial.print(INNER_KEY);
-  Serial.print(xvy); Serial.print(INNER_KEY);
-  Serial.print(points_displayed); Serial.print(INNER_KEY);
-  Serial.print(size); Serial.print(INNER_KEY);
-  for (int i = 0; i < size; i++)
-  {
-      Serial.print( wrappers[i].GetLabel() ); Serial.print(INNER_KEY);
-      Serial.print( wrappers[i].GetValue() ); Serial.print(INNER_KEY);
-  }
+    Serial.print(title); Serial.print(INNER_KEY);
+    Serial.print(xvy); Serial.print(INNER_KEY);
+    Serial.print(points_displayed); Serial.print(INNER_KEY);
+    Serial.print(size); Serial.print(INNER_KEY);
+    for (int i = 0; i < size; i++)
+    {
+	Serial.print( wrappers[i].GetLabel() ); Serial.print(INNER_KEY);
+	Serial.print( wrappers[i].GetValue() ); Serial.print(INNER_KEY);
+    }
+}
+
+// VariableWrapper
+
+Plotter::VarWrapper::VarWrapper() :
+    ref( NULL ),
+    deref( NULL )
+{}
+
+Plotter::VarWrapper::VarWrapper( String label, void * ref, double ( * deref )( void * ) ) :
+    label( label ),
+    ref ( ref ),
+    deref ( deref )
+{}
+
+String Plotter::VarWrapper::GetLabel()
+{
+    return label;
+}
+
+double Plotter::VarWrapper::GetValue()
+{
+    return deref( ref );
 }
