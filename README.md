@@ -1,11 +1,11 @@
-ArduinoPlotter
+Arduino-Plotter
 ===============
 An Arduino library for easy graphing on host computer via serial communication
 
 _by: Devin Conley_
 
 Features:
-----------
+---
 - Multi-variable plots against time
 - 2-variable "x" vs "y" plots
 - Display multiple graphs within single window
@@ -18,7 +18,7 @@ Features:
 ![Plotter Preview Image](https://www.dropbox.com/s/0471kf89skyo72x/plotter_preview.png?raw=1)
 
 Quickstart:
-------------
+---
 
 #### Install Plotter library 
 Search for "Plotter" in the Arduino Library Manager.
@@ -81,7 +81,7 @@ The application will configure itself and your data should be plotted appropriat
 ![Quick Start Results Image](https://www.dropbox.com/s/jcj7wilsu8fbzia/quickstart.png?raw=1)
 
 Documentation:
-------------
+---
 
 #### void AddTimeGraph( String title, int pointsDisplayed, String label1, Variable1Type variable1 )
 
@@ -91,6 +91,8 @@ Documentation:
 - pointsDisplayed: number of points to be shown at a given time. Used to control time-scaling
 - label1: String with label of the plotted variable
 - variable1: global variable that will be updated throughout program
+
+---
 
 #### void AddTimeGraph( String title, int pointsDisplayed, String label1, Variable1Type variable1, String label2, Variable2Type variable2, ... )
 
@@ -104,6 +106,8 @@ Documentation:
 - variable2: global variable that will be updated throughout program
 - ...
 
+---
+
 #### void AddXYGraph( String title, int pointsDisplayed, String labelX, VariableTypeX variableX, String labelY, VariableTypeY variableY )
 
 *Add an X vs Y graph*
@@ -114,10 +118,12 @@ Documentation:
 - variableX: global X-variable that will be updated throughout program
 - labelY: String with label of variable to be plotted along Y-axis
 - variableY: global Y-variable that will be updated throughout program
+---
 
 #### void Plot()
 
 *Send most recent values for all plotted variables to the listener application*
+---
 
 #### bool Remove( int index )
 
