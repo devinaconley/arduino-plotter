@@ -17,6 +17,8 @@ Features:
 
 ![Plotter Preview Image](https://www.dropbox.com/s/0471kf89skyo72x/plotter_preview.png?raw=1)
 
+---
+
 Quickstart:
 ---
 
@@ -26,6 +28,8 @@ Search for "Plotter" in the Arduino Library Manager.
 ___or___
 
 Install manually with the [ZIP file of Plotter](https://github.com/devinconley/ArduinoPlotter-for-Library-Manager/archive/master.zip).
+
+---
 
 #### Setup Listener
 Download one of the following stand-alone listener options. Keep the folder intact so the application can access the library and source folders. 
@@ -37,6 +41,8 @@ Download one of the following stand-alone listener options. Keep the folder inta
 ___or___
 
 Download the source script from this repository (ArduinoPlotter_processingListener.pde) and run that with the Processing IDE.
+
+---
 
 #### Usage in Arduino code
 Include library
@@ -71,6 +77,8 @@ void loop()
 }
 ```
 
+---
+
 #### Using the Listener
 Once the Arduino is running, start the listener application that you setup above.
 
@@ -79,6 +87,8 @@ Once the Arduino is running, start the listener application that you setup above
 The application will configure itself and your data should be plotted appropriately.
 
 ![Quick Start Results Image](https://www.dropbox.com/s/jcj7wilsu8fbzia/quickstart.png?raw=1)
+
+---
 
 Documentation:
 ---
@@ -118,11 +128,13 @@ Documentation:
 - variableX: global X-variable that will be updated throughout program
 - labelY: String with label of variable to be plotted along Y-axis
 - variableY: global Y-variable that will be updated throughout program
+
 ---
 
 #### void Plot()
 
 *Send most recent values for all plotted variables to the listener application*
+
 ---
 
 #### bool Remove( int index )
