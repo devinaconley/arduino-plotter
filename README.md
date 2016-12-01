@@ -37,6 +37,7 @@ Download one of the following stand-alone listener options. Keep the folder inta
 - [Windows 64-bit](https://www.dropbox.com/s/ahy2ppul6v4lybi/ArduinoPlotter_listener_windows64.zip?dl=1)
 - [Linux 32-bit](https://www.dropbox.com/s/ilt9n3hkiw74vrf/ArduinoPlotter_listener_linux32.zip?dl=1)
 - [Linux 64-bit](https://www.dropbox.com/s/6irh0fn4c97aqz0/ArduinoPlotter_listener_linux64.zip?dl=1)
+- [Mac OS X](https://www.dropbox.com/s/emasvotan4yxbmo/ArduinoPlotter_listener_macOSX.zip?dl=1)
 
 ___or___
 
