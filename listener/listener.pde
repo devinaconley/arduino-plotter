@@ -1,7 +1,7 @@
 /*
   ===========================================================================================
-  ArduinoPlotter_processingListener is the source processing script that corresponds to the 
-  Plotter library for Arduino. The library supports plots against time as well as 2-variable 
+  This listener is the source processing script that corresponds to the Arduino Plotter 
+  library for Arduino. The library supports plots against time as well as 2-variable 
   "X vs Y" graphing. 
   -------------------------------------------------------------------------------------------
   The library transfers information via the serial port to a listener program written with the
@@ -15,7 +15,7 @@
   https://github.com/devinconley/Arduino-Plotter
 
   -------------------------------------------------------------------------------------------
-  ArduinoPlotter_processingListener
+  Arduino Plotter Listener
   v2.0.0
   https://github.com/devinconley/Arduino-Plotter
   by Devin Conley
@@ -26,7 +26,7 @@ import processing.serial.*;
 Serial port;
 
 //CONSTANTS
-final int[] COLORS = {#00FF00,#FF0000,#0000FF, #FEFF00, #FF9900, #FF00FF}; //int color codes
+final int[] COLORS = {#00FF00, #FF0000,#0000FF, #FEFF00, #FF9900, #FF00FF}; //int color codes
 final char OUTER_KEY = '#';
 final String INNER_KEY = "@";
 final float AXIS_COVERAGE = 0.75;
@@ -264,6 +264,8 @@ void serialEvent(Serial ser) {
       
       pos_x = new int[max_points];
       num_points = new int[num_graphs];
+      
+      //Graph test = new Graph(0, 0, 100, 100, false, 1, 1000, "Test", labels);
       
       // Iterate through the individual graph data blocks to get graph specific info
       int k = 0; // k tracks overall variable index
