@@ -302,9 +302,15 @@ void serialEvent(Serial ser) {
 		    p += 2;
 		    k++;
 		}
+
+		if ( xvyTemp )
+		{
+		    numVars = 1;
+		}
+		
 		// Create new Graph
-		Graph temp = new Graph(this, posGraphs[i][0], posGraphs[i][1], 100, 100,
-				       xvyTemp, numVars, maxPoints, title, labelsTemp);
+		Graph temp = new Graph(this, posGraphs[i][0], posGraphs[i][1], 300, 300,
+				       xvyTemp, numVars, maxPoints, title, labelsTemp, COLORS);
 		graphs.add( temp );
 	    }
 	    println("Added ", graphs.size() ); 
@@ -324,8 +330,21 @@ void serialEvent(Serial ser) {
 	    int temp_time = millis();
       
 	    for (int i = 0; i < num_graphs; i++) {
-		String[] array_sub = arrayMain[i+1].split(INNER_KEY);
+		String[] arraySub = arrayMain[i+1].split( INNER_KEY );
 
+		String[] array_sub = arraySub;
+
+		double[] tempData = new double[ (arraySub.length - 5) / 2 ];
+		
+		// Update graph objects with new data
+		int q = 0;
+		for ( int j = 5; j < arraySub.length; j += 2 )
+		{
+		    tempData[q] = Double.parseDouble( arraySub[j] );
+		    q++;       
+		}
+		graphs.get( i ).Update( tempData, temp_time );
+		
 		if (xvy[i]) {
 		    // Plot x vs y graph
 		    int p = 5; // first index of double in split array
