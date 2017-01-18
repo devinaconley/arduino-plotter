@@ -68,7 +68,7 @@ class Graph
 	this.labels = labels;	
     }
     
-    public void Reconfigure( int posY, int posX, int height, int width )
+    public void Reconfigure( float posY, float posX, float height, float width )
     {
 	this.posY = posY;
 	this.posX = posX;
@@ -129,13 +129,14 @@ class Graph
 	// Plot Background
 	this.parent.fill( PLOT_COL );
 	this.parent.stroke( 255 );
+	this.parent.strokeWeight( PT_SZ );
 	this.parent.rect( this.posX, this.posY, this.width, this.height );
 
 	// Title
 	this.parent.textSize( TITLE_SZ );
 	this.parent.fill( 255 );
 	this.parent.textAlign( this.parent.CENTER, this.parent.TOP );
-	this.parent.text( this.title, this.posX + this.height/2, this.posY + TITLE_SZ);
+	this.parent.text( this.title, this.posX + this.width / 2, this.posY + TITLE_SZ);
 
 	
 	// Calculations for offset and scaling of graph ( vs. time )
@@ -198,9 +199,10 @@ class Graph
 	// X and Y labels
 	this.parent.textSize( LABEL_SZ );
 	this.parent.textAlign( this.parent.LEFT, this.parent.TOP );
-	//text(labels[k+1], pos_graphs[g][0] + 10, pos_graphs[g][1] + 10);
+	this.parent.text( this.labels[1], this.posY + 10, this.posY + 10);
+
 	this.parent.textAlign( this.parent.RIGHT, this.parent.BOTTOM );
-	//text(labels[k], pos_graphs[g][0] + sub_width - 10, pos_graphs[g][1] + sub_height - 3*NUM_SZ);
+	this.parent.text( this.labels[0], this.posX + this.width - 10, this.posY + this.height - 3*NUM_SZ);
     }
 
 
@@ -219,7 +221,7 @@ class Graph
 	for ( float tempY = this.posY + tickOffset; tempY <= this.posY + this.height - tickOffset;
 	     tempY += tickInterval )
 	{
-	    float val = (float) ( ( (double)tempY - ( yOffset + this.posY ) ) / yScale ); 
+	    float val = (float) ( ( ( yOffset + this.posY ) - (double)tempY ) / yScale ); 
 	    this.parent.line( tempX, tempY, tempX + TICK_LEN, tempY );
 	    this.parent.text( Float.toString( val ), tempX + TICK_LEN + 5, tempY );
 	}
