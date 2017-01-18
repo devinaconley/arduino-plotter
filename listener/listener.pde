@@ -23,14 +23,15 @@
 */
 
 import processing.serial.*;
-Serial port;
 
 //CONSTANTS
-final int[] COLORS = {#00FF00, #FF0000,#0000FF, #FEFF00, #FF9900, #FF00FF}; //int color codes
+final int[] COLORS = {#00FF00, #FF0000, #0000FF, #FEFF00, #FF9900, #FF00FF}; //int color codes
 final char OUTER_KEY = '#';
 final String INNER_KEY = "@";
 final int MARGIN_SZ = 20; // between plots
-final int BG_COL = 75; // 
+final int BG_COL = 75; // background
+final int PORT_INTERVAL = 5000; // time to sit on each port
+final int BAUD_RATE = 115200;
 
 // Setup and config Globals
 int h;
@@ -39,22 +40,24 @@ int numGraphs;
 String configCode = "This will not be matched!";
 boolean configured = false;
 int lastConfig;
-
+int lastPortSwitch;
+int portIndex;
+Serial port;
 ArrayList<Graph> graphs;
 
 void setup()
 {
+    // Canvas
     size( 800, 800 );
-    surface.setResizable(true);
+    surface.setResizable( true );
     h = height;
     w = width;
-    String portID = Serial.list()[0];
-    // Add handshake here
-    port = new Serial( this, portID, 115200 );  
-    port.bufferUntil( OUTER_KEY );
     frameRate( 100 );
-    textSize( 16 );
-    background( BG_COL );
+    
+    // Serial comms
+    portIndex = 0;
+    lastPortSwitch = millis();
+    attemptConnect( portIndex );
 }
 
 void draw()
@@ -62,13 +65,27 @@ void draw()
     //PLOT ALL
     try
     {
+	background( BG_COL );
+	
 	if ( configured )
-	{
-	    background( BG_COL );
-
+	{	    
 	    for( int i = 0; i < graphs.size(); i++ )
 	    {
 		graphs.get(i).Plot();
+	    }
+	}
+	else
+	{
+	    text( "Scanning serial ports... (Port " + portIndex + ")", 20, 20 );
+	    // Continue to scan ports if not configuring
+	    if ( millis() - lastPortSwitch > PORT_INTERVAL )
+	    {	// Go to next port
+		portIndex++;
+		if ( portIndex >= Serial.list().length )
+		{
+		    portIndex = 0;
+		}
+		attemptConnect( portIndex );
 	    }
 	}
 	// Resize if needed
@@ -231,4 +248,18 @@ float[][] setupGraphPosition( int numGraphs )
     }
 
     return posGraphs;
+}
+
+void attemptConnect( int index )
+{
+    // Attempt connect on specified serial port
+    try
+    {
+	// Configure
+	port = new Serial( this, Serial.list()[portIndex], BAUD_RATE );  
+	port.bufferUntil( OUTER_KEY );
+	lastPortSwitch = millis(); // at end so that we try again immediately on invalid port
+    }
+    catch ( Exception e )
+    {}
 }
