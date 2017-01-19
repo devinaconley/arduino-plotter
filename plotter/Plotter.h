@@ -48,7 +48,7 @@ public:
 		       String labelA, A & refA )
     {
 	VariableWrapper * wrappers = new VariableWrapper[1];
-	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &dereference<A> );
+	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &Dereference<A> );
 	AddGraphHelper( title, wrappers, 1, false, pointsDisplayed );
     }
   
@@ -68,8 +68,8 @@ public:
 		     String labelX, X & refX, String labelY, Y & refY )
     {
 	VariableWrapper * wrappers = new VariableWrapper[2];
-	wrappers[0] = VariableWrapper( labelX, static_cast<void *>( &refX ), &dereference<X> );
-	wrappers[1] = VariableWrapper( labelY, static_cast<void *>( &refY ), &dereference<Y> );
+	wrappers[0] = VariableWrapper( labelX, static_cast<void *>( &refX ), &Dereference<X> );
+	wrappers[1] = VariableWrapper( labelY, static_cast<void *>( &refY ), &Dereference<Y> );
 	AddGraphHelper( title, wrappers, 2, true, pointsDisplayed );
     }
   
@@ -91,7 +91,7 @@ public:
       Returns:
       - true, if successful
     */
-    bool remove( int index );
+    bool Remove( int index );
   
     // Add a 2-variable graph vs. time
     template <typename A, typename B>
@@ -99,8 +99,8 @@ public:
 		       String labelA, A & refA, String labelB, B & refB )
     {
 	VariableWrapper * wrappers = new VariableWrapper[2];
-	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &dereference<A> );
-	wrappers[1] = VariableWrapper( labelB, static_cast<void *>( &refB ), &dereference<B> );
+	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &Dereference<A> );
+	wrappers[1] = VariableWrapper( labelB, static_cast<void *>( &refB ), &Dereference<B> );
 	AddGraphHelper( title, wrappers, 2, false, pointsDisplayed );
     }
 
@@ -110,9 +110,9 @@ public:
 		       String labelA, A & refA, String labelB, B & refB, String labelC, C & refC )
     {
 	VariableWrapper * wrappers = new VariableWrapper[3];
-	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &dereference<A> );
-	wrappers[1] = VariableWrapper( labelB, static_cast<void *>( &refB ), &dereference<B> );
-	wrappers[2] = VariableWrapper( labelC, static_cast<void *>( &refC ), &dereference<C> );
+	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &Dereference<A> );
+	wrappers[1] = VariableWrapper( labelB, static_cast<void *>( &refB ), &Dereference<B> );
+	wrappers[2] = VariableWrapper( labelC, static_cast<void *>( &refC ), &Dereference<C> );
 	AddGraphHelper( title, wrappers, 3, false, pointsDisplayed );
     }
   
@@ -123,10 +123,10 @@ public:
 		       String labelD, D & refD )
     {
 	VariableWrapper * wrappers = new VariableWrapper[4];
-	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &dereference<A> );
-	wrappers[1] = VariableWrapper( labelB, static_cast<void *>( &refB ), &dereference<B> );
-	wrappers[2] = VariableWrapper( labelC, static_cast<void *>( &refC ), &dereference<C> );
-	wrappers[3] = VariableWrapper( labelD, static_cast<void *>( &refD ), &dereference<D> );
+	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &Dereference<A> );
+	wrappers[1] = VariableWrapper( labelB, static_cast<void *>( &refB ), &Dereference<B> );
+	wrappers[2] = VariableWrapper( labelC, static_cast<void *>( &refC ), &Dereference<C> );
+	wrappers[3] = VariableWrapper( labelD, static_cast<void *>( &refD ), &Dereference<D> );
 	AddGraphHelper( title, wrappers, 4, false, pointsDisplayed );
     }
 
@@ -137,11 +137,11 @@ public:
 		       String labelD, D & refD, String labelE, E & refE )
     {
 	VariableWrapper * wrappers = new VariableWrapper[5];
-	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &dereference<A> );
-	wrappers[1] = VariableWrapper( labelB, static_cast<void *>( &refB ), &dereference<B> );
-	wrappers[2] = VariableWrapper( labelC, static_cast<void *>( &refC ), &dereference<C> );
-	wrappers[3] = VariableWrapper( labelD, static_cast<void *>( &refD ), &dereference<D> );
-	wrappers[4] = VariableWrapper( labelE, static_cast<void *>( &refE ), &dereference<E> );
+	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &Dereference<A> );
+	wrappers[1] = VariableWrapper( labelB, static_cast<void *>( &refB ), &Dereference<B> );
+	wrappers[2] = VariableWrapper( labelC, static_cast<void *>( &refC ), &Dereference<C> );
+	wrappers[3] = VariableWrapper( labelD, static_cast<void *>( &refD ), &Dereference<D> );
+	wrappers[4] = VariableWrapper( labelE, static_cast<void *>( &refE ), &Dereference<E> );
 	AddGraphHelper( title, wrappers, 5, false, pointsDisplayed );
     }
 
@@ -152,12 +152,12 @@ public:
 		       String labelD, D & refD, String labelE, E & refE, String labelF, F & refF )
     {
 	VariableWrapper * wrappers = new VariableWrapper[6];
-	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &dereference<A> );
-	wrappers[1] = VariableWrapper( labelB, static_cast<void *>( &refB ), &dereference<B> );
-	wrappers[2] = VariableWrapper( labelC, static_cast<void *>( &refC ), &dereference<C> );
-	wrappers[3] = VariableWrapper( labelD, static_cast<void *>( &refD ), &dereference<D> );
-	wrappers[4] = VariableWrapper( labelE, static_cast<void *>( &refE ), &dereference<E> );
-	wrappers[5] = VariableWrapper( labelF, static_cast<void *>( &refF ), &dereference<F> );
+	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &Dereference<A> );
+	wrappers[1] = VariableWrapper( labelB, static_cast<void *>( &refB ), &Dereference<B> );
+	wrappers[2] = VariableWrapper( labelC, static_cast<void *>( &refC ), &Dereference<C> );
+	wrappers[3] = VariableWrapper( labelD, static_cast<void *>( &refD ), &Dereference<D> );
+	wrappers[4] = VariableWrapper( labelE, static_cast<void *>( &refE ), &Dereference<E> );
+	wrappers[5] = VariableWrapper( labelF, static_cast<void *>( &refF ), &Dereference<F> );
 	AddGraphHelper( title, wrappers, 6, false, pointsDisplayed );
     }
 		    
@@ -210,7 +210,7 @@ private:
     void AddGraphHelper(String title, VariableWrapper * wrappers, int sz, bool xvy, int pointsDisplayed);
     
     template <typename T>
-    static double dereference( void * ref )
+    static double Dereference( void * ref )
     {
 	return static_cast<double>( (* static_cast<T *>( ref ) ) );
     }

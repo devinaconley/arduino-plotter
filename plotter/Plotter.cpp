@@ -73,7 +73,7 @@ void Plotter::AddGraphHelper( String title, VariableWrapper * wrappers, int sz, 
     lastUpdated = millis();
 }
 
-bool Plotter::remove(int index)
+bool Plotter::Remove(int index)
 {
     if ( numGraphs == 0 || index < 0 || numGraphs <= index )
     {
