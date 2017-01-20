@@ -48,7 +48,7 @@ public:
 		       String labelA, A & refA )
     {
 	VariableWrapper * wrappers = new VariableWrapper[1];
-	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &Dereference<A> );
+	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &Dereference<A>, "green" );
 	AddGraphHelper( title, wrappers, 1, false, pointsDisplayed );
     }
   
@@ -68,8 +68,8 @@ public:
 		     String labelX, X & refX, String labelY, Y & refY )
     {
 	VariableWrapper * wrappers = new VariableWrapper[2];
-	wrappers[0] = VariableWrapper( labelX, static_cast<void *>( &refX ), &Dereference<X> );
-	wrappers[1] = VariableWrapper( labelY, static_cast<void *>( &refY ), &Dereference<Y> );
+	wrappers[0] = VariableWrapper( labelX, static_cast<void *>( &refX ), &Dereference<X>, "green" );
+	wrappers[1] = VariableWrapper( labelY, static_cast<void *>( &refY ), &Dereference<Y>, "green" );
 	AddGraphHelper( title, wrappers, 2, true, pointsDisplayed );
     }
   
@@ -92,6 +92,17 @@ public:
       - true, if successful
     */
     bool Remove( int index );
+
+    /*
+      Set Variable Colors
+
+      Args:
+      - index: position of graph to set colors for
+      - colorA: new color to set
+      Returns:
+      - true, if successful
+    */
+    bool SetColor( int index, String colorA );
   
     // Add a 2-variable graph vs. time
     template <typename A, typename B>
@@ -99,8 +110,8 @@ public:
 		       String labelA, A & refA, String labelB, B & refB )
     {
 	VariableWrapper * wrappers = new VariableWrapper[2];
-	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &Dereference<A> );
-	wrappers[1] = VariableWrapper( labelB, static_cast<void *>( &refB ), &Dereference<B> );
+	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &Dereference<A>, "green" );
+	wrappers[1] = VariableWrapper( labelB, static_cast<void *>( &refB ), &Dereference<B>, "orange" );
 	AddGraphHelper( title, wrappers, 2, false, pointsDisplayed );
     }
 
@@ -110,9 +121,9 @@ public:
 		       String labelA, A & refA, String labelB, B & refB, String labelC, C & refC )
     {
 	VariableWrapper * wrappers = new VariableWrapper[3];
-	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &Dereference<A> );
-	wrappers[1] = VariableWrapper( labelB, static_cast<void *>( &refB ), &Dereference<B> );
-	wrappers[2] = VariableWrapper( labelC, static_cast<void *>( &refC ), &Dereference<C> );
+	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &Dereference<A>, "green" );
+	wrappers[1] = VariableWrapper( labelB, static_cast<void *>( &refB ), &Dereference<B>, "orange" );
+	wrappers[2] = VariableWrapper( labelC, static_cast<void *>( &refC ), &Dereference<C>, "cyan" );
 	AddGraphHelper( title, wrappers, 3, false, pointsDisplayed );
     }
   
@@ -123,10 +134,10 @@ public:
 		       String labelD, D & refD )
     {
 	VariableWrapper * wrappers = new VariableWrapper[4];
-	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &Dereference<A> );
-	wrappers[1] = VariableWrapper( labelB, static_cast<void *>( &refB ), &Dereference<B> );
-	wrappers[2] = VariableWrapper( labelC, static_cast<void *>( &refC ), &Dereference<C> );
-	wrappers[3] = VariableWrapper( labelD, static_cast<void *>( &refD ), &Dereference<D> );
+	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &Dereference<A>, "green");
+	wrappers[1] = VariableWrapper( labelB, static_cast<void *>( &refB ), &Dereference<B>, "orange" );
+	wrappers[2] = VariableWrapper( labelC, static_cast<void *>( &refC ), &Dereference<C>, "cyan" );
+	wrappers[3] = VariableWrapper( labelD, static_cast<void *>( &refD ), &Dereference<D>, "yellow" );
 	AddGraphHelper( title, wrappers, 4, false, pointsDisplayed );
     }
 
@@ -137,11 +148,11 @@ public:
 		       String labelD, D & refD, String labelE, E & refE )
     {
 	VariableWrapper * wrappers = new VariableWrapper[5];
-	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &Dereference<A> );
-	wrappers[1] = VariableWrapper( labelB, static_cast<void *>( &refB ), &Dereference<B> );
-	wrappers[2] = VariableWrapper( labelC, static_cast<void *>( &refC ), &Dereference<C> );
-	wrappers[3] = VariableWrapper( labelD, static_cast<void *>( &refD ), &Dereference<D> );
-	wrappers[4] = VariableWrapper( labelE, static_cast<void *>( &refE ), &Dereference<E> );
+	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &Dereference<A>, "green" );
+	wrappers[1] = VariableWrapper( labelB, static_cast<void *>( &refB ), &Dereference<B>, "orange" );
+	wrappers[2] = VariableWrapper( labelC, static_cast<void *>( &refC ), &Dereference<C>, "cyan" );
+	wrappers[3] = VariableWrapper( labelD, static_cast<void *>( &refD ), &Dereference<D>, "yellow" );
+	wrappers[4] = VariableWrapper( labelE, static_cast<void *>( &refE ), &Dereference<E>, "pink" );
 	AddGraphHelper( title, wrappers, 5, false, pointsDisplayed );
     }
 
@@ -152,37 +163,51 @@ public:
 		       String labelD, D & refD, String labelE, E & refE, String labelF, F & refF )
     {
 	VariableWrapper * wrappers = new VariableWrapper[6];
-	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &Dereference<A> );
-	wrappers[1] = VariableWrapper( labelB, static_cast<void *>( &refB ), &Dereference<B> );
-	wrappers[2] = VariableWrapper( labelC, static_cast<void *>( &refC ), &Dereference<C> );
-	wrappers[3] = VariableWrapper( labelD, static_cast<void *>( &refD ), &Dereference<D> );
-	wrappers[4] = VariableWrapper( labelE, static_cast<void *>( &refE ), &Dereference<E> );
-	wrappers[5] = VariableWrapper( labelF, static_cast<void *>( &refF ), &Dereference<F> );
+	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &Dereference<A>, "green" );
+	wrappers[1] = VariableWrapper( labelB, static_cast<void *>( &refB ), &Dereference<B>, "orange" );
+	wrappers[2] = VariableWrapper( labelC, static_cast<void *>( &refC ), &Dereference<C>, "cyan" );
+	wrappers[3] = VariableWrapper( labelD, static_cast<void *>( &refD ), &Dereference<D>, "yellow" );
+	wrappers[4] = VariableWrapper( labelE, static_cast<void *>( &refE ), &Dereference<E>, "pink" );
+	wrappers[5] = VariableWrapper( labelF, static_cast<void *>( &refF ), &Dereference<F>, "blue" );
 	AddGraphHelper( title, wrappers, 6, false, pointsDisplayed );
     }
-		    
+
+    // Set Colors for multivariable graphs
+    bool SetColor( int index, String colorA, String colorB );    
+    bool SetColor( int index, String colorA, String colorB, String colorC );
+    bool SetColor( int index, String colorA, String colroB, String colorC,
+		   String colorD );
+    bool SetColor( int index, String colorA, String colroB, String colorC,
+		   String colorD, String colorE );
+    bool SetColor( int index, String colorA, String colroB, String colorC,
+		   String colorD, String colorE, String colorF );
+    
     // Destructor for Plotter class
     ~Plotter();
-  
-public:
 
+public:
+    
     // Nested VariableWrapper class
     class VariableWrapper
     {
     public:
         VariableWrapper();
-        VariableWrapper( String label, void * ref, double ( * deref )( void * ) );
+        VariableWrapper( String label, void * ref, double ( * deref )( void * ), String color );
 	
 	String GetLabel();
 	double GetValue();
+	String GetColor();
+	void SetColor( String col );
 
     private:
 	// Data
 	String label;
+	String color;
 	void * ref;
 	double ( * deref )( void * );
 	
     }; //-- VariableWrapper
+
     
 public:
     // Nested Graph node class
@@ -192,6 +217,7 @@ public:
 	Graph(String title, VariableWrapper * wrappers, int size, bool xvy, int pointsDisplayed);
 	~Graph();
 	void Plot();
+	bool SetColor( int sz, String * colors );
 	
 	// Data
 	Graph * next;
@@ -207,7 +233,8 @@ public:
     
 private:
     // Helpers
-    void AddGraphHelper(String title, VariableWrapper * wrappers, int sz, bool xvy, int pointsDisplayed);
+    void AddGraphHelper( String title, VariableWrapper * wrappers, int sz, bool xvy, int pointsDisplayed );
+    bool SetColorHelper( int index, int sz, String * colors );
     
     template <typename T>
     static double Dereference( void * ref )

@@ -73,7 +73,7 @@ void Plotter::AddGraphHelper( String title, VariableWrapper * wrappers, int sz, 
     lastUpdated = millis();
 }
 
-bool Plotter::Remove(int index)
+bool Plotter::Remove( int index )
 {
     if ( numGraphs == 0 || index < 0 || numGraphs <= index )
     {
@@ -103,6 +103,64 @@ bool Plotter::Remove(int index)
 	lastUpdated = millis();
 	return true;
     }
+}
+
+bool Plotter::SetColor( int index, String colorA )
+{
+    String colors[] = { colorA };
+    return SetColorHelper( index, 1, colors );
+}
+
+bool Plotter::SetColor( int index, String colorA, String colorB )
+{
+    String colors[] = { colorA, colorB };
+    return SetColorHelper( index, 2, colors );
+}
+
+bool Plotter::SetColor( int index, String colorA, String colorB, String colorC )
+{
+    String colors[] = { colorA, colorB, colorC };
+    return SetColorHelper( index, 3, colors );
+}
+
+bool Plotter::SetColor( int index, String colorA, String colorB, String colorC,
+			String colorD )
+{
+    String colors[] = { colorA, colorB, colorC, colorD };
+    return SetColorHelper( index, 4, colors );
+}
+
+bool Plotter::SetColor( int index, String colorA, String colorB, String colorC,
+			String colorD, String colorE )
+{
+    String colors[] = { colorA, colorB, colorC, colorD, colorE };
+    return SetColorHelper( index, 5, colors );
+}
+
+bool Plotter::SetColor( int index, String colorA, String colorB, String colorC,
+			String colorD, String colorE, String colorF )
+{
+    String colors[] = { colorA, colorB, colorC, colorD, colorE, colorF };
+    return SetColorHelper( index, 5, colors );
+}
+
+bool Plotter::SetColorHelper( int index, int sz, String * colors )
+{
+    if ( numGraphs == 0 || index < 0 || numGraphs <= index )
+    {
+	return false;
+    }
+    Graph * temp = head;
+    for ( int i = 0; i < index; i++ )
+    {
+	temp = temp->next;
+    }
+    bool res = temp->SetColor( sz, colors );
+    if ( res )
+    {
+	lastUpdated = millis();
+    }
+    return res;
 }
 
 void Plotter::Plot()
@@ -146,8 +204,30 @@ void Plotter::Graph::Plot()
     for (int i = 0; i < size; i++)
     {
 	Serial.print( wrappers[i].GetLabel() ); Serial.print( INNER_KEY );
+	Serial.print( wrappers[i].GetColor() ); Serial.print( INNER_KEY );
 	Serial.print( wrappers[i].GetValue() ); Serial.print( INNER_KEY );
     }
+}
+
+bool Plotter::Graph::SetColor( int sz, String * colors )
+{
+    if ( sz != size && !xvy )
+    {
+	return false;
+    }
+
+    if ( xvy )
+    {
+	wrappers[0].SetColor( colors[0] );
+    }
+    else
+    {
+	for ( int i = 0; i < size; i++ )
+	{
+	    wrappers[i].SetColor( colors[i] );
+	}
+    }
+    return true;
 }
 
 // VariableWrapper
@@ -157,10 +237,11 @@ Plotter::VariableWrapper::VariableWrapper() :
     deref( NULL )
 {}
 
-Plotter::VariableWrapper::VariableWrapper( String label, void * ref, double ( * deref )( void * ) ) :
+Plotter::VariableWrapper::VariableWrapper( String label, void * ref, double ( * deref )( void * ), String color ) :
     label( label ),
-    ref ( ref ),
-    deref ( deref )
+    ref( ref ),
+    deref( deref ),
+    color( color ) 
 {}
 
 String Plotter::VariableWrapper::GetLabel()
@@ -171,4 +252,14 @@ String Plotter::VariableWrapper::GetLabel()
 double Plotter::VariableWrapper::GetValue()
 {
     return deref( ref );
+}
+
+String Plotter::VariableWrapper::GetColor()
+{
+    return color;
+}
+
+void Plotter::VariableWrapper::SetColor( String col )
+{
+    color = col;
 }

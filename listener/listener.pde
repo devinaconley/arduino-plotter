@@ -23,15 +23,28 @@
 */
 
 import processing.serial.*;
+import java.util.Map;
 
 //CONSTANTS
-final int[] COLORS = {#00FF00, #FF0000, #0000FF, #FEFF00, #FF9900, #FF00FF}; //int color codes
 final char OUTER_KEY = '#';
 final String INNER_KEY = "@";
 final int MARGIN_SZ = 20; // between plots
 final int BG_COL = 75; // background
 final int PORT_INTERVAL = 5000; // time to sit on each port
 final int BAUD_RATE = 115200;
+final HashMap<String, Integer> COLORMAP = new HashMap<String, Integer>()
+{
+    {
+	put( "red", color( 255, 0, 0 ) );
+	put( "green", color( 0, 255, 0 ) );
+	put( "blue", color( 0, 0, 255 ) );
+	put( "orange", color( 255, 153, 51 ) );
+	put( "yellow", color( 255, 255, 0 ) );
+	put( "pink", color( 255, 51, 204 ) );
+	put( "purple", color( 172, 0, 230 ) );
+	put( "cyan", color( 0, 255, 255 ) );
+    }
+};
 
 // Setup and config Globals
 int h;
@@ -143,10 +156,17 @@ void serialEvent( Serial ser )
 		int maxPoints = Integer.parseInt( arraySub[2] );
 		int numVars = Integer.parseInt( arraySub[3] );
 		String[] labelsTemp = new String[numVars];
+		int[] colorsTemp = new int[numVars];
        
 		for ( int j = 0; j < numVars; j++ )
 		{
-		    labelsTemp[j] = arraySub[4 + 2*j];
+		    labelsTemp[j] = arraySub[4 + 3*j];
+		    colorsTemp[j] = COLORMAP.get( arraySub[5 + 3*j] );
+		    if ( colorsTemp[j] == 0 )
+		    {
+			colorsTemp[j] = COLORMAP.get( "green" );
+		    }
+		    println( colorsTemp[j] );
 		}
 
 		if ( xvyTemp )
@@ -155,8 +175,8 @@ void serialEvent( Serial ser )
 		}
 		
 		// Create new Graph
-		Graph temp = new Graph(this, posGraphs[i][0], posGraphs[i][1], posGraphs[i][2], posGraphs[i][3],
-				       xvyTemp, numVars, maxPoints, title, labelsTemp, COLORS);
+		Graph temp = new Graph( this, posGraphs[i][0], posGraphs[i][1], posGraphs[i][2], posGraphs[i][3],
+					xvyTemp, numVars, maxPoints, title, labelsTemp, colorsTemp );
 		graphs.add( temp );
 	    }
 	    println("Added ", graphs.size() ); 
@@ -180,11 +200,11 @@ void serialEvent( Serial ser )
 	    {
 		String[] arraySub = arrayMain[i+1].split( INNER_KEY );
 
-		double[] tempData = new double[ (arraySub.length - 5) / 2 ];
+		double[] tempData = new double[ (arraySub.length - 5) / 3 ];
 		
 		// Update graph objects with new data
 		int q = 0;
-		for ( int j = 5; j < arraySub.length; j += 2 )
+		for ( int j = 6; j < arraySub.length; j += 3 )
 		{
 		    tempData[q] = Double.parseDouble( arraySub[j] );
 		    q++;       

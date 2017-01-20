@@ -41,9 +41,9 @@ class Graph
 	this.title = title;
 	this.labels = labels;
 	this.colors = colors;
-
-	this.parent.println( "Constructed new graph: ", this.title, this.posY, " ", this.posX);
-
+	
+	// this.parent.println( "Constructed new graph: ", this.title, " at ", this.posY, " ", this.posX );
+	
 	// Initialize
 	this.index = 0;
 	this.data = new double[maxPoints][numVars][2];
@@ -199,7 +199,7 @@ class Graph
 	// X and Y labels
 	this.parent.textSize( LABEL_SZ );
 	this.parent.textAlign( this.parent.LEFT, this.parent.TOP );
-	this.parent.text( this.labels[1], this.posY + 10, this.posY + 10);
+	this.parent.text( this.labels[1], this.posX + 10, this.posY + 10);
 
 	this.parent.textAlign( this.parent.RIGHT, this.parent.BOTTOM );
 	this.parent.text( this.labels[0], this.posX + this.width - 10, this.posY + this.height - 3*NUM_SZ);
