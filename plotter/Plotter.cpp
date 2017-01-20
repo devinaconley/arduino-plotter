@@ -201,11 +201,14 @@ void Plotter::Graph::Plot()
     Serial.print( xvy ); Serial.print( INNER_KEY );
     Serial.print( pointsDisplayed ); Serial.print( INNER_KEY );
     Serial.print( size ); Serial.print( INNER_KEY );
+
+    char val[15];
     for (int i = 0; i < size; i++)
     {
 	Serial.print( wrappers[i].GetLabel() ); Serial.print( INNER_KEY );
 	Serial.print( wrappers[i].GetColor() ); Serial.print( INNER_KEY );
-	Serial.print( wrappers[i].GetValue() ); Serial.print( INNER_KEY );
+	dtostrf( wrappers[i].GetValue(), 1, 7, val );
+	Serial.print( val ); Serial.print( INNER_KEY );
     }
 }
 

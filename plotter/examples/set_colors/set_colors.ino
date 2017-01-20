@@ -26,11 +26,12 @@ void setup()
     // Set variable colors of graph with index 0 to pink and orange
     p.SetColor( 0, "pink", "orange" );
     p.SetColor( 1, "cyan" );
+
 }
 
 void loop() {
-    x = 10*sin( 2.0*PI*( millis() / 5000.0 ) );
-    y = 10*cos( 2.0*PI*( millis() / 5000.0 ) );
-    
+    x = 0.0009*sin( 2.0*PI*( millis() / 5000.0 ) );
+    y = 90000*cos( 2.0*PI*( millis() / 5000.0 ) );
+
     p.Plot(); // usually called within loop()
 }

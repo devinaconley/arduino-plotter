@@ -1,4 +1,5 @@
 import processing.core.PApplet;
+import java.text.DecimalFormat;
 
 class Graph
 {
@@ -221,9 +222,12 @@ class Graph
 	for ( float tempY = this.posY + tickOffset; tempY <= this.posY + this.height - tickOffset;
 	     tempY += tickInterval )
 	{
-	    float val = (float) ( ( ( yOffset + this.posY ) - (double)tempY ) / yScale ); 
+	    float val = (float) ( ( ( yOffset + this.posY ) - (double)tempY ) / yScale );
+	    int n = GetDecimalPlaces( val );
+	    String fmt = "%" + Integer.toString( 1 + SIG_DIGITS - n ) + "." + Integer.toString( n ) + "g";
+	    this.parent.println( fmt );
 	    this.parent.line( tempX, tempY, tempX + TICK_LEN, tempY );
-	    this.parent.text( Float.toString( val ), tempX + TICK_LEN + 5, tempY );
+	    this.parent.text( String.format( fmt, val ), tempX + TICK_LEN + 5, tempY );
 	}
 
 	// x-axis
@@ -236,9 +240,30 @@ class Graph
 	{
 	    float val = (float) ( ( (double)tempX + xOffset - this.posX ) / xScale ); 
 	    this.parent.line( tempX, tempY, tempX, tempY + TICK_LEN );
-	    this.parent.text( Float.toString( val ), tempX, tempY - 5 );
+	    if ( this.xvy )
+	    {
+		int n = GetDecimalPlaces( val );
+		String fmt = "%" + Integer.toString( 1 + SIG_DIGITS - n ) + "." + Integer.toString( n ) + "g";
+		this.parent.text( String.format( fmt, val ), tempX, tempY - 5 );
+	    }
+	    else
+	    {
+		this.parent.text( String.format( "%d", (int)val ), tempX, tempY - 5 );		
+	    }
 	}	
 	
+    }
+
+    private int GetDecimalPlaces( float value )
+    {
+	int n = SIG_DIGITS;
+	int d = 1;	
+	while ( n > 0 && Math.round( Math.abs( value / d ) ) > 0 )
+	{
+	    n--;
+	    d *= 10;
+	}
+	return n;
     }
 
     private void CheckExtremes()
@@ -348,5 +373,5 @@ class Graph
     private static final int TICK_LEN = 6;
     private static final int NUM_TICKS = 5;
     private static final float PT_SZ = 1.5f;
-
+    private static final int SIG_DIGITS = 3;
 }
