@@ -129,15 +129,15 @@ class Graph
     {
 	// Plot Background
 	this.parent.fill( PLOT_COL );
-	this.parent.stroke( 255 );
-	this.parent.strokeWeight( PT_SZ );
+	this.parent.stroke( PLOT_COL );
+	this.parent.strokeWeight( (this.width + this.height) / 2.0f * PT_SZ );
 	this.parent.rect( this.posX, this.posY, this.width, this.height );
 
 	// Title
-	this.parent.textSize( TITLE_SZ );
+	this.parent.textSize( (int)( (this.width + this.height) / 2.0f * TITLE_SZ ) );
 	this.parent.fill( 255 );
 	this.parent.textAlign( this.parent.CENTER, this.parent.TOP );
-	this.parent.text( this.title, this.posX + this.width / 2, this.posY + TITLE_SZ);
+	this.parent.text( this.title, this.posX + this.width / 2, this.posY + 10 );
 
 	
 	// Calculations for offset and scaling of graph ( vs. time )
@@ -179,17 +179,19 @@ class Graph
     
     private void DrawTimeStuff()
     {
+	int labelSz = (int) ( (this.width + this.height) / 2.0f * LABEL_SZ );
+	
 	// Setup legend start
-	float textPos = this.posY + LABEL_SZ;
+	float textPos = this.posY + labelSz;
 	this.parent.textAlign( this.parent.RIGHT, this.parent.TOP );
-	this.parent.textSize( LABEL_SZ );
+	this.parent.textSize( labelSz );
 
 	// Draw each legend entry
 	for ( int i = 0; i < this.numVars; i++ )
 	{
 	    this.parent.fill( this.colors[i] );
 	    this.parent.text( this.labels[i], this.posX + this.width - 10, textPos);
-	    textPos += ( LABEL_SZ + LABEL_SZ/4 );
+	    textPos += ( labelSz + labelSz/4 );
 	    this.parent.stroke( this.colors[i] );
 	}
 
@@ -198,12 +200,12 @@ class Graph
     private void DrawXYStuff()
     {
 	// X and Y labels
-	this.parent.textSize( LABEL_SZ );
+	this.parent.textSize( (int)( (this.width + this.height) / 2.0f * LABEL_SZ) );
 	this.parent.textAlign( this.parent.LEFT, this.parent.TOP );
 	this.parent.text( this.labels[1], this.posX + 10, this.posY + 10);
 
 	this.parent.textAlign( this.parent.RIGHT, this.parent.BOTTOM );
-	this.parent.text( this.labels[0], this.posX + this.width - 10, this.posY + this.height - 3*NUM_SZ);
+	this.parent.text( this.labels[0], this.posX + this.width - 10, this.posY + this.height - 3.5f*TICK_LEN);
     }
 
 
@@ -212,7 +214,7 @@ class Graph
 	// Label graph with numbered tick marks
 	this.parent.stroke( 255 );
 	this.parent.fill( 255 );
-	this.parent.textSize( NUM_SZ );
+	this.parent.textSize( (int)( ( this.width + this.height ) / 2.0f * NUM_SZ )  );
 	this.parent.textAlign( this.parent.LEFT, this.parent.CENTER );
 
 	// Draw ticks along y-axis
@@ -223,9 +225,7 @@ class Graph
 	     tempY += tickInterval )
 	{
 	    float val = (float) ( ( ( yOffset + this.posY ) - (double)tempY ) / yScale );
-	    int n = GetDecimalPlaces( val );
-	    String fmt = "%" + Integer.toString( 1 + SIG_DIGITS - n ) + "." + Integer.toString( n ) + "g";
-	    this.parent.println( fmt );
+	    String fmt = GetNumberFormat( val );
 	    this.parent.line( tempX, tempY, tempX + TICK_LEN, tempY );
 	    this.parent.text( String.format( fmt, val ), tempX + TICK_LEN + 5, tempY );
 	}
@@ -242,8 +242,7 @@ class Graph
 	    this.parent.line( tempX, tempY, tempX, tempY + TICK_LEN );
 	    if ( this.xvy )
 	    {
-		int n = GetDecimalPlaces( val );
-		String fmt = "%" + Integer.toString( 1 + SIG_DIGITS - n ) + "." + Integer.toString( n ) + "g";
+		String fmt = GetNumberFormat( val );
 		this.parent.text( String.format( fmt, val ), tempX, tempY - 5 );
 	    }
 	    else
@@ -254,8 +253,8 @@ class Graph
 	
     }
 
-    private int GetDecimalPlaces( float value )
-    {
+    private String GetNumberFormat( float value )
+    {      
 	int n = SIG_DIGITS;
 	int d = 1;	
 	while ( n > 0 && Math.round( Math.abs( value / d ) ) > 0 )
@@ -263,7 +262,17 @@ class Graph
 	    n--;
 	    d *= 10;
 	}
-	return n;
+
+	String fmt = "%" + Integer.toString( 1 + SIG_DIGITS - n ) + "." + Integer.toString( n );
+	if ( ( Math.abs( value ) > 1000 || Math.abs( value ) < 0.001 ) && value != 0 )
+	{
+	    fmt += "e";
+	}
+	else
+	{
+	    fmt += "f";
+	}
+	return fmt;
     }
 
     private void CheckExtremes()
@@ -367,11 +376,11 @@ class Graph
     // Constants
     private static final float AXIS_COV = 0.75f;
     private static final int PLOT_COL = 115;
-    private static final int LABEL_SZ = 14;
-    private static final int TITLE_SZ = 16;
-    private static final int NUM_SZ = 10;
+    private static final float LABEL_SZ = 0.025f;
+    private static final float TITLE_SZ = 0.03f;
+    private static final float NUM_SZ = 0.02f;
     private static final int TICK_LEN = 6;
     private static final int NUM_TICKS = 5;
-    private static final float PT_SZ = 1.5f;
+    private static final float PT_SZ = 0.0025f;
     private static final int SIG_DIGITS = 3;
 }
