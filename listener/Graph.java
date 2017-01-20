@@ -171,14 +171,29 @@ class Graph
 	double yScale = AXIS_COV * this.height / ( this.extremes[3] - this.extremes[2] );
 	double yOffset = yScale * this.extremes[3] + 0.5 * ( 1.0 - AXIS_COV ) * this.height;
 
+	// Modify scaling and offset
+	if ( this.xvy )
+	{
+	    xScale *= AXIS_COV;
+	    xOffset = xScale * this.extremes[0] - 0.5 * ( 1.0 - AXIS_COV ) * this.width;
+	}
+
+	
+        // Do actual data plotting
+	for ( int i = 0; i < this.numVars; i++ )
+	{
+	    this.parent.stroke( this.colors[i] );
+	    for ( int j = 0; j < this.currPoints; j++ )
+	    {
+		this.parent.point( (float)(this.posX + (this.data[j][i][0]*xScale - xOffset)),
+				   (float)(this.posY + yOffset - data[j][i][1]*yScale) );
+	    }
+	}	
+	
 	// X vs Y and vs Time specific stuff
 	if ( this.xvy )
 	{
-	    this.DrawXYStuff();
-	    
-	    // Modify scaling and offset
-	    xScale *= AXIS_COV;
-	    xOffset = xScale * this.extremes[0] - 0.5 * ( 1.0 - AXIS_COV ) * this.width;
+	    this.DrawXYStuff();	    
 	}
 	else
 	{
@@ -188,16 +203,6 @@ class Graph
 	// Draw Ticks
 	this.DrawTicks( xScale, xOffset, yScale, yOffset );
 	
-	// Do actual data plotting
-	for ( int i = 0; i < this.numVars; i++ )
-	{
-	    this.parent.stroke( this.colors[i] );
-	    for ( int j = 0; j < this.currPoints; j++ )
-	    {
-		this.parent.point( (float)(this.posX + (this.data[j][i][0]*xScale - xOffset)),
-				   (float)(this.posY + yOffset - data[j][i][1]*yScale) );
-	    }
-	}
     }
 
     // Private Helpers
