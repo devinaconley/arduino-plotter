@@ -3,23 +3,25 @@
   Plotter is an Arduino library that allows easy multi-variable and multi-graph plotting. The
   library supports plots against time as well as 2-variable "X vs Y" graphing. 
   -------------------------------------------------------------------------------------------
-  The library transfers information via the serial port to a listener program written with the
+  The library stores and handles all relevant graph information and variable references, 
+  and transfers information via the serial port to a listener program written with the
   software provided by Processing. No modification is needed to this program; graph placement,
   axis-scaling, etc. are handled automatically. 
   Multiple options for this listener are available including stand-alone applications as well 
   as the source Processing script.
 
-  The library, these listeners, a quick-start guide, and usage examples are available at:
+  The library, these listeners, a quick-start guide, documentation, and usage examples are 
+  available at:
   
-  https://github.com/devinconley/Arduino-Plotter
+  https://github.com/devinaconley/arduino-plotter
 
   -------------------------------------------------------------------------------------------
   Plotter
-  v2.0.0
-  https://github.com/devinconley/Arduino-Plotter
+  v2.1.0
+  https://github.com/devinaconley/arduino-plotter
   by Devin Conley
   ===========================================================================================
- */
+*/
 
 #include "Plotter.h"
 

@@ -3,8 +3,8 @@
   Example to demonstrate configuring specific colors for each variable 
   -------------------------------------------------------------------------------------------
   Plotter
-  v2.0.0
-  https://github.com/devinconley/Arduino-Plotter
+  v2.1.0
+  https://github.com/deviaconley/arduino-plotter
   by Devin Conley
   ===========================================================================================
 */
@@ -25,6 +25,7 @@ void setup()
 
     // Set variable colors of graph with index 0 to pink and orange
     p.SetColor( 0, "pink", "orange" );
+    // Set color of x vs y graph at index 1 to cyan
     p.SetColor( 1, "cyan" );
 
 }

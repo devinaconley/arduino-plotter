@@ -1,23 +1,25 @@
 /*
   ===========================================================================================
-  This listener is the source processing script that corresponds to the Arduino Plotter 
-  library for Arduino. The library supports plots against time as well as 2-variable 
-  "X vs Y" graphing. 
+  This listener is the main processing script that corresponds to the Arduino Plotter 
+  library for Arduino. This driver script handles serial port information and manages a 
+  set of Graph objects to do the actual plotting. 
   -------------------------------------------------------------------------------------------
-  The library transfers information via the serial port to a listener program written with the
+  The library stores and handles all relevant graph information and variable references, 
+  and transfers information via the serial port to a listener program written with the
   software provided by Processing. No modification is needed to this program; graph placement,
   axis-scaling, etc. are handled automatically. 
   Multiple options for this listener are available including stand-alone applications as well 
   as the source Processing script.
 
-  The library, these listeners, a quick-start guide, and usage examples are available at:
+  The library, these listeners, a quick-start guide, documentation, and usage examples are 
+  available at:
   
-  https://github.com/devinconley/Arduino-Plotter
+  https://github.com/devinaconley/arduino-plotter
 
   -------------------------------------------------------------------------------------------
   Arduino Plotter Listener
-  v2.0.0
-  https://github.com/devinconley/Arduino-Plotter
+  v2.1.0
+  https://github.com/devinaconley/arduino-plotter
   by Devin Conley
   ===========================================================================================
 */
@@ -166,7 +168,6 @@ void serialEvent( Serial ser )
 		    {
 			colorsTemp[j] = COLORMAP.get( "green" );
 		    }
-		    println( colorsTemp[j] );
 		}
 
 		if ( xvyTemp )

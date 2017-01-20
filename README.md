@@ -1,4 +1,4 @@
-Arduino-Plotter
+arduino-plotter
 ===============
 An Arduino library for easy graphing on host computer via serial communication
 
@@ -6,13 +6,14 @@ _by: Devin Conley_
 
 Features:
 ---
-- Multi-variable plots against time
+- Continuous multi-variable plots against time
 - 2-variable "x" vs "y" plots
-- Display multiple graphs within single window
+- Display multiple graphs within single resizable window
 - Support for any data type that can be cast to a double
 - Simply pass a reference to your variables when the graph is added, no need to update each value explicitly
 - Control number of data points displayed on each graph
 - Auto-scaling to fit all data on graph
+- Configurable line color per variable
 - Stand-alone listener application, written with Processing, is provided
 
 ![Plotter Preview Image](https://www.dropbox.com/s/0471kf89skyo72x/plotter_preview.png?raw=1)
@@ -27,7 +28,7 @@ Search for "Plotter" in the Arduino Library Manager.
 
 ___or___
 
-Install manually with the [ZIP file of Plotter](https://github.com/devinconley/ArduinoPlotter-for-Library-Manager/archive/master.zip).
+Install manually with the [ZIP file of Plotter](https://github.com/devinconley/arduino-plotter-for-library-manager/archive/master.zip).
 
 ---
 
@@ -143,6 +144,18 @@ Documentation:
 *Removes the graph at the specified position with zero-indexing. (ie passing 0 would remove the first graph added)*
 ##### Arguments
 - index: position of graph to remove
+
+##### Returns
+- bool: true if successful
+
+---
+
+#### bool SetColor( int index, String colorA, ... )
+
+*Sets the line colors for each variable in the graph at the specified position with zero-indexing. (ie passing 0 would set colors for the first graph added)*
+##### Arguments
+- index: position of graph to remove
+- colorA: color for first variable
 
 ##### Returns
 - bool: true if successful
