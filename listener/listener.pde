@@ -53,6 +53,7 @@ int h;
 int w;
 int numGraphs;
 String configCode = "This will not be matched!";
+String lastLabels = "Also will not be matched";
 boolean configured = false;
 int lastConfig;
 int lastPortSwitch;
@@ -142,8 +143,8 @@ void serialEvent( Serial ser )
 		throw new Exception();
 	    }
 	    configured = false;
-	    //print("New config");
-            
+	    String concatLabels = "";
+	    
 	    // Setup new layout
 	    float[][] posGraphs = setupGraphPosition( numGraphs );
       
@@ -153,13 +154,15 @@ void serialEvent( Serial ser )
 	    for ( int i = 0; i < numGraphs; i++ )
 	    {
 		arraySub = arrayMain[i+1].split( INNER_KEY );
-		String title = arraySub[0];
+		String title = arraySub[0];		
 		boolean xvyTemp = Integer.parseInt( arraySub[1] ) == 1;
 		int maxPoints = Integer.parseInt( arraySub[2] );
 		int numVars = Integer.parseInt( arraySub[3] );
 		String[] labelsTemp = new String[numVars];
 		int[] colorsTemp = new int[numVars];
-       
+
+		concatLabels += title;
+		
 		for ( int j = 0; j < numVars; j++ )
 		{
 		    labelsTemp[j] = arraySub[4 + 3*j];
@@ -168,6 +171,7 @@ void serialEvent( Serial ser )
 		    {
 			colorsTemp[j] = COLORMAP.get( "green" );
 		    }
+		    concatLabels += labelsTemp[j];
 		}
 
 		if ( xvyTemp )
@@ -181,11 +185,14 @@ void serialEvent( Serial ser )
 		graphs.add( temp );
 	    }
 	    println("Added ", graphs.size() ); 
-      
+	    
 	    // Set new config code
-	    configCode = arrayMain[0];
-	    //println(config_code);
-	    lastConfig = millis();
+	    if ( concatLabels.equals( lastLabels ) ) // Only when we're sure on labels
+	    {
+		configCode = arrayMain[0];
+		lastConfig = millis();
+	    }
+	    lastLabels = concatLabels;
 	}
 	else
 	{
