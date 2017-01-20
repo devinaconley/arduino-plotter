@@ -3,23 +3,25 @@
   Plotter is an Arduino library that allows easy multi-variable and multi-graph plotting. The
   library supports plots against time as well as 2-variable "X vs Y" graphing. 
   -------------------------------------------------------------------------------------------
-  The library transfers information via the serial port to a listener program written with the
+  The library stores and handles all relevant graph information and variable references, 
+  and transfers information via the serial port to a listener program written with the
   software provided by Processing. No modification is needed to this program; graph placement,
   axis-scaling, etc. are handled automatically. 
   Multiple options for this listener are available including stand-alone applications as well 
   as the source Processing script.
 
-  The library, these listeners, a quick-start guide, and usage examples are available at:
+  The library, these listeners, a quick-start guide, documentation, and usage examples are 
+  available at:
   
-  https://github.com/devinconley/Arduino-Plotter
+  https://github.com/devinaconley/arduino-plotter
 
   -------------------------------------------------------------------------------------------
   Plotter
-  v2.0.0
-  https://github.com/devinconley/Arduino-Plotter
+  v2.1.0
+  https://github.com/devinaconley/arduino-plotter
   by Devin Conley
   ===========================================================================================
- */
+*/
 
 #include "Plotter.h"
 
@@ -73,7 +75,7 @@ void Plotter::AddGraphHelper( String title, VariableWrapper * wrappers, int sz, 
     lastUpdated = millis();
 }
 
-bool Plotter::remove(int index)
+bool Plotter::Remove( int index )
 {
     if ( numGraphs == 0 || index < 0 || numGraphs <= index )
     {
@@ -103,6 +105,64 @@ bool Plotter::remove(int index)
 	lastUpdated = millis();
 	return true;
     }
+}
+
+bool Plotter::SetColor( int index, String colorA )
+{
+    String colors[] = { colorA };
+    return SetColorHelper( index, 1, colors );
+}
+
+bool Plotter::SetColor( int index, String colorA, String colorB )
+{
+    String colors[] = { colorA, colorB };
+    return SetColorHelper( index, 2, colors );
+}
+
+bool Plotter::SetColor( int index, String colorA, String colorB, String colorC )
+{
+    String colors[] = { colorA, colorB, colorC };
+    return SetColorHelper( index, 3, colors );
+}
+
+bool Plotter::SetColor( int index, String colorA, String colorB, String colorC,
+			String colorD )
+{
+    String colors[] = { colorA, colorB, colorC, colorD };
+    return SetColorHelper( index, 4, colors );
+}
+
+bool Plotter::SetColor( int index, String colorA, String colorB, String colorC,
+			String colorD, String colorE )
+{
+    String colors[] = { colorA, colorB, colorC, colorD, colorE };
+    return SetColorHelper( index, 5, colors );
+}
+
+bool Plotter::SetColor( int index, String colorA, String colorB, String colorC,
+			String colorD, String colorE, String colorF )
+{
+    String colors[] = { colorA, colorB, colorC, colorD, colorE, colorF };
+    return SetColorHelper( index, 5, colors );
+}
+
+bool Plotter::SetColorHelper( int index, int sz, String * colors )
+{
+    if ( numGraphs == 0 || index < 0 || numGraphs <= index )
+    {
+	return false;
+    }
+    Graph * temp = head;
+    for ( int i = 0; i < index; i++ )
+    {
+	temp = temp->next;
+    }
+    bool res = temp->SetColor( sz, colors );
+    if ( res )
+    {
+	lastUpdated = millis();
+    }
+    return res;
 }
 
 void Plotter::Plot()
@@ -143,11 +203,36 @@ void Plotter::Graph::Plot()
     Serial.print( xvy ); Serial.print( INNER_KEY );
     Serial.print( pointsDisplayed ); Serial.print( INNER_KEY );
     Serial.print( size ); Serial.print( INNER_KEY );
+
+    char val[15];
     for (int i = 0; i < size; i++)
     {
 	Serial.print( wrappers[i].GetLabel() ); Serial.print( INNER_KEY );
-	Serial.print( wrappers[i].GetValue() ); Serial.print( INNER_KEY );
+	Serial.print( wrappers[i].GetColor() ); Serial.print( INNER_KEY );
+	dtostrf( wrappers[i].GetValue(), 1, 7, val );
+	Serial.print( val ); Serial.print( INNER_KEY );
     }
+}
+
+bool Plotter::Graph::SetColor( int sz, String * colors )
+{
+    if ( sz != size && !xvy )
+    {
+	return false;
+    }
+
+    if ( xvy )
+    {
+	wrappers[0].SetColor( colors[0] );
+    }
+    else
+    {
+	for ( int i = 0; i < size; i++ )
+	{
+	    wrappers[i].SetColor( colors[i] );
+	}
+    }
+    return true;
 }
 
 // VariableWrapper
@@ -157,10 +242,11 @@ Plotter::VariableWrapper::VariableWrapper() :
     deref( NULL )
 {}
 
-Plotter::VariableWrapper::VariableWrapper( String label, void * ref, double ( * deref )( void * ) ) :
+Plotter::VariableWrapper::VariableWrapper( String label, void * ref, double ( * deref )( void * ), String color ) :
     label( label ),
-    ref ( ref ),
-    deref ( deref )
+    ref( ref ),
+    deref( deref ),
+    color( color ) 
 {}
 
 String Plotter::VariableWrapper::GetLabel()
@@ -171,4 +257,14 @@ String Plotter::VariableWrapper::GetLabel()
 double Plotter::VariableWrapper::GetValue()
 {
     return deref( ref );
+}
+
+String Plotter::VariableWrapper::GetColor()
+{
+    return color;
+}
+
+void Plotter::VariableWrapper::SetColor( String col )
+{
+    color = col;
 }

@@ -3,3 +3,4 @@ AddTimeGraph	KEYWORD2
 AddXYGraph	KEYWORD2
 Plot		KEYWORD2
 Remove		KEYWORD2
+SetColor	KEYWORD2

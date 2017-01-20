@@ -1,4 +1,4 @@
-Arduino-Plotter
+arduino-plotter
 ===============
 An Arduino library for easy graphing on host computer via serial communication
 
@@ -6,16 +6,17 @@ _by: Devin Conley_
 
 Features:
 ---
-- Multi-variable plots against time
+- Continuous multi-variable plots against time
 - 2-variable "x" vs "y" plots
-- Display multiple graphs within single window
+- Display multiple graphs within single resizable window
 - Support for any data type that can be cast to a double
 - Simply pass a reference to your variables when the graph is added, no need to update each value explicitly
 - Control number of data points displayed on each graph
 - Auto-scaling to fit all data on graph
+- Configurable line color per variable
 - Stand-alone listener application, written with Processing, is provided
 
-![Plotter Preview Image](https://www.dropbox.com/s/0471kf89skyo72x/plotter_preview.png?raw=1)
+![Plotter Preview](https://www.dropbox.com/s/2mtg5ig7lyrrffi/plotter_preview.gif?raw=1)
 
 ---
 
@@ -27,21 +28,21 @@ Search for "Plotter" in the Arduino Library Manager.
 
 ___or___
 
-Install manually with the [ZIP file of Plotter](https://github.com/devinconley/ArduinoPlotter-for-Library-Manager/archive/master.zip).
+Install manually with the [ZIP file of Plotter](https://github.com/devinaconley/arduino-plotter-for-library-manager/archive/master.zip).
 
 ---
 
 #### Setup Listener
 Download one of the following stand-alone listener options. Keep the folder intact so the application can access the library and source folders. 
-- [Windows 32-bit](https://www.dropbox.com/s/88wa2nkfzh5j3uz/ArduinoPlotter_listener_windows32.zip?dl=1)
-- [Windows 64-bit](https://www.dropbox.com/s/ahy2ppul6v4lybi/ArduinoPlotter_listener_windows64.zip?dl=1)
-- [Linux 32-bit](https://www.dropbox.com/s/ilt9n3hkiw74vrf/ArduinoPlotter_listener_linux32.zip?dl=1)
-- [Linux 64-bit](https://www.dropbox.com/s/6irh0fn4c97aqz0/ArduinoPlotter_listener_linux64.zip?dl=1)
+- [Windows 32-bit](https://www.dropbox.com/s/vbgd4osedrfgep3/arduino-plotter-listener-windows32.zip?dl=1)
+- [Windows 64-bit](https://www.dropbox.com/s/0x4xqv375h4j5hh/arduino-plotter-listener-windows64.zip?dl=1)
+- [Linux 32-bit](https://www.dropbox.com/s/u0g1ey96aw14k9z/arduino-plotter-listener-linux32.zip?dl=1)
+- [Linux 64-bit](https://www.dropbox.com/s/lsrpo5edb25sv3a/arduino-plotter-listener-linux64.zip?dl=1)
 - [Mac OS X](https://www.dropbox.com/s/emasvotan4yxbmo/ArduinoPlotter_listener_macOSX.zip?dl=1)
 
 ___or___
 
-Download the source script from this repository (ArduinoPlotter_processingListener.pde) and run that with the Processing IDE.
+Download the source directory from this repository (listener/) and run that with the Processing IDE.
 
 ---
 
@@ -146,3 +147,19 @@ Documentation:
 
 ##### Returns
 - bool: true if successful
+
+---
+
+#### bool SetColor( int index, String colorA, String colorB, ... )
+
+*Sets the line colors for each variable in the graph at the specified position with zero-indexing. (ie passing 0 would set colors for the first graph added)*
+
+*Options: "red", "green", "blue", "orange", "yellow", "pink", "purple", "cyan"*
+##### Arguments
+- index: position of graph to remove
+- colorA: color for first variable
+- colorB: color for second variable
+- ...
+
+##### Returns
+- bool: true if successful. returns false when incorrect number of colors have been passed.
