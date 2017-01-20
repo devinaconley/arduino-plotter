@@ -42,7 +42,7 @@ Download one of the following stand-alone listener options. Keep the folder inta
 
 ___or___
 
-Download the source script from this repository (ArduinoPlotter_processingListener.pde) and run that with the Processing IDE.
+Download the source directory from this repository (listener/) and run that with the Processing IDE.
 
 ---
 
