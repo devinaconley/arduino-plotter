@@ -4,6 +4,14 @@ An Arduino library for easy graphing on host computer via serial communication
 
 _by: Devin Conley_
 
+Contents:
+---
+[Features](#features)  
+[Quickstart](#quickstart)  
+[Documentation](#documentation)  
+
+---
+
 Features:
 ---
 - Continuous multi-variable plots against time
@@ -42,7 +50,7 @@ Download one of the following stand-alone listener options. Keep the folder inta
 
 ___or___
 
-Download the source directory from this repository (listener/) and run that with the Processing IDE.
+Download the source directory from this repository ( ***listener/*** ) and run that with the Processing IDE.
 
 ---
 
