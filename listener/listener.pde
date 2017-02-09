@@ -184,7 +184,7 @@ void serialEvent( Serial ser )
 					xvyTemp, numVars, maxPoints, title, labelsTemp, colorsTemp );
 		graphs.add( temp );
 	    }
-	    println("Added ", graphs.size() ); 
+	    println( "Configured " + graphs.size() + " graphs" ); 
 	    
 	    // Set new config code
 	    if ( concatLabels.equals( lastLabels ) ) // Only when we're sure on labels
@@ -281,6 +281,7 @@ float[][] setupGraphPosition( int numGraphs )
 void attemptConnect( int index )
 {
     // Attempt connect on specified serial port
+    println( "Attempting connect on port index: " + index );
     try
     {
 	// Configure
@@ -289,5 +290,7 @@ void attemptConnect( int index )
 	lastPortSwitch = millis(); // at end so that we try again immediately on invalid port
     }
     catch ( Exception e )
-    {}
+    {
+	println( e.getMessage() );
+    }
 }

@@ -350,7 +350,7 @@ class Graph
 	    return;
 	}
 
-	this.parent.println("Recalculating extremes...");
+	// this.parent.println("Recalculating extremes...");
 	
 	// Full re-calculation for new extremes
 	if ( this.xvy )
