@@ -4,6 +4,14 @@ An Arduino library for easy graphing on host computer via serial communication
 
 _by: Devin Conley_
 
+Contents:
+---
+[Features](#features)  
+[Quickstart](#quickstart)  
+[Documentation](#documentation)  
+
+---
+
 Features:
 ---
 - Continuous multi-variable plots against time
@@ -33,16 +41,16 @@ Install manually with the [ZIP file of Plotter](https://github.com/devinaconley/
 ---
 
 #### Setup Listener
-Download one of the following stand-alone listener options. Keep the folder intact so the application can access the library and source folders. 
+Download one of the following stand-alone listener options. Keep the folder intact so the application can access the library and source folders. **(Java Runtime Environment 8 required)**
 - [Windows 32-bit](https://www.dropbox.com/s/vbgd4osedrfgep3/arduino-plotter-listener-windows32.zip?dl=1)
 - [Windows 64-bit](https://www.dropbox.com/s/0x4xqv375h4j5hh/arduino-plotter-listener-windows64.zip?dl=1)
 - [Linux 32-bit](https://www.dropbox.com/s/u0g1ey96aw14k9z/arduino-plotter-listener-linux32.zip?dl=1)
 - [Linux 64-bit](https://www.dropbox.com/s/lsrpo5edb25sv3a/arduino-plotter-listener-linux64.zip?dl=1)
-- [Mac OS X](https://www.dropbox.com/s/emasvotan4yxbmo/ArduinoPlotter_listener_macOSX.zip?dl=1)
+- [Mac OS X](https://www.dropbox.com/s/k6ej5jftofotlhk/arduino-plotter-listener-macosx.zip?dl=1)
 
 ___or___
 
-Download the source directory from this repository (listener/) and run that with the Processing IDE.
+Download the source directory from this repository ( ***listener/*** ) and run that with the Processing IDE.
 
 ---
 
