@@ -27,6 +27,13 @@
 import processing.serial.*;
 import java.util.Map;
 
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 // FLAG FOR DEBUG MODE
 final boolean DEBUG = false;
 
@@ -36,6 +43,7 @@ final String INNER_KEY = "@";
 final int MARGIN_SZ = 20; // between plots
 final int BG_COL = 75; // background
 final int PORT_INTERVAL = 5000; // time to sit on each port
+final int CONNECT_TIMEOUT = 2000; // force timeout on connecting to serial port
 final int BAUD_RATE = 115200;
 final HashMap<String, Integer> COLORMAP = new HashMap<String, Integer>()
 {
@@ -323,13 +331,26 @@ void attemptConnect( int index )
     // Attempt connect on specified serial port
     String portName = Serial.list()[portIndex];
     println( "Attempting connect on port: " + portName );
+
+    // Wrap Serial port connect in future to force timeout
+    ExecutorService exec = Executors.newSingleThreadExecutor();
+    Future<Serial> future = exec.submit( new ConnectWithTimeout( this, portName, BAUD_RATE ) );    
+
     try
     {
-	// Configure
-	port = new Serial( this, portName, BAUD_RATE );  
+	// Do connect with timeout
+	port = future.get( CONNECT_TIMEOUT, TimeUnit.MILLISECONDS );
 
 	lastPortSwitch = millis(); // at end so that we try again immediately on invalid port
 	println( "Connected on " + portName + ". Listening for configuration..." );
+    }
+    catch ( TimeoutException e )
+    {
+	future.cancel( true );
+	if ( DEBUG )
+	{
+	    println( "Timeout." );
+	}
     }
     catch ( Exception e )
     {
@@ -337,6 +358,28 @@ void attemptConnect( int index )
 	{	    
 	    println( e.getMessage() );
 	}
-	delay( 100 );
     }
+
+    exec.shutdownNow();
+}
+
+// Callable class to wrap Serial connect
+class ConnectWithTimeout implements Callable<Serial>
+{
+    private final PApplet parent;
+    private final String portName;
+    private final int baudRate;
+
+    public ConnectWithTimeout( PApplet parent, String portName, int baud )
+    {
+	this.parent = parent;
+	this.portName = portName;
+	this.baudRate = baud;
+    }
+  
+    @Override
+	public Serial call() throws Exception
+    {
+	return new Serial( this.parent, this.portName, baudRate );
+    }     
 }
