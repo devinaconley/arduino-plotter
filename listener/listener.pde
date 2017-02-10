@@ -27,6 +27,9 @@
 import processing.serial.*;
 import java.util.Map;
 
+// FLAG FOR DEBUG MODE
+final boolean DEBUG = false;
+
 //CONSTANTS
 final char OUTER_KEY = '#';
 final String INNER_KEY = "@";
@@ -71,6 +74,11 @@ void setup()
     frameRate( 100 );
     
     // Serial comms
+    while ( Serial.list().length < 1 )
+    {
+	text( "No serial ports available. Waiting...", 20, 20 );	
+	delay( 100 );
+    }
     portIndex = 0;
     lastPortSwitch = millis();
     attemptConnect( portIndex );
@@ -92,15 +100,22 @@ void draw()
 	}
 	else
 	{
-	    text( "Scanning serial ports... (Port " + portIndex + ")", 20, 20 );
-	    // Continue to scan ports if not configuring
+            // Continue to scan ports if not configuring
+	    text( "Scanning serial ports... (" + Serial.list()[portIndex] + ")", 20, 20 );
+	    
 	    if ( millis() - lastPortSwitch > PORT_INTERVAL )
-	    {	// Go to next port
+	    {	// Go to next port		
 		portIndex++;
 		if ( portIndex >= Serial.list().length )
 		{
 		    portIndex = 0;
 		}
+		
+		if ( DEBUG )
+		{
+		    println( "Trying next port... index: " + portIndex + ", name: " + Serial.list()[portIndex] );
+		}
+		
 		attemptConnect( portIndex );
 	    }
 	}
@@ -126,6 +141,10 @@ void serialEvent( Serial ser )
     try
     {
 	String message = ser.readStringUntil( OUTER_KEY );
+	if ( message == null || message.isEmpty() || message.equals( "\n\n" + OUTER_KEY ) )
+	{
+	    return;
+	}
 	String[] arrayMain = message.split( "\n" );
     
 	// ********************************************************* //
@@ -137,11 +156,19 @@ void serialEvent( Serial ser )
 	{
 	    String[] arraySub = arrayMain[0].split( INNER_KEY );
 	    // Check for size of full transmission against expected to flag bad transmission
-	    numGraphs = Integer.parseInt( arraySub[0] );
+	    try
+	    {		
+		numGraphs = Integer.parseInt( arraySub[0] );
+	    }
+	    catch ( Exception e )
+	    {
+		return;
+	    }
 	    if ( arrayMain.length != numGraphs + 1 )
 	    {
-		throw new Exception();
+		return;
 	    }
+
 	    configured = false;
 	    String concatLabels = "";
 	    
@@ -169,6 +196,10 @@ void serialEvent( Serial ser )
 		    colorsTemp[j] = COLORMAP.get( arraySub[5 + 3*j] );
 		    if ( colorsTemp[j] == 0 )
 		    {
+			if ( DEBUG )
+			{
+			    println( "Invalid color: " + arraySub[5 + 3*j] + ", defaulting to green." );
+			}
 			colorsTemp[j] = COLORMAP.get( "green" );
 		    }
 		    concatLabels += labelsTemp[j];
@@ -184,15 +215,20 @@ void serialEvent( Serial ser )
 					xvyTemp, numVars, maxPoints, title, labelsTemp, colorsTemp );
 		graphs.add( temp );
 	    }
-	    println( "Configured " + graphs.size() + " graphs" ); 
 	    
 	    // Set new config code
 	    if ( concatLabels.equals( lastLabels ) ) // Only when we're sure on labels
 	    {
 		configCode = arrayMain[0];
 		lastConfig = millis();
+		println( "Configured " + graphs.size() + " graphs" ); 
 	    }
 	    lastLabels = concatLabels;
+
+	    if ( DEBUG )
+	    {
+		println( "Config code: " + configCode + ", Label config: " + concatLabels );
+	    }	    
 	}
 	else
 	{
@@ -209,7 +245,7 @@ void serialEvent( Serial ser )
 		String[] arraySub = arrayMain[i+1].split( INNER_KEY );
 
 		double[] tempData = new double[ (arraySub.length - 5) / 3 ];
-		
+
 		// Update graph objects with new data
 		int q = 0;
 		for ( int j = 6; j < arraySub.length; j += 3 )
@@ -217,12 +253,16 @@ void serialEvent( Serial ser )
 		    tempData[q] = Double.parseDouble( arraySub[j] );
 		    q++;       
 		}
-		graphs.get( i ).Update( tempData, tempTime );		
+		graphs.get( i ).Update( tempData, tempTime );
 	    }
 	}
     }
-    catch (Exception e) {
-	//println("exception....");
+    catch ( Exception e )
+    {
+	if ( DEBUG )
+	{
+	    println( "Exception... " + e.getMessage() );
+	}
     }
 }
 
@@ -281,16 +321,22 @@ float[][] setupGraphPosition( int numGraphs )
 void attemptConnect( int index )
 {
     // Attempt connect on specified serial port
-    println( "Attempting connect on port index: " + index );
+    String portName = Serial.list()[portIndex];
+    println( "Attempting connect on port: " + portName );
     try
     {
 	// Configure
-	port = new Serial( this, Serial.list()[portIndex], BAUD_RATE );  
-	port.bufferUntil( OUTER_KEY );
+	port = new Serial( this, portName, BAUD_RATE );  
+
 	lastPortSwitch = millis(); // at end so that we try again immediately on invalid port
+	println( "Connected on " + portName + ". Listening for configuration..." );
     }
     catch ( Exception e )
     {
-	println( e.getMessage() );
+	if ( DEBUG )
+	{	    
+	    println( e.getMessage() );
+	}
+	delay( 100 );
     }
 }
