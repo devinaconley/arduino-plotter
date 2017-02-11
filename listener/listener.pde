@@ -119,10 +119,8 @@ void draw()
 		    portIndex = 0;
 		}
 		
-		if ( DEBUG )
-		{
-		    println( "Trying next port... index: " + portIndex + ", name: " + Serial.list()[portIndex] );
-		}
+		logMessage( "Trying next port... index: " + portIndex + ", name: " + Serial.list()[portIndex],
+			    true );
 		
 		attemptConnect( portIndex );
 	    }
@@ -204,10 +202,7 @@ void serialEvent( Serial ser )
 		    colorsTemp[j] = COLORMAP.get( arraySub[5 + 3*j] );
 		    if ( colorsTemp[j] == 0 )
 		    {
-			if ( DEBUG )
-			{
-			    println( "Invalid color: " + arraySub[5 + 3*j] + ", defaulting to green." );
-			}
+			logMessage( "Invalid color: " + arraySub[5 + 3*j] + ", defaulting to green.", true );
 			colorsTemp[j] = COLORMAP.get( "green" );
 		    }
 		    concatLabels += labelsTemp[j];
@@ -229,14 +224,11 @@ void serialEvent( Serial ser )
 	    {
 		configCode = arrayMain[0];
 		lastConfig = millis();
-		println( "Configured " + graphs.size() + " graphs" ); 
+		logMessage( "Configured " + graphs.size() + " graphs", false ); 
 	    }
 	    lastLabels = concatLabels;
 
-	    if ( DEBUG )
-	    {
-		println( "Config code: " + configCode + ", Label config: " + concatLabels );
-	    }	    
+	    logMessage( "Config code: " + configCode + ", Label config: " + concatLabels, true );
 	}
 	else
 	{
@@ -267,10 +259,7 @@ void serialEvent( Serial ser )
     }
     catch ( Exception e )
     {
-	if ( DEBUG )
-	{
-	    println( "Exception... " + e.getMessage() );
-	}
+	logMessage( "Exception in serialEvent: " + e.toString(), true );
     }
 }
 
@@ -327,10 +316,14 @@ float[][] setupGraphPosition( int numGraphs )
 }
 
 void attemptConnect( int index )
-{
+{    
     // Attempt connect on specified serial port
+    if ( index >= Serial.list().length )
+    {
+	return;
+    }
     String portName = Serial.list()[portIndex];
-    println( "Attempting connect on port: " + portName );
+    logMessage( "Attempting connect on port: " + portName, false );
 
     // Wrap Serial port connect in future to force timeout
     ExecutorService exec = Executors.newSingleThreadExecutor();
@@ -338,26 +331,26 @@ void attemptConnect( int index )
 
     try
     {
+	// Close port if another is open
+	if ( port != null && port.active() )
+	{
+	    port.stop();
+	}
+	
 	// Do connect with timeout
 	port = future.get( CONNECT_TIMEOUT, TimeUnit.MILLISECONDS );
 
 	lastPortSwitch = millis(); // at end so that we try again immediately on invalid port
-	println( "Connected on " + portName + ". Listening for configuration..." );
+	logMessage( "Connected on " + portName + ". Listening for configuration...", false );
     }
     catch ( TimeoutException e )
     {
 	future.cancel( true );
-	if ( DEBUG )
-	{
-	    println( "Timeout." );
-	}
+	logMessage( "Timed out.", true );
     }
     catch ( Exception e )
     {
-	if ( DEBUG )
-	{	    
-	    println( e.getMessage() );
-	}
+	logMessage( "Exception on connect: " + e.toString(), true );	
     }
 
     exec.shutdownNow();
@@ -383,3 +376,16 @@ class ConnectWithTimeout implements Callable<Serial>
 	return new Serial( this.parent, this.portName, baudRate );
     }     
 }
+
+// Logger helper
+void logMessage( String message, boolean debugOnly )
+{
+    if ( DEBUG || !debugOnly )
+    {
+	String level = debugOnly ? "DEBUG" : "STATUS";
+	println( "[Time: " + millis() + " ms]" + "[" + level + "] " + message );
+    }
+}
+
+
+		 
