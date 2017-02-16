@@ -46,8 +46,8 @@ public:
        Similar methods for multi-variable graphing vs. time are declared below and follow the same format
     */
     template <typename A>
-    void AddTimeGraph( String title, int pointsDisplayed,
-		       String labelA, A & refA )
+	void AddTimeGraph( String title, int pointsDisplayed,
+			   String labelA, A & refA )
     {
 	VariableWrapper * wrappers = new VariableWrapper[1];
 	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &Dereference<A>, "green" );
@@ -66,8 +66,8 @@ public:
       - refY: reference to global Y-variable that will be updated throughout program
     */
     template <typename X, typename Y>
-    void AddXYGraph( String title, int pointsDisplayed,
-		     String labelX, X & refX, String labelY, Y & refY )
+	void AddXYGraph( String title, int pointsDisplayed,
+			 String labelX, X & refX, String labelY, Y & refY )
     {
 	VariableWrapper * wrappers = new VariableWrapper[2];
 	wrappers[0] = VariableWrapper( labelX, static_cast<void *>( &refX ), &Dereference<X>, "green" );
@@ -108,8 +108,8 @@ public:
   
     // Add a 2-variable graph vs. time
     template <typename A, typename B>
-    void AddTimeGraph( String title, int pointsDisplayed,
-		       String labelA, A & refA, String labelB, B & refB )
+	void AddTimeGraph( String title, int pointsDisplayed,
+			   String labelA, A & refA, String labelB, B & refB )
     {
 	VariableWrapper * wrappers = new VariableWrapper[2];
 	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &Dereference<A>, "green" );
@@ -119,8 +119,8 @@ public:
 
     // Add a 3-variable graph vs. time
     template <typename A, typename B, typename C>
-    void AddTimeGraph( String title, int pointsDisplayed,
-		       String labelA, A & refA, String labelB, B & refB, String labelC, C & refC )
+	void AddTimeGraph( String title, int pointsDisplayed,
+			   String labelA, A & refA, String labelB, B & refB, String labelC, C & refC )
     {
 	VariableWrapper * wrappers = new VariableWrapper[3];
 	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &Dereference<A>, "green" );
@@ -131,9 +131,9 @@ public:
   
     // Add a 4-variable graph vs. time
     template <typename A, typename B, typename C, typename D>
-    void AddTimeGraph( String title, int pointsDisplayed,
-		       String labelA, A & refA, String labelB, B & refB, String labelC, C & refC,
-		       String labelD, D & refD )
+	void AddTimeGraph( String title, int pointsDisplayed,
+			   String labelA, A & refA, String labelB, B & refB, String labelC, C & refC,
+			   String labelD, D & refD )
     {
 	VariableWrapper * wrappers = new VariableWrapper[4];
 	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &Dereference<A>, "green");
@@ -145,9 +145,9 @@ public:
 
     // Add a 5-variable graph vs. time
     template <typename A, typename B, typename C, typename D, typename E>
-    void AddTimeGraph( String title, int pointsDisplayed,
-		       String labelA, A & refA, String labelB, B & refB, String labelC, C & refC,
-		       String labelD, D & refD, String labelE, E & refE )
+	void AddTimeGraph( String title, int pointsDisplayed,
+			   String labelA, A & refA, String labelB, B & refB, String labelC, C & refC,
+			   String labelD, D & refD, String labelE, E & refE )
     {
 	VariableWrapper * wrappers = new VariableWrapper[5];
 	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &Dereference<A>, "green" );
@@ -160,9 +160,9 @@ public:
 
     // Add a 6-variable graph vs. time
     template <typename A, typename B, typename C, typename D, typename E, typename F>    
-    void AddTimeGraph( String title, int pointsDisplayed,
-		       String labelA, A & refA, String labelB, B & refB, String labelC, C & refC,
-		       String labelD, D & refD, String labelE, E & refE, String labelF, F & refF )
+	void AddTimeGraph( String title, int pointsDisplayed,
+			   String labelA, A & refA, String labelB, B & refB, String labelC, C & refC,
+			   String labelD, D & refD, String labelE, E & refE, String labelF, F & refF )
     {
 	VariableWrapper * wrappers = new VariableWrapper[6];
 	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &Dereference<A>, "green" );
@@ -218,7 +218,7 @@ public:
     public:
 	Graph(String title, VariableWrapper * wrappers, int size, bool xvy, int pointsDisplayed);
 	~Graph();
-	void Plot();
+	void Plot( bool config );
 	bool SetColor( int sz, String * colors );
 	
 	// Data
@@ -239,7 +239,7 @@ private:
     bool SetColorHelper( int index, int sz, String * colors );
     
     template <typename T>
-    static double Dereference( void * ref )
+	static double Dereference( void * ref )
     {
 	return static_cast<double>( (* static_cast<T *>( ref ) ) );
     }
@@ -247,17 +247,28 @@ private:
   
     // Data
     int numGraphs;
-    int totalSize;
-    int maxPointsDisplayed;
     unsigned long lastUpdated;
+    int counter;
     Graph * head;
     Graph * tail;
   
 }; //-- Plotter
 
-
 // Constants
+static const int CONFIG_INTERVAL = 50;
+
+// Transmission Keys
 static const String OUTER_KEY = "#";
-static const String INNER_KEY = "@";
+static const String TIME_KEY = "t";
+static const String NUM_GRAPH_KEY = "ng";
+static const String LAST_UPDATED_KEY = "lu";
+static const String GRAPHS_KEY = "g";
+static const String TITLE_KEY = "t";
+static const String XVY_KEY = "xvy";
+static const String POINTS_DISPLAYED_KEY = "pd";
+static const String SIZE_KEY = "sz";
+static const String LABELS_KEY = "l";
+static const String COLORS_KEY = "c";
+static const String DATA_KEY = "d";
 
 #endif

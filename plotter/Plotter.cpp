@@ -29,13 +29,12 @@
 
 Plotter::Plotter()
 {
-  Serial.begin(115200);
-  head = NULL;
-  tail = NULL;
-  totalSize = 0;
-  numGraphs = 0;
-  maxPointsDisplayed = 0;
-  lastUpdated = millis();
+    Serial.begin( 115200 );
+    head = NULL;
+    tail = NULL;
+    numGraphs = 0;
+    lastUpdated = millis();
+    counter = 0;
 }
 
 Plotter::~Plotter()
@@ -65,13 +64,7 @@ void Plotter::AddGraphHelper( String title, VariableWrapper * wrappers, int sz, 
 	tail = temp;
     }
   
-    totalSize += sz;
-    numGraphs++;
-    if ( pointsDisplayed > maxPointsDisplayed )
-    {
-	maxPointsDisplayed = pointsDisplayed;
-    }
-  
+    numGraphs++;  
     lastUpdated = millis();
 }
 
@@ -99,7 +92,6 @@ bool Plotter::Remove( int index )
 	    }
 	    last->next = temp->next;
 	    numGraphs--;
-	    totalSize -= temp->size;
 	    delete temp;
 	}
 	lastUpdated = millis();
@@ -167,18 +159,35 @@ bool Plotter::SetColorHelper( int index, int sz, String * colors )
 
 void Plotter::Plot()
 {
-    String code = OUTER_KEY;
-    code += ( numGraphs + INNER_KEY + totalSize + INNER_KEY
-	     + maxPointsDisplayed + INNER_KEY + lastUpdated + INNER_KEY );
-    Serial.print( code );
-    Graph * temp = head;
-    while ( temp != NULL )
+    bool config = counter == 0;
+
+    Serial.print( "{\"" + TIME_KEY + "\":" ); Serial.print( millis() );
+    
+    if ( config )
     {
-	Serial.println();
-	temp->Plot();
-	temp = temp->next;
+	Serial.print( ",\"" + NUM_GRAPH_KEY + "\":" ); Serial.print( numGraphs );
+	Serial.print( ",\"" + LAST_UPDATED_KEY + "\":" ); Serial.print( lastUpdated );
     }
-    Serial.println( OUTER_KEY );
+    
+    Serial.print( ",\"" + GRAPHS_KEY + "\":[" );
+
+    Graph * temp = head;
+    while ( temp )
+    {
+	temp->Plot( config );
+	temp = temp->next;
+	if ( temp )
+	{
+	    Serial.print( "," );
+	}
+    }
+    Serial.print( "]}" ); Serial.println( OUTER_KEY );
+
+    counter++;
+    if ( counter >= CONFIG_INTERVAL )
+    {
+	counter = 0;
+    }
 }
 
 // Graph
@@ -197,21 +206,50 @@ Plotter::Graph::~Graph()
     delete[] wrappers;
 }
 
-void Plotter::Graph::Plot()
+void Plotter::Graph::Plot( bool config )
 {
-    Serial.print( title ); Serial.print( INNER_KEY );
-    Serial.print( xvy ); Serial.print( INNER_KEY );
-    Serial.print( pointsDisplayed ); Serial.print( INNER_KEY );
-    Serial.print( size ); Serial.print( INNER_KEY );
-
+    Serial.print( "{" );
+    
+    if ( config )
+    {
+	Serial.print( "\"" + TITLE_KEY + "\":" ); Serial.print( "\"" + title + "\"" );
+	Serial.print( ",\"" + XVY_KEY + "\":" ); Serial.print( xvy );
+	Serial.print( ",\"" + POINTS_DISPLAYED_KEY + "\":" ); Serial.print( pointsDisplayed );
+	Serial.print( ",\"" + SIZE_KEY + "\":" ); Serial.print( size );
+	Serial.print( ",\"" + LABELS_KEY + "\":[" );
+	for ( int i = 0; i < size; i++ )
+	{
+	    Serial.print( "\"" + wrappers[i].GetLabel() + "\"" );
+	    if ( i + 1 < size )
+	    {
+		Serial.print( "," );
+	    }
+	}
+	Serial.print( "],\"" + COLORS_KEY + "\":[" );
+	for ( int i = 0; i < size; i++ )
+	{
+	    Serial.print( "\"" + wrappers[i].GetColor() + "\"" );
+	    if ( i + 1 < size )
+	    {
+		Serial.print( "," );
+	    }
+	}
+	Serial.print( "]," );
+    }
+    
+    Serial.print( "\"" + DATA_KEY + "\":[" );
     char val[15];
     for (int i = 0; i < size; i++)
     {
-	Serial.print( wrappers[i].GetLabel() ); Serial.print( INNER_KEY );
-	Serial.print( wrappers[i].GetColor() ); Serial.print( INNER_KEY );
 	dtostrf( wrappers[i].GetValue(), 1, 7, val );
-	Serial.print( val ); Serial.print( INNER_KEY );
+	Serial.print( val );
+	if ( i + 1 < size )
+	{
+	    Serial.print( "," );
+	}
     }
+    
+    Serial.print( "]}" );
 }
 
 bool Plotter::Graph::SetColor( int sz, String * colors )

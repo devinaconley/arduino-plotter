@@ -110,7 +110,7 @@ class Graph
 	    // Validate
 	    if ( newData.length != 2 )
 	    {
-		this.parent.println( "Invalid data passed to X v. Y graph." );
+		//this.parent.println( "Invalid data passed to X v. Y graph." );
 		return;
 	    }
 	    
@@ -122,7 +122,7 @@ class Graph
 	    // Validate
 	    if ( newData.length != this.numVars )
 	    {
-		this.parent.println( "Invalid data passed to time graph." );
+		//this.parent.println( "Invalid data passed to time graph." );
 		return;
 	    }
 

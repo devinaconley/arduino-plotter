@@ -39,7 +39,6 @@ final boolean DEBUG = false;
 
 //CONSTANTS
 final char OUTER_KEY = '#';
-final String INNER_KEY = "@";
 final int MARGIN_SZ = 20; // between plots
 final int BG_COL = 75; // background
 final int PORT_INTERVAL = 5000; // time to sit on each port
@@ -147,30 +146,41 @@ void serialEvent( Serial ser )
     try
     {
 	String message = ser.readStringUntil( OUTER_KEY );
-	if ( message == null || message.isEmpty() || message.equals( "\n\n" + OUTER_KEY ) )
+	if ( message == null || message.isEmpty() || message.equals( OUTER_KEY ) )
 	{
 	    return;
 	}
-	String[] arrayMain = message.split( "\n" );
-    
+
+	JSONObject json = parseJSONObject( message );
+
+	if ( json == null )
+	{
+	    return;
+	}		
+
 	// ********************************************************* //
 	// ************* PLOT SETUP FROM CONFIG CODE *************** //
 	// ********************************************************* //
-    
-	// If config code has changed, need to go through setup again
-	if ( !configCode.equals( arrayMain[0] ) )
+
+	String tempCode = "";
+	boolean config = false;
+	if ( json.hasKey( "ng" ) && json.hasKey( "lu" ) )
 	{
-	    String[] arraySub = arrayMain[0].split( INNER_KEY );
+	    tempCode = Integer.toString( json.getInt( "ng" ) ) + Integer.toString( json.getInt( "lu" ) );
+	    config = true;
+	}
+	
+	// If config code has changed, need to go through setup again
+	if ( config && !configCode.equals( tempCode ) )
+	{
+	    lastPortSwitch = millis(); // (likely on the right port, just need to reconfigure graph layout)
+	    
 	    // Check for size of full transmission against expected to flag bad transmission
-	    try
-	    {		
-		numGraphs = Integer.parseInt( arraySub[0] );
-	    }
-	    catch ( Exception e )
-	    {
-		return;
-	    }
-	    if ( arrayMain.length != numGraphs + 1 )
+	    numGraphs = json.getInt( "ng" );
+	    
+	    JSONArray jsonGraphs = json.getJSONArray( "g" );
+	    
+	    if ( jsonGraphs.size() != numGraphs )
 	    {
 		return;
 	    }
@@ -186,23 +196,26 @@ void serialEvent( Serial ser )
 	    // Iterate through the individual graph data blocks to get graph specific info
 	    for ( int i = 0; i < numGraphs; i++ )
 	    {
-		arraySub = arrayMain[i+1].split( INNER_KEY );
-		String title = arraySub[0];		
-		boolean xvyTemp = Integer.parseInt( arraySub[1] ) == 1;
-		int maxPoints = Integer.parseInt( arraySub[2] );
-		int numVars = Integer.parseInt( arraySub[3] );
+		JSONObject g = jsonGraphs.getJSONObject( i );
+		
+		String title = g.getString( "t" );
+		boolean xvyTemp = g.getInt( "xvy" ) == 1;
+		int maxPoints = g.getInt( "pd" );
+		int numVars = g.getInt( "sz" );
 		String[] labelsTemp = new String[numVars];
 		int[] colorsTemp = new int[numVars];
 
 		concatLabels += title;
-		
+
+		JSONArray l = g.getJSONArray( "l" );
+		JSONArray c = g.getJSONArray( "c" );
 		for ( int j = 0; j < numVars; j++ )
 		{
-		    labelsTemp[j] = arraySub[4 + 3*j];
-		    colorsTemp[j] = COLORMAP.get( arraySub[5 + 3*j] );
+		    labelsTemp[j] = l.getString( j );
+		    colorsTemp[j] = COLORMAP.get( c.getString( j ) );
 		    if ( colorsTemp[j] == 0 )
 		    {
-			logMessage( "Invalid color: " + arraySub[5 + 3*j] + ", defaulting to green.", true );
+			logMessage( "Invalid color: " + c.getString( j ) + ", defaulting to green.", true );
 			colorsTemp[j] = COLORMAP.get( "green" );
 		    }
 		    concatLabels += labelsTemp[j];
@@ -222,7 +235,7 @@ void serialEvent( Serial ser )
 	    // Set new config code
 	    if ( concatLabels.equals( lastLabels ) ) // Only when we're sure on labels
 	    {
-		configCode = arrayMain[0];
+		configCode = tempCode;
 		lastConfig = millis();
 		logMessage( "Configured " + graphs.size() + " graphs", false ); 
 	    }
@@ -238,20 +251,20 @@ void serialEvent( Serial ser )
 	    // *********************************************************** //
 	    // ************ NORMAL PLOTTING FUNCTIONALITY **************** //
 	    // *********************************************************** //
-	    int tempTime = millis();
+	    int tempTime = json.getInt( "t" );
       
+	    JSONArray jsonGraphs = json.getJSONArray( "g" );
+
 	    for ( int i = 0; i < numGraphs; i++ )
 	    {
-		String[] arraySub = arrayMain[i+1].split( INNER_KEY );
+		JSONArray data = jsonGraphs.getJSONObject( i ).getJSONArray( "d" );
 
-		double[] tempData = new double[ (arraySub.length - 5) / 3 ];
+		double[] tempData = new double[ data.size() ];
 
 		// Update graph objects with new data
-		int q = 0;
-		for ( int j = 6; j < arraySub.length; j += 3 )
+		for ( int j = 0; j < data.size(); j++ )
 		{
-		    tempData[q] = Double.parseDouble( arraySub[j] );
-		    q++;       
+		    tempData[j] = data.getDouble( j );
 		}
 		graphs.get( i ).Update( tempData, tempTime );
 	    }
