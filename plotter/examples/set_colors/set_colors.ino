@@ -3,7 +3,7 @@
   Example to demonstrate configuring specific colors for each variable 
   -------------------------------------------------------------------------------------------
   Plotter
-  v2.1.0
+  v2.2.0
   https://github.com/deviaconley/arduino-plotter
   by Devin Conley
   ===========================================================================================
