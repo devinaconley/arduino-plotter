@@ -35,11 +35,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 // FLAG FOR DEBUG MODE
-final boolean DEBUG = true;
+final boolean DEBUG = false;
 
 //CONSTANTS
 final char OUTER_KEY = '#';
-final String INNER_KEY = "@";
 final int MARGIN_SZ = 20; // between plots
 final int BG_COL = 75; // background
 final int PORT_INTERVAL = 5000; // time to sit on each port
@@ -94,10 +93,6 @@ void setup()
 
 void draw()
 {
-    // REMOVE ***
-    int start = millis();
-    // *** REMOVE
-    
     //PLOT ALL
     try
     {
@@ -143,30 +138,10 @@ void draw()
     }
     catch ( Exception e )
     {}
-
-    // REMOVE ***
-    totalGraphing += ( millis() - start );
-    // *** REMOVE
 }
-
-// REMOVE **** timing vars
-int countTo = 1000;
-int count = 0;
-int startTrial = 0;
-int totalSerialEvent = 0;
-int totalGraphing = 0;
-// *** REMOVE
 
 void serialEvent( Serial ser )
 {
-    // REMOVE**** timing logic: start
-    int start = millis();
-    if ( count == 0 )
-    {
-	startTrial = start;
-    }
-    // ***** REMOVE
-    
     // Listen for serial data until #, the end of transmission key
     try
     {
@@ -198,9 +173,11 @@ void serialEvent( Serial ser )
 	// If config code has changed, need to go through setup again
 	if ( config && !configCode.equals( tempCode ) )
 	{
+	    lastPortSwitch = millis(); // (likely on the right port, just need to reconfigure graph layout)
+	    
 	    // Check for size of full transmission against expected to flag bad transmission
 	    numGraphs = json.getInt( "ng" );
-
+	    
 	    JSONArray jsonGraphs = json.getJSONArray( "g" );
 	    
 	    if ( jsonGraphs.size() != numGraphs )
@@ -297,20 +274,6 @@ void serialEvent( Serial ser )
     {
 	logMessage( "Exception in serialEvent: " + e.toString(), true );
     }
-
-    // REMOVE ***** timing logic: end
-    int end = millis();
-    totalSerialEvent += ( end - start );
-    count++;
-    if ( count == countTo )
-    {
-	logMessage( "Time per " + count + " counts: overall: " + ( end - startTrial ) + ", in serialEvent: "
-		    + totalSerialEvent + ", graphing: " + totalGraphing, false );
-	count = 0;
-	totalSerialEvent = 0;
-	totalGraphing = 0;
-    }
-    // ***** REMOVE
 }
 
 // Helper method to calculate bounds of graphs
