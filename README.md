@@ -24,22 +24,22 @@ _by: Devin Conley_
 ### Extremely easy usage:
 ```arduino
 #include "Plotter.h"
-double x;
 
+double x; // global variables
 Plotter p;
 
 void setup()
 {
-  p = Plotter();
+  p = Plotter(); // create plotter
   
-  p.AddTimeGraph( "Some title of a graph", 500, "label for x", x );
+  p.AddTimeGraph( "Some title of a graph", 500, "label for x", x ); // add any graphs you want
 }
 
 void loop()
 {
-  x = 10*sin( 2.0*PI*( millis() / 5000.0 ) );
+  x = 10*sin( 2.0*PI*( millis() / 5000.0 ) ); // update your variables like usual
 
-  p.Plot(); // usually called within loop()
+  p.Plot(); // plot all current data -- usually called within loop()
 }
 ```
 
