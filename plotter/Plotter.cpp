@@ -17,7 +17,7 @@
 
   -------------------------------------------------------------------------------------------
   Plotter
-  v2.2.0
+  v2.2.1
   https://github.com/devinaconley/arduino-plotter
   by Devin Conley
   ===========================================================================================
@@ -241,8 +241,7 @@ void Plotter::Graph::Plot( bool config )
     char val[15];
     for (int i = 0; i < size; i++)
     {
-	dtostrf( wrappers[i].GetValue(), 1, 7, val );
-	Serial.print( val );
+	Serial.print( wrappers[i].GetValue(), 8 );
 	if ( i + 1 < size )
 	{
 	    Serial.print( "," );

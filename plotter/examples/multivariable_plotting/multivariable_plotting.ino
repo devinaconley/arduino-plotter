@@ -3,7 +3,7 @@
   Example to demonstrate multi-variable plotting against time
   -------------------------------------------------------------------------------------------
   Plotter
-  v2.2.0
+  v2.2.1
   https://github.com/devinaconley/arduino-plotter
   by Devin Conley
   ===========================================================================================
