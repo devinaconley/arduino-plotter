@@ -3,7 +3,7 @@
   Example used in Quick-Start
   -------------------------------------------------------------------------------------------
   Plotter
-  v2.2.1
+  v2.3.0
   https://github.com/devinaconley/arduino-plotter
   by Devin Conley
   ===========================================================================================
@@ -17,7 +17,7 @@ Plotter p;
 
 void setup()
 {
-    p = Plotter();
+    p.Begin();
 
     p.AddTimeGraph( "Some title of a graph", 500, "label for x", x );
 }

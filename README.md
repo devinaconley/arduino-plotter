@@ -26,11 +26,11 @@ _by: Devin Conley_
 #include "Plotter.h"
 
 double x; // global variables
-Plotter p;
+Plotter p; // create plotter
 
 void setup()
 {
-  p = Plotter(); // create plotter
+  p.Begin(); // start plotter
   
   p.AddTimeGraph( "Some title of a graph", 500, "label for x", x ); // add any graphs you want
 }

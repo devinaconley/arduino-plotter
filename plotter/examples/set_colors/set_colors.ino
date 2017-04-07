@@ -3,7 +3,7 @@
   Example to demonstrate configuring specific colors for each variable 
   -------------------------------------------------------------------------------------------
   Plotter
-  v2.2.1
+  v2.3.0
   https://github.com/deviaconley/arduino-plotter
   by Devin Conley
   ===========================================================================================
@@ -18,8 +18,10 @@ Plotter p;
 
 void setup()
 {
-    p = Plotter();
+    // Start plotter
+    p.Begin();
 
+    // Add plots
     p.AddTimeGraph( "Some title of a graph", 500, "label for x", x, "label for y", y );
     p.AddXYGraph( "Title of X vs Y graph", 1000, "x axis", x, "y axis", y );
 

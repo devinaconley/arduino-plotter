@@ -17,7 +17,7 @@
 
   -------------------------------------------------------------------------------------------
   Plotter
-  v2.2.1
+  v2.3.0
   https://github.com/devinaconley/arduino-plotter
   by Devin Conley
   ===========================================================================================
@@ -33,7 +33,10 @@ class Plotter
 public:
     // The constructor for Plotter requires no arguments
     Plotter();
-  
+
+    // Initialize Plotter
+    void Begin();
+    
     /* 
        Add a 1-variable graph vs. time
      

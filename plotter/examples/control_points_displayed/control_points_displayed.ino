@@ -3,7 +3,7 @@
   Example to demonstrate effect of "Points Displayed" in Time Graph and in XY Graph
   -------------------------------------------------------------------------------------------
   Plotter
-  v2.2.1
+  v2.3.0
   https://github.com/devinaconley/arduino-plotter
   by Devin Conley
   ===========================================================================================
@@ -20,8 +20,8 @@ Plotter p;
 
 void setup()
 {
-    // Plotter constructor
-    p = Plotter();
+    // Start plotter
+    p.Begin();
   
     // Add X-Y graphs 
     p.AddXYGraph( "X-Y graph w/ 500 points", 500, "x axis", x, "y axis", y );

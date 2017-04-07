@@ -3,7 +3,7 @@
   Example to demonstrate dynamic addition and removal of graphs
   -------------------------------------------------------------------------------------------
   Plotter
-  v2.2.1
+  v2.3.0
   https://github.com/devinaconley/arduino-plotter
   by Devin Conley
   ===========================================================================================
@@ -26,9 +26,9 @@ boolean remove_graph = true;
 
 void setup()
 {
-    // Plotter contructor
-    p = Plotter();
-  
+    // Plotter constructor
+    p.Begin();
+    
     // Add a graph during setup
     p.AddTimeGraph( "x and y against time", 1000, "x label", x, "y label", y );
 }

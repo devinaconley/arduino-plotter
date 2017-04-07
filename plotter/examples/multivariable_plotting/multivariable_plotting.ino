@@ -3,7 +3,7 @@
   Example to demonstrate multi-variable plotting against time
   -------------------------------------------------------------------------------------------
   Plotter
-  v2.2.1
+  v2.3.0
   https://github.com/devinaconley/arduino-plotter
   by Devin Conley
   ===========================================================================================
@@ -23,8 +23,8 @@ Plotter p;
 
 void setup()
 {
-    // Plotter constructor
-    p = Plotter();
+    // Start plotter
+    p.Begin();
   
     // Add 5 variable time graph
     p.AddTimeGraph( "5 variable time graph", 1000, "v label", v, "w label", w, "x label", x,

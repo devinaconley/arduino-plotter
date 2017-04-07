@@ -1,4 +1,5 @@
 Plotter	KEYWORD1
+Begin		KEYWORD2
 AddTimeGraph	KEYWORD2
 AddXYGraph	KEYWORD2
 Plot		KEYWORD2

@@ -17,7 +17,7 @@
 
   -------------------------------------------------------------------------------------------
   Plotter
-  v2.2.1
+  v2.3.0
   https://github.com/devinaconley/arduino-plotter
   by Devin Conley
   ===========================================================================================
@@ -29,12 +29,18 @@
 
 Plotter::Plotter()
 {
-    Serial.begin( 115200 );
     head = NULL;
     tail = NULL;
     numGraphs = 0;
-    lastUpdated = millis();
     counter = 0;
+    Serial.begin( 115200 ); // duplicate calls left for backward compatibility
+    lastUpdated = millis();
+}
+
+void Plotter::Begin()
+{
+    Serial.begin( 115200 );
+    lastUpdated = millis();
 }
 
 Plotter::~Plotter()
