@@ -199,12 +199,12 @@ void Plotter::Plot()
 // Graph
 
 Plotter::Graph::Graph( String title, VariableWrapper * wrappers, int size, bool xvy, int pointsDisplayed ) :
-    title( title ),
-    wrappers( wrappers ),
+    next( NULL ),
     size( size ),
     xvy( xvy ),
     pointsDisplayed( pointsDisplayed ),
-    next( NULL )
+    title( title ),
+    wrappers( wrappers )
 {}
 
 Plotter::Graph::~Graph()
@@ -244,7 +244,6 @@ void Plotter::Graph::Plot( bool config )
     }
     
     Serial.print( "\"" + DATA_KEY + "\":[" );
-    char val[15];
     for (int i = 0; i < size; i++)
     {
 	Serial.print( wrappers[i].GetValue(), 8 );
@@ -287,9 +286,9 @@ Plotter::VariableWrapper::VariableWrapper() :
 
 Plotter::VariableWrapper::VariableWrapper( String label, void * ref, double ( * deref )( void * ), String color ) :
     label( label ),
+    color( color ),
     ref( ref ),
-    deref( deref ),
-    color( color ) 
+    deref( deref )
 {}
 
 String Plotter::VariableWrapper::GetLabel()
