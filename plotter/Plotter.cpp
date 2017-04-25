@@ -141,7 +141,7 @@ bool Plotter::SetColor( int index, String colorA, String colorB, String colorC,
 			String colorD, String colorE, String colorF )
 {
     String colors[] = { colorA, colorB, colorC, colorD, colorE, colorF };
-    return SetColorHelper( index, 5, colors );
+    return SetColorHelper( index, 6, colors );
 }
 
 bool Plotter::SetColorHelper( int index, int sz, String * colors )
@@ -200,8 +200,8 @@ void Plotter::Plot()
 
 Plotter::Graph::Graph( String title, VariableWrapper * wrappers, int size, bool xvy, int pointsDisplayed ) :
     next( NULL ),
-    size( size ),
     xvy( xvy ),
+    size( size ),
     pointsDisplayed( pointsDisplayed ),
     title( title ),
     wrappers( wrappers )

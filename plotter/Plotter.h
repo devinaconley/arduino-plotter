@@ -226,10 +226,10 @@ public:
 	
 	// Data
 	Graph * next;
-	int size;
 	
     private:
 	bool xvy;
+	int size;
 	int pointsDisplayed;
 	String title;
 	VariableWrapper * wrappers;

@@ -19,7 +19,7 @@ void setup()
 {
     p.Begin();
 
-    p.AddTimeGraph( "Some title of a graph", 500, "label for x", x );
+    p.AddTimeGraph( "Some title of a graph", 1500, "label for x", x );
 }
 
 void loop() {

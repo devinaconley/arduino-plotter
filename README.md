@@ -32,7 +32,7 @@ void setup()
 {
   p.Begin(); // start plotter
   
-  p.AddTimeGraph( "Some title of a graph", 500, "label for x", x ); // add any graphs you want
+  p.AddTimeGraph( "Some title of a graph", 1500, "label for x", x ); // add any graphs you want
 }
 
 void loop()
