@@ -167,15 +167,15 @@ void Plotter::Plot()
 {
     bool config = counter == 0;
 
-    Serial.print( "{\"" + TIME_KEY + "\":" ); Serial.print( millis() );
+    Serial.print( "{\""); Serial.print(TIME_KEY); Serial.print("\":" ); Serial.print( millis() );
     
     if ( config )
     {
-	Serial.print( ",\"" + NUM_GRAPH_KEY + "\":" ); Serial.print( numGraphs );
-	Serial.print( ",\"" + LAST_UPDATED_KEY + "\":" ); Serial.print( lastUpdated );
+	Serial.print( ",\""); Serial.print(NUM_GRAPH_KEY); Serial.print("\":" ); Serial.print( numGraphs );
+	Serial.print( ",\""); Serial.print(LAST_UPDATED_KEY); Serial.print("\":" ); Serial.print( lastUpdated );
     }
     
-    Serial.print( ",\"" + GRAPHS_KEY + "\":[" );
+    Serial.print( ",\""); Serial.print(GRAPHS_KEY); Serial.print("\":[" );
 
     Graph * temp = head;
     while ( temp )
@@ -215,26 +215,26 @@ Plotter::Graph::~Graph()
 void Plotter::Graph::Plot( bool config )
 {
     Serial.print( "{" );
-    
+
     if ( config )
     {
-	Serial.print( "\"" + TITLE_KEY + "\":" ); Serial.print( "\"" + title + "\"" );
-	Serial.print( ",\"" + XVY_KEY + "\":" ); Serial.print( xvy );
-	Serial.print( ",\"" + POINTS_DISPLAYED_KEY + "\":" ); Serial.print( pointsDisplayed );
-	Serial.print( ",\"" + SIZE_KEY + "\":" ); Serial.print( size );
-	Serial.print( ",\"" + LABELS_KEY + "\":[" );
+	Serial.print( "\""); Serial.print(TITLE_KEY); Serial.print("\":" ); Serial.print( "\""); Serial.print(title); Serial.print("\"" );
+	Serial.print( ",\""); Serial.print(XVY_KEY); Serial.print("\":" ); Serial.print( xvy );
+	Serial.print( ",\""); Serial.print(POINTS_DISPLAYED_KEY); Serial.print("\":" ); Serial.print( pointsDisplayed );
+	Serial.print( ",\""); Serial.print(SIZE_KEY); Serial.print("\":" ); Serial.print( size );
+	Serial.print( ",\""); Serial.print(LABELS_KEY); Serial.print("\":[" );
 	for ( int i = 0; i < size; i++ )
 	{
-	    Serial.print( "\"" + wrappers[i].GetLabel() + "\"" );
+	    Serial.print( "\""); Serial.print(wrappers[i].GetLabel()); Serial.print("\"" );
 	    if ( i + 1 < size )
 	    {
 		Serial.print( "," );
 	    }
 	}
-	Serial.print( "],\"" + COLORS_KEY + "\":[" );
+	Serial.print( "],\""); Serial.print(COLORS_KEY); Serial.print("\":[" );
 	for ( int i = 0; i < size; i++ )
 	{
-	    Serial.print( "\"" + wrappers[i].GetColor() + "\"" );
+	    Serial.print( "\""); Serial.print(wrappers[i].GetColor()); Serial.print("\"" );
 	    if ( i + 1 < size )
 	    {
 		Serial.print( "," );
@@ -243,7 +243,7 @@ void Plotter::Graph::Plot( bool config )
 	Serial.print( "]," );
     }
     
-    Serial.print( "\"" + DATA_KEY + "\":[" );
+    Serial.print( "\""); Serial.print(DATA_KEY); Serial.print("\":[" );
     for (int i = 0; i < size; i++)
     {
 	Serial.print( wrappers[i].GetValue(), 8 );
