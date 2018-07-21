@@ -56,7 +56,7 @@ Plotter::~Plotter()
     delete temp;
 }
 
-void Plotter::AddGraphHelper( String title, VariableWrapper * wrappers, int sz, bool xvy, int pointsDisplayed )
+void Plotter::AddGraphHelper( const char * title, VariableWrapper * wrappers, int sz, bool xvy, int pointsDisplayed )
 { 
     Graph * temp = new Graph( title, wrappers, sz, xvy, pointsDisplayed );
     if ( head )
@@ -105,46 +105,46 @@ bool Plotter::Remove( int index )
     }
 }
 
-bool Plotter::SetColor( int index, String colorA )
+bool Plotter::SetColor( int index, const char * colorA )
 {
-    String colors[] = { colorA };
+    const char * colors[] = { colorA };
     return SetColorHelper( index, 1, colors );
 }
 
-bool Plotter::SetColor( int index, String colorA, String colorB )
+bool Plotter::SetColor( int index, const char * colorA, const char * colorB )
 {
-    String colors[] = { colorA, colorB };
+    const char * colors[] = { colorA, colorB };
     return SetColorHelper( index, 2, colors );
 }
 
-bool Plotter::SetColor( int index, String colorA, String colorB, String colorC )
+bool Plotter::SetColor( int index, const char * colorA, const char * colorB, const char * colorC )
 {
-    String colors[] = { colorA, colorB, colorC };
+    const char * colors[] = { colorA, colorB, colorC };
     return SetColorHelper( index, 3, colors );
 }
 
-bool Plotter::SetColor( int index, String colorA, String colorB, String colorC,
-			String colorD )
+bool Plotter::SetColor( int index, const char * colorA, const char * colorB, const char * colorC,
+			const char * colorD )
 {
-    String colors[] = { colorA, colorB, colorC, colorD };
+    const char * colors[] = { colorA, colorB, colorC, colorD };
     return SetColorHelper( index, 4, colors );
 }
 
-bool Plotter::SetColor( int index, String colorA, String colorB, String colorC,
-			String colorD, String colorE )
+bool Plotter::SetColor( int index, const char * colorA, const char * colorB, const char * colorC,
+			const char * colorD, const char * colorE )
 {
-    String colors[] = { colorA, colorB, colorC, colorD, colorE };
+    const char * colors[] = { colorA, colorB, colorC, colorD, colorE };
     return SetColorHelper( index, 5, colors );
 }
 
-bool Plotter::SetColor( int index, String colorA, String colorB, String colorC,
-			String colorD, String colorE, String colorF )
+bool Plotter::SetColor( int index, const char * colorA, const char * colorB, const char * colorC,
+			const char * colorD, const char * colorE, const char * colorF )
 {
-    String colors[] = { colorA, colorB, colorC, colorD, colorE, colorF };
+    const char * colors[] = { colorA, colorB, colorC, colorD, colorE, colorF };
     return SetColorHelper( index, 6, colors );
 }
 
-bool Plotter::SetColorHelper( int index, int sz, String * colors )
+bool Plotter::SetColorHelper( int index, int sz, const char * * colors )
 {
     if ( numGraphs == 0 || index < 0 || numGraphs <= index )
     {
@@ -198,7 +198,7 @@ void Plotter::Plot()
 
 // Graph
 
-Plotter::Graph::Graph( String title, VariableWrapper * wrappers, int size, bool xvy, int pointsDisplayed ) :
+Plotter::Graph::Graph( const char * title, VariableWrapper * wrappers, int size, bool xvy, int pointsDisplayed ) :
     next( NULL ),
     xvy( xvy ),
     size( size ),
@@ -256,7 +256,7 @@ void Plotter::Graph::Plot( bool config )
     Serial.print( "]}" );
 }
 
-bool Plotter::Graph::SetColor( int sz, String * colors )
+bool Plotter::Graph::SetColor( int sz, const char * * colors )
 {
     if ( sz != size && !xvy )
     {
@@ -284,14 +284,14 @@ Plotter::VariableWrapper::VariableWrapper() :
     deref( NULL )
 {}
 
-Plotter::VariableWrapper::VariableWrapper( String label, void * ref, double ( * deref )( void * ), String color ) :
+Plotter::VariableWrapper::VariableWrapper( const char * label, void * ref, double ( * deref )( void * ), const char * color ) :
     label( label ),
     color( color ),
     ref( ref ),
     deref( deref )
 {}
 
-String Plotter::VariableWrapper::GetLabel()
+const char * Plotter::VariableWrapper::GetLabel()
 {
     return label;
 }
@@ -301,12 +301,12 @@ double Plotter::VariableWrapper::GetValue()
     return deref( ref );
 }
 
-String Plotter::VariableWrapper::GetColor()
+const char * Plotter::VariableWrapper::GetColor()
 {
     return color;
 }
 
-void Plotter::VariableWrapper::SetColor( String col )
+void Plotter::VariableWrapper::SetColor( const char * col )
 {
     color = col;
 }
