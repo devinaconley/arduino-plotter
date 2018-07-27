@@ -180,11 +180,11 @@ public:
     // Set Colors for multivariable graphs
     bool SetColor( int index, const char * colorA, const char * colorB );    
     bool SetColor( int index, const char * colorA, const char * colorB, const char * colorC );
-    bool SetColor( int index, const char * colorA, const char * colroB, const char * colorC,
+    bool SetColor( int index, const char * colorA, const char * colorB, const char * colorC,
 		   const char * colorD );
-    bool SetColor( int index, const char * colorA, const char * colroB, const char * colorC,
+    bool SetColor( int index, const char * colorA, const char * colorB, const char * colorC,
 		   const char * colorD, const char * colorE );
-    bool SetColor( int index, const char * colorA, const char * colroB, const char * colorC,
+    bool SetColor( int index, const char * colorA, const char * colorB, const char * colorC,
 		   const char * colorD, const char * colorE, const char * colorF );
     
     // Destructor for Plotter class
