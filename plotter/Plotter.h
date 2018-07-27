@@ -139,7 +139,7 @@ public:
 			   const char * labelD, D & refD )
     {
 	VariableWrapper * wrappers = new VariableWrapper[4];
-	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &Dereference<A>, "green");
+	wrappers[0] = VariableWrapper( labelA, static_cast<void *>( &refA ), &Dereference<A>, "green" );
 	wrappers[1] = VariableWrapper( labelB, static_cast<void *>( &refB ), &Dereference<B>, "orange" );
 	wrappers[2] = VariableWrapper( labelC, static_cast<void *>( &refC ), &Dereference<C>, "cyan" );
 	wrappers[3] = VariableWrapper( labelD, static_cast<void *>( &refD ), &Dereference<D>, "yellow" );
@@ -219,7 +219,7 @@ public:
     class Graph
     {
     public:
-	Graph(const char * title, VariableWrapper * wrappers, int size, bool xvy, int pointsDisplayed);
+	Graph( const char * title, VariableWrapper * wrappers, int size, bool xvy, int pointsDisplayed );
 	~Graph();
 	void Plot( bool config );
 	bool SetColor( int sz, const char * * colors );
@@ -244,7 +244,7 @@ private:
     template <typename T>
 	static double Dereference( void * ref )
     {
-	return static_cast<double>( (* static_cast<T *>( ref ) ) );
+	return static_cast<double>( ( * static_cast<T *>( ref ) ) );
     }
   
   
