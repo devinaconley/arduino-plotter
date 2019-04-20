@@ -22,7 +22,7 @@ _by: Devin Conley_
 ---
 
 ### Extremely easy usage:
-```arduino
+```c++
 #include "Plotter.h"
 
 double x; // global variables
