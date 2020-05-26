@@ -1,8 +1,8 @@
-arduino-plotter
-===============
-An Arduino library for easy graphing on host computer via serial communication
+# arduino-plotter
 
-_by: Devin Conley_
+[![arduino-library-badge](https://www.ardu-badge.com/badge/Plotter.svg?)](https://www.ardu-badge.com/Plotter)
+
+**Plotter** is an Arduino library for easy graphing on host computer via serial communication
 
 ---
 
