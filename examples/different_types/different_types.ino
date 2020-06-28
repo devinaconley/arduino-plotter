@@ -11,7 +11,7 @@
 
 #include "Plotter.h"
 
-// Plotted variables must be declared as globals 
+// Plotted variables must be declared as globals
 float f;
 float f2;
 int i;
@@ -23,23 +23,22 @@ Plotter p;
 void setup()
 {
     // Start plotter
-    p.Begin();
-  
-    // Add time graphs.
-    p.AddTimeGraph( "float vs int", 500, "float", f, "int", i );
-    p.AddTimeGraph( "float vs char", 500, "float", f2, "unsigned char", ch );
+    p.begin();
 
+    // Add time graphs.
+    p.addTimeGraph( "float vs int", 500, "float", f, "int", i );
+    p.addTimeGraph( "float vs char", 500, "float", f2, "unsigned char", ch );
 }
 
 void loop()
 {
     // Update different variable types with arbitrary sine/cosine data
     unsigned long time = millis();
-    f = 5*sin( 2.0*PI*( time / 5000.0 ) );
-    i = 5*sin( 2.0*PI*( time / 5000.0 ) );
-    f2 = 300*sin( 2.0*PI*( time / 5000.0 ) );
-    ch = 300*sin( 2.0*PI*( time / 5000.0 ) );
+    f = 5 * sin( 2.0 * PI * ( time / 5000.0 ) );
+    i = 5 * sin( 2.0 * PI * ( time / 5000.0 ) );
+    f2 = 300 * sin( 2.0 * PI * ( time / 5000.0 ) );
+    ch = 300 * sin( 2.0 * PI * ( time / 5000.0 ) );
 
     // Plot
-    p.Plot();
+    p.plot();
 }

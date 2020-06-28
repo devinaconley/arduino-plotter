@@ -1,0 +1,25 @@
+Language: Cpp
+
+IndentWidth: 4
+UseTab: Never
+SpacesInParentheses: true
+ColumnLimit: 100
+
+BreakBeforeBraces: Allman
+AllowAllArgumentsOnNextLine: false
+AllowAllConstructorInitializersOnNextLine: false
+AllowAllParametersOfDeclarationOnNextLine: false
+AlignAfterOpenBracket: AlwaysBreak
+BinPackArguments: false
+BinPackParameters: false
+
+DerivePointerAlignment: false
+PointerAlignment: Left
+
+Cpp11BracedListStyle: false
+
+AllowAllConstructorInitializersOnNextLine: true
+BreakConstructorInitializers: BeforeColon
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+
+AllowShortFunctionsOnASingleLine: Empty

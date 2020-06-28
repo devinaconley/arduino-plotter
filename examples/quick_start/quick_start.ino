@@ -17,13 +17,14 @@ Plotter p;
 
 void setup()
 {
-    p.Begin();
+    p.begin();
 
-    p.AddTimeGraph( "Some title of a graph", 1500, "label for x", x );
+    p.addTimeGraph( "Some title of a graph", 1500, "label for x", x );
 }
 
-void loop() {
-    x = 10*sin( 2.0*PI*( millis() / 5000.0 ) );
+void loop()
+{
+    x = 10 * sin( 2.0 * PI * ( millis() / 5000.0 ) );
 
-    p.Plot(); // usually called within loop()
+    p.plot(); // usually called within loop()
 }

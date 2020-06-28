@@ -11,7 +11,7 @@
 
 #include "Plotter.h"
 
-// Plotted variables must be declared as globals 
+// Plotted variables must be declared as globals
 double v;
 double w;
 double x;
@@ -24,22 +24,28 @@ Plotter p;
 void setup()
 {
     // Start plotter
-    p.Begin();
-  
+    p.begin();
+
     // Add 5 variable time graph
-    p.AddTimeGraph( "5 variable time graph", 1000, "v label", v, "w label", w, "x label", x,
-		    "y label", y, "z label", z );
+    p.addTimeGraph(
+        "5 variable time graph", 1000,
+        "v label", v,
+        "w label", w,
+        "x label", x,
+        "y label", y,
+        "z label", z
+    );
 }
 
 void loop()
 {
     // Update variables with arbitrary sine/cosine data
-    v = 3*cos( 2.0*PI*( millis()/2500.0 ) );
+    v = 3 * cos( 2.0 * PI * ( millis() / 2500.0 ) );
     w = 4.0;
-    x = 10*sin( 2.0*PI*( millis() / 5000.0 ) );
-    y = 7*cos( 2.0*PI*( millis() / 5000.0 ) );
-    z = 5*sin( 2.0*PI*( millis() / 5000.0 ) );
+    x = 10 * sin( 2.0 * PI * ( millis() / 5000.0 ) );
+    y = 7 * cos( 2.0 * PI * ( millis() / 5000.0 ) );
+    z = 5 * sin( 2.0 * PI * ( millis() / 5000.0 ) );
 
     // Plot
-    p.Plot();
+    p.plot();
 }
