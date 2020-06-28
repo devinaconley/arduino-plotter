@@ -33,7 +33,6 @@ Plotter::Plotter()
     tail = NULL;
     numGraphs = 0;
     counter = 0;
-    Serial.begin( 115200 ); // duplicate calls left for backward compatibility
     lastUpdated = millis();
 }
 
