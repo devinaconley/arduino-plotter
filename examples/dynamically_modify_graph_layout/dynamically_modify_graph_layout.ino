@@ -3,7 +3,7 @@
   Example to demonstrate dynamic addition and removal of graphs
   -------------------------------------------------------------------------------------------
   Plotter
-  v2.4.0
+  v2.4.1
   https://github.com/devinaconley/arduino-plotter
   by Devin Conley
   ===========================================================================================
