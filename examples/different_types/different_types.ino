@@ -3,7 +3,7 @@
   Example to demonstrate effect of plotting different variable types
   -------------------------------------------------------------------------------------------
   Plotter
-  v2.4.0
+  v2.4.1
   https://github.com/devinaconley/arduino-plotter
   by Devin Conley
   ===========================================================================================
