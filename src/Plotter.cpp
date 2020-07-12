@@ -24,13 +24,14 @@
 */
 
 #include "Plotter.h"
+#include "Arduino.h"
 
 // Plotter
 
 Plotter::Plotter()
 {
-    head = NULL;
-    tail = NULL;
+    head = nullptr;
+    tail = nullptr;
     numGraphs = 0;
     counter = 0;
     lastUpdated = millis();
@@ -55,23 +56,17 @@ Plotter::~Plotter()
     delete temp;
 }
 
-void Plotter::addGraphHelper(
-    const char* title,
-    VariableWrapper* wrappers,
-    int sz,
-    bool xvy,
-    int pointsDisplayed )
+void Plotter::addGraph( Graph* graph )
 {
-    Graph* temp = new Graph( title, wrappers, sz, xvy, pointsDisplayed );
     if ( head )
     {
-        tail->next = temp;
-        tail = temp;
+        tail->next = graph;
+        tail = graph;
     }
     else
     {
-        head = temp;
-        tail = temp;
+        head = graph;
+        tail = graph;
     }
 
     numGraphs++;
@@ -107,79 +102,6 @@ bool Plotter::remove( int index )
         lastUpdated = millis();
         return true;
     }
-}
-
-bool Plotter::setColor( int index, const char* colorA )
-{
-    const char* colors[] = { colorA };
-    return setColorHelper( index, 1, colors );
-}
-
-bool Plotter::setColor( int index, const char* colorA, const char* colorB )
-{
-    const char* colors[] = { colorA, colorB };
-    return setColorHelper( index, 2, colors );
-}
-
-bool Plotter::setColor( int index, const char* colorA, const char* colorB, const char* colorC )
-{
-    const char* colors[] = { colorA, colorB, colorC };
-    return setColorHelper( index, 3, colors );
-}
-
-bool Plotter::setColor(
-    int index,
-    const char* colorA,
-    const char* colorB,
-    const char* colorC,
-    const char* colorD )
-{
-    const char* colors[] = { colorA, colorB, colorC, colorD };
-    return setColorHelper( index, 4, colors );
-}
-
-bool Plotter::setColor(
-    int index,
-    const char* colorA,
-    const char* colorB,
-    const char* colorC,
-    const char* colorD,
-    const char* colorE )
-{
-    const char* colors[] = { colorA, colorB, colorC, colorD, colorE };
-    return setColorHelper( index, 5, colors );
-}
-
-bool Plotter::setColor(
-    int index,
-    const char* colorA,
-    const char* colorB,
-    const char* colorC,
-    const char* colorD,
-    const char* colorE,
-    const char* colorF )
-{
-    const char* colors[] = { colorA, colorB, colorC, colorD, colorE, colorF };
-    return setColorHelper( index, 6, colors );
-}
-
-bool Plotter::setColorHelper( int index, int sz, const char** colors )
-{
-    if ( numGraphs == 0 || index < 0 || numGraphs <= index )
-    {
-        return false;
-    }
-    Graph* temp = head;
-    for ( int i = 0; i < index; i++ )
-    {
-        temp = temp->next;
-    }
-    bool res = temp->setColor( sz, colors );
-    if ( res )
-    {
-        lastUpdated = millis();
-    }
-    return res;
 }
 
 void Plotter::plot()
@@ -218,126 +140,3 @@ void Plotter::plot()
     }
 }
 
-// Graph
-
-Plotter::Graph::Graph(
-    const char* title,
-    VariableWrapper* wrappers,
-    int size,
-    bool xvy,
-    int pointsDisplayed )
-    : next( NULL ),
-      xvy( xvy ),
-      size( size ),
-      pointsDisplayed( pointsDisplayed ),
-      title( title ),
-      wrappers( wrappers )
-{
-}
-
-Plotter::Graph::~Graph()
-{
-    delete[] wrappers;
-}
-
-void Plotter::Graph::plot( bool config )
-{
-    Serial.print( "{" );
-
-    if ( config )
-    {
-        Serial.print( "\"" ), Serial.print( TITLE_KEY ), Serial.print( "\":" );
-        Serial.print( "\"" ), Serial.print( title ), Serial.print( "\"" );
-        Serial.print( ",\"" ), Serial.print( XVY_KEY );
-        Serial.print( "\":" ), Serial.print( xvy );
-        Serial.print( ",\"" ), Serial.print( POINTS_DISPLAYED_KEY );
-        Serial.print( "\":" ), Serial.print( pointsDisplayed );
-        Serial.print( ",\"" ), Serial.print( SIZE_KEY );
-        Serial.print( "\":" ), Serial.print( size );
-        Serial.print( ",\"" ), Serial.print( LABELS_KEY ), Serial.print( "\":[" );
-        for ( int i = 0; i < size; i++ )
-        {
-            Serial.print( "\"" ), Serial.print( wrappers[i].getLabel() ), Serial.print( "\"" );
-            if ( i + 1 < size )
-            {
-                Serial.print( "," );
-            }
-        }
-        Serial.print( "],\"" ), Serial.print( COLORS_KEY ), Serial.print( "\":[" );
-        for ( int i = 0; i < size; i++ )
-        {
-            Serial.print( "\"" ), Serial.print( wrappers[i].getColor() ), Serial.print( "\"" );
-            if ( i + 1 < size )
-            {
-                Serial.print( "," );
-            }
-        }
-        Serial.print( "]," );
-    }
-
-    Serial.print( "\"" ), Serial.print( DATA_KEY ), Serial.print( "\":[" );
-    for ( int i = 0; i < size; i++ )
-    {
-        Serial.print( wrappers[i].getValue(), 8 );
-        if ( i + 1 < size )
-        {
-            Serial.print( "," );
-        }
-    }
-
-    Serial.print( "]}" );
-}
-
-bool Plotter::Graph::setColor( int sz, const char** colors )
-{
-    if ( sz != size && !xvy )
-    {
-        return false;
-    }
-
-    if ( xvy )
-    {
-        wrappers[0].setColor( colors[0] );
-    }
-    else
-    {
-        for ( int i = 0; i < size; i++ )
-        {
-            wrappers[i].setColor( colors[i] );
-        }
-    }
-    return true;
-}
-
-// VariableWrapper
-
-Plotter::VariableWrapper::VariableWrapper() : ref( NULL ), deref( NULL ) {}
-
-Plotter::VariableWrapper::VariableWrapper(
-    const char* label,
-    void* ref,
-    double ( *deref )( void* ),
-    const char* color )
-    : label( label ), color( color ), ref( ref ), deref( deref )
-{
-}
-
-const char* Plotter::VariableWrapper::getLabel()
-{
-    return label;
-}
-
-double Plotter::VariableWrapper::getValue()
-{
-    return deref( ref );
-}
-
-const char* Plotter::VariableWrapper::getColor()
-{
-    return color;
-}
-
-void Plotter::VariableWrapper::setColor( const char* col )
-{
-    color = col;
-}

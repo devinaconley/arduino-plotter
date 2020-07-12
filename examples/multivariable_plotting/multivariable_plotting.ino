@@ -27,14 +27,12 @@ void setup()
     p.begin();
 
     // Add 5 variable time graph
-    p.addTimeGraph(
-        "5 variable time graph", 1000,
-        "v label", v,
-        "w label", w,
-        "x label", x,
-        "y label", y,
-        "z label", z
-    );
+    LineGraph& g = p.addLineGraph( "5 variable time graph" );
+    g.line( "v label", v );
+    g.line( "w label", w );
+    g.line( "x label", x );
+    g.line( "y label", y );
+    g.line( "z label", z );
 }
 
 void loop()
