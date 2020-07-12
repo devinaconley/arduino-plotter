@@ -30,7 +30,7 @@ void setup()
     p.begin();
 
     // Add a graph during setup
-    p.addTimeGraph( "x and y against time", 1000, "x label", x, "y label", y );
+    p.lineGraph( "x and y against time", 1000, "x label", x, "y label", y );
 }
 
 void loop()
@@ -38,14 +38,14 @@ void loop()
     // After 3 seconds add a 1-variable graph
     if ( millis() > 3000 && add_first )
     {
-        p.addTimeGraph( "First dynamic addition", 1000, "z label", z );
+        p.lineGraph( "First dynamic addition", 1000, "z label", z );
         add_first = false;
     }
 
     // After 5 seconds, add a 3-variable graph
     if ( millis() > 5000 && add_second )
     {
-        p.addTimeGraph( "Second dynamic addition", 1000, "x label", x, "y label", y, "z label", z );
+        p.lineGraph( "Second dynamic addition", 1000, "x label", x, "y label", y, "z label", z );
         add_second = false;
     }
 

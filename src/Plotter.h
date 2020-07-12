@@ -39,7 +39,7 @@ class Plotter
     void begin();
 
     /*
-       Add an empty line graph vs. time
+       Create and add an empty line graph vs. time
 
        Args:
        - title: const char * with title of graph
@@ -48,7 +48,7 @@ class Plotter
        Returns:
        - reference to created line graph
     */
-    LineGraph& addLineGraph( const char* title, int maxPoints = 1000 )
+    LineGraph& lineGraph( const char* title, int maxPoints = 1000 )
     {
         LineGraph* graph = new LineGraph( title, 5000, maxPoints );
         addGraph( graph );
@@ -56,7 +56,7 @@ class Plotter
     }
 
     /*
-      Add an empty scatter graph
+      Create and add an empty scatter graph
 
       Args:
       - title: const char * with title of graph
@@ -65,7 +65,7 @@ class Plotter
       Returns:
       - reference to created scatter graph
     */
-    ScatterGraph& addScatterGraph( const char* title, int maxPoints )
+    ScatterGraph& scatterGraph( const char* title, int maxPoints )
     {
         ScatterGraph* graph = new ScatterGraph( title, maxPoints );
         addGraph( graph );
@@ -73,7 +73,7 @@ class Plotter
     }
 
     /*
-       Add a 1-variable graph vs. time
+       Create and add a 1-variable graph vs. time
 
        Args:
        - title: const char * with title of graph
@@ -85,7 +85,7 @@ class Plotter
        format
     */
     template <typename A>
-    void addLineGraph( const char* title, int maxPoints, const char* labelA, A& refA )
+    void lineGraph( const char* title, int maxPoints, const char* labelA, A& refA )
     {
         LineGraph* graph = new LineGraph( title, 5000, maxPoints );
         graph->line( labelA, refA );
@@ -93,7 +93,7 @@ class Plotter
     }
 
     /*
-      Add an X vs. Y graph
+      Create and add an X vs. Y scatter graph
 
       Args:
       - title: const char * with title of graph
@@ -104,7 +104,7 @@ class Plotter
       - refY: reference to global Y-variable that will be updated throughout program
     */
     template <typename X, typename Y>
-    void addScatterGraph(
+    void scatterGraph(
         const char* title,
         int maxPoints,
         const char* labelX,
@@ -137,9 +137,9 @@ class Plotter
     */
     bool remove( int index );
 
-    // Add a 2-variable graph vs. time
+    // Create and add a 2-variable graph vs. time
     template <typename A, typename B>
-    void addLineGraph(
+    void lineGraph(
         const char* title,
         int maxPoints,
         const char* labelA,
@@ -153,9 +153,9 @@ class Plotter
         addGraph( graph );
     }
 
-    // Add a 3-variable graph vs. time
+    // Create and add a 3-variable graph vs. time
     template <typename A, typename B, typename C>
-    void addLineGraph(
+    void lineGraph(
         const char* title,
         int maxPoints,
         const char* labelA,

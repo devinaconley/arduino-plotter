@@ -19,7 +19,7 @@ void setup()
 {
     p.begin();
 
-    p.addTimeGraph( "Some title of a graph", 1500, "label for x", x );
+    p.lineGraph( "Some title of a graph", 1500, "label for x", x );
 }
 
 void loop()

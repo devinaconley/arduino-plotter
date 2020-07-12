@@ -24,12 +24,12 @@ void setup()
     p.begin();
 
     // Add X-Y graphs
-    p.addXYGraph( "X-Y graph w/ 500 points", 500, "x axis", x, "y axis", y );
-    p.addXYGraph( "X-Y graph w/ 200 points", 200, "x axis", x, "y axis", y );
+    p.scatterGraph( "X-Y graph w/ 500 points", 500, "x axis", x, "y axis", y );
+    p.scatterGraph( "X-Y graph w/ 200 points", 200, "x axis", x, "y axis", y );
 
     // Add time graphs. Notice the effect of points displayed on the time scale
-    p.addTimeGraph( "Time graph w/ 500 points", 500, "x label", x );
-    p.addTimeGraph( "Time graph w/ 200 points", 200, "x label", x );
+    p.lineGraph( "Time graph w/ 500 points", 500, "x label", x );
+    p.lineGraph( "Time graph w/ 200 points", 200, "x label", x );
 }
 
 void loop()

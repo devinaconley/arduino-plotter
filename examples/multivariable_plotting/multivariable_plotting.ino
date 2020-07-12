@@ -27,7 +27,7 @@ void setup()
     p.begin();
 
     // Add 5 variable time graph
-    LineGraph& g = p.addLineGraph( "5 variable time graph" );
+    LineGraph& g = p.lineGraph( "5 variable time graph" );
     g.line( "v label", v );
     g.line( "w label", w );
     g.line( "x label", x );

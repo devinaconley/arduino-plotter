@@ -22,8 +22,8 @@ void setup()
     p.begin();
 
     // Add plots
-    LineGraph& lg = p.addLineGraph( "Some title of a graph", 500 );
-    ScatterGraph& sg = p.addScatterGraph( "Title of X vs Y graph", 1000 );
+    LineGraph& lg = p.lineGraph( "Some title of a graph", 500 );
+    ScatterGraph& sg = p.scatterGraph( "Title of X vs Y graph", 1000 );
 
     // Add line variables and specify color
     lg.line( "label for x", x, "pink" );

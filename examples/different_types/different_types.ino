@@ -26,8 +26,8 @@ void setup()
     p.begin();
 
     // Add time graphs.
-    p.addTimeGraph( "float vs int", 500, "float", f, "int", i );
-    p.addTimeGraph( "float vs char", 500, "float", f2, "unsigned char", ch );
+    p.lineGraph( "float vs int", 500, "float", f, "int", i );
+    p.lineGraph( "float vs char", 500, "float", f2, "unsigned char", ch );
 }
 
 void loop()

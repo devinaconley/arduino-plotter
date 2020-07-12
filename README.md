@@ -32,7 +32,7 @@ void setup()
 {
     p.begin(); // start plotter
   
-    p.addTimeGraph( "Some title of a graph", 1500, "label for x", x ); // add any graphs you want
+    p.lineGraph( "Some title of a graph", 1500, "label for x", x ); // add any graphs you want
 }
 
 void loop()
