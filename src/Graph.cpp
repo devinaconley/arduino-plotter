@@ -95,7 +95,7 @@ void Graph::plot( bool config )
     Variable* temp = head;
     while ( temp )
     {
-        Serial.print( temp->getValue() );
+        Serial.print( temp->getValue(), 8 );
         temp = temp->next;
         if ( temp )
         {

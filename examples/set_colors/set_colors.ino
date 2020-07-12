@@ -22,13 +22,15 @@ void setup()
     p.begin();
 
     // Add plots
-    p.addTimeGraph( "Some title of a graph", 500, "label for x", x, "label for y", y );
-    p.addXYGraph( "Title of X vs Y graph", 1000, "x axis", x, "y axis", y );
+    LineGraph& lg = p.addLineGraph( "Some title of a graph", 500 );
+    ScatterGraph& sg = p.addScatterGraph( "Title of X vs Y graph", 1000 );
 
-    // Set variable colors of graph with index 0 to pink and orange
-    p.setColor( 0, "pink", "orange" );
-    // Set color of x vs y graph at index 1 to cyan
-    p.setColor( 1, "cyan" );
+    // Add line variables and specify color
+    lg.line( "label for x", x, "pink" );
+    lg.line( "label for y", y, "orange" );
+
+    // Add scatter channel and specify color
+    sg.scatter( "x axis", x, "y axis", y, "cyan" );
 }
 
 void loop()

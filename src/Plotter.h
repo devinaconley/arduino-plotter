@@ -44,10 +44,30 @@ class Plotter
        Args:
        - title: const char * with title of graph
        - maxPoints: number of points to be shown at a given time. Used to control time-scaling
+
+       Returns:
+       - reference to created line graph
     */
     LineGraph& addLineGraph( const char* title, int maxPoints = 1000 )
     {
         LineGraph* graph = new LineGraph( title, 5000, maxPoints );
+        addGraph( graph );
+        return *graph;
+    }
+
+    /*
+      Add an empty scatter graph
+
+      Args:
+      - title: const char * with title of graph
+      - maxPoints: max number of points to be shown at a given time. Controls data persistence
+
+      Returns:
+      - reference to created scatter graph
+    */
+    ScatterGraph& addScatterGraph( const char* title, int maxPoints )
+    {
+        ScatterGraph* graph = new ScatterGraph( title, maxPoints );
         addGraph( graph );
         return *graph;
     }

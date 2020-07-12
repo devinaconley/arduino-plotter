@@ -69,10 +69,13 @@ class LineGraph : public Graph
   public:
     LineGraph( const char* title = "", int range = 5000, int maxPoints = 1000 );
 
-    template <typename T> void line( const char* label, T& ref )
+    template <typename T> void line( const char* label, T& ref, const char* color = "" )
     {
-        addVariable(
-            new Variable( label, static_cast<void*>( &ref ), &dereference<T>, COLORS[size % 6] ) );
+        if ( color[0] == '\0' )
+        {
+            color = COLORS[size % 6];
+        }
+        addVariable( new Variable( label, static_cast<void*>( &ref ), &dereference<T>, color ) );
     }
 
     virtual bool xvy()
@@ -92,14 +95,14 @@ class ScatterGraph : public Graph
     ScatterGraph( const char* title = "", int maxPoints = 1000 );
 
     template <typename X, typename Y>
-    void scatter( const char* labelX, X& refX, const char* labelY, Y& refY )
+    void scatter( const char* labelX, X& refX, const char* labelY, Y& refY, const char* color = "" )
     {
-        addVariable( new Variable(
-            labelX,
-            static_cast<void*>( &refX ),
-            &dereference<X>,
-            COLORS[( size / 2 ) % 6] ) );
-        addVariable( new Variable( labelY, static_cast<void*>( &refY ), &dereference<Y>, "" ) );
+        if ( color[0] == '\0' )
+        {
+            color = COLORS[( size / 2 ) % 6];
+        }
+        addVariable( new Variable( labelX, static_cast<void*>( &refX ), &dereference<X>, color ) );
+        addVariable( new Variable( labelY, static_cast<void*>( &refY ), &dereference<Y>, color ) );
     }
 
     virtual bool xvy()
