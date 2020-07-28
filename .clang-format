@@ -1,9 +1,10 @@
-Language: Cpp
-
+---
 IndentWidth: 4
 UseTab: Never
 SpacesInParentheses: true
 ColumnLimit: 100
+---
+Language: Cpp
 
 BreakBeforeBraces: Allman
 AllowAllArgumentsOnNextLine: false
@@ -23,3 +24,7 @@ BreakConstructorInitializers: BeforeColon
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
 
 AllowShortFunctionsOnASingleLine: Empty
+---
+Language: Java
+# TODO
+---

@@ -139,4 +139,3 @@ void Plotter::plot()
         counter = 0;
     }
 }
-
